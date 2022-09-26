@@ -10,7 +10,7 @@ use App\Models\Advertisement;
 use App\Models\AdvertisementValue;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
-
+use App\Models\AttributesValue;
 
 
 /**
@@ -47,13 +47,13 @@ class AdvertisementCrudController extends CrudController
     protected function setupListOperation()
     {
         // CRUD::field('category_id');
-        $this->crud->addColumns(['category_id']);
+        // $this->crud->addColumns(['category_id']);
 
         $this->crud->addColumn('Name', [
             'label' => 'Name',
             'type' => 'relationship',
-            'name' => '', // the db column for the foreign key
-            'entity' => 'advertisementdata', // the method that defines the relationship in your Model
+            'name' => 'advertisedata', // the db column for the foreign key
+            'entity' => 'advertisedata', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => 'App\Models\Advertisement' // foreign key model
         ]);
@@ -78,16 +78,19 @@ class AdvertisementCrudController extends CrudController
         CRUD::addColumn('category_id');
         CRUD::addColumn([
             'name'      => 'advertisement',
-            'label'     => 'Attribute Value',
+            'label'     => 'Attributes Value',
             'type'     => 'closure',
-            'function' => function($entry) {
-                $data = $entry->advertisementdata;
-                dd($data);
-                $arr=[];
-                foreach ($data as $key) {
-                    $arr[]= $key->id;
-                }
-                $entry = AttributesValue::whereIn('id',$arr)->get();
+            'function' => function($entry) {    
+                $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
+                return view('vendor.return.attribute_valuedata', ['entry' => $entry])->render();
+            }
+        ]);
+        CRUD::addColumn([
+            'name'      => 'advertise_name',
+            'label'     => 'Attributes Name',
+            'type'     => 'closure',
+            'function' => function($entry) {    
+                $entry = AttributesValue::whereIn('id',Attributes::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
                 return view('vendor.return.attribute_valuedata', ['entry' => $entry])->render();
             }
         ]);

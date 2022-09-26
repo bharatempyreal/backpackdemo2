@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\AttributesValue;
+use App\Models\AdvertisementValue;
 
 class Advertisement extends Model
 {
@@ -36,6 +38,9 @@ class Advertisement extends Model
     */
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+    public function advertisedata() {
+        return $this->hasMany(AdvertisementValue::class);
     }
 
     /*

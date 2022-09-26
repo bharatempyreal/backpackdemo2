@@ -7,16 +7,10 @@
           </tr>
         </thead>
         <tbody>
-            {{-- @foreach ($entry as $data )
+            @foreach ($entry as $data )
                 <tr>
                 <td>{{ $data->attribute_name }}</td>
-                @if($data->status == 1)
-                <td>{{$data->status = "Active";}}</td>
-                @else
-                <td>{{$data->status ='Deactive'}}</td>
-                @endif
-                </tr>
-            @endforeach --}}
+            @endforeach 
 
         </tbody>
 
