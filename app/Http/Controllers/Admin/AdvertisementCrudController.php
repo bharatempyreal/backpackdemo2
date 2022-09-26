@@ -25,6 +25,8 @@ class AdvertisementCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -458,7 +460,10 @@ class AdvertisementCrudController extends CrudController
     }
     public function destroy($id)
     {
-        // AttributesValue::where('attributes_id',$id)->delete();
-        // return $this->crud->delete($id);
+        // Advertisement entry delete
+        // advertisement_value 
+        Advertisement::where('id', $id)->delete();
+        AdvertisementValue::where('advertisement_id', $id)->delete();
+        return $this->crud->delete($id);
     }
 }

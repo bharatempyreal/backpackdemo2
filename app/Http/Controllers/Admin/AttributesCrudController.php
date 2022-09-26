@@ -234,8 +234,7 @@ class AttributesCrudController extends CrudController
         $response = $this->traitStore();
         $attributes_id = $this->crud->entry->id;
         $json = json_decode($request['attributes']);
-
-        if($request['attributes']  != null && count(json_decode($request['attributes']))){
+        if(count($json) && $json[0]->attributes_value != null ){
             foreach(json_decode($request['attributes']) as $value) {
                 $items_sub = new AttributesValue();
                 $items_sub->attributes_id = $attributes_id;
@@ -249,11 +248,12 @@ class AttributesCrudController extends CrudController
                 $items_sub->save();
             }
         }
+
         return $response;
     }
     public function update(AttributesRequest $request)
     {
-        $data = \App\Models\Attributes::find($request->id);
+        $data = Attributes::find($request->id);
         $data->category_id   = $request->category_id;
         $data->category_type    = $request->category_type;
         $data->name    = $request->name;
@@ -261,7 +261,8 @@ class AttributesCrudController extends CrudController
         $data->save();
         $attributes_id = $data->id;
         $attrIds = [];
-        if($request['attributesvalue'] && count(json_decode($request['attributes']))){
+        $json = json_decode($request['attributesvalue']);
+        if(count($json) && $json[0]->attribute_name != null ){
             foreach(json_decode($request['attributesvalue']) as $value) {
                 if ($value->id != null) {
                     $item =  AttributesValue::find($value->id);
