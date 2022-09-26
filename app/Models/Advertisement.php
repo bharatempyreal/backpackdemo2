@@ -31,6 +31,7 @@ class Advertisement extends Model
     |--------------------------------------------------------------------------
     */
 
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -60,4 +61,24 @@ class Advertisement extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function setPhotosAttribute($value)
+    {
+        $attribute_name = "photos";
+        $disk = "public";
+        $destination_path = "image/";
+
+        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($obj) {
+            if (count((array)$obj->photos)) {
+                foreach ($obj->photos as $file_path) {
+                    \Storage::disk('public_folder')->delete($file_path);
+                }
+            }
+        });
+    }
 }

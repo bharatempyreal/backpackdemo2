@@ -31,4 +31,5 @@ Route::group([
     Route::crud('advertisement', 'AdvertisementCrudController');
 
     Route::get('getadvertisement', 'AdvertisementCrudController@getadvertisement')->name('getadvertisement');
+    Route::get('geteditadvertisement', 'AdvertisementCrudController@geteditadvertisement')->name('geteditadvertisement');
 });

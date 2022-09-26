@@ -70,6 +70,8 @@ class Attributes extends Model
         return $this->hasMany(AttributesValue::class, 'attributes_id');
     }
 
+    
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

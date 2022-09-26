@@ -233,6 +233,7 @@ class AttributesCrudController extends CrudController
     {
         $response = $this->traitStore();
         $attributes_id = $this->crud->entry->id;
+        $json = json_decode($request['attributes']);
 
         if($request['attributes']  != null && count(json_decode($request['attributes']))){
             foreach(json_decode($request['attributes']) as $value) {
