@@ -79,21 +79,22 @@ class AdvertisementCrudController extends CrudController
         $this->crud->set('show.setFromDb', false);
         CRUD::addColumn('category_id');
         CRUD::addColumn([
-            'name'      => 'advertisement',
-            'label'     => 'Attributes Value',
+            'name'      => 'advertise_name',
+            'label'     => 'Advertisement Name',
             'type'     => 'closure',
             'function' => function($entry) {
                 $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
-                return view('vendor.return.attribute_valuedata', ['entry' => $entry])->render();
+                return view('vendor.return.advertisement_namedata
+                ', ['entry' => $entry])->render();
             }
         ]);
         CRUD::addColumn([
-            'name'      => 'advertise_name',
-            'label'     => 'Attributes Name',
+            'name'      => 'advertisement',
+            'label'     => 'Advertisement Value',
             'type'     => 'closure',
             'function' => function($entry) {
-                $entry = AttributesValue::whereIn('id',Attributes::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
-                return view('vendor.return.attribute_valuedata', ['entry' => $entry])->render();
+                $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
+                return view('vendor.return.advertisement_valuedata', ['entry' => $entry])->render();
             }
         ]);
     }
@@ -153,6 +154,10 @@ class AdvertisementCrudController extends CrudController
             'type'    => 'script',
             'content' => 'js/user-js/advertisement.js'
         ]);
+        Widget::add([
+            'type'    => 'style',
+            'content' => 'js/user-js/image-new.css'
+        ]);
 
     }
 
@@ -169,108 +174,103 @@ class AdvertisementCrudController extends CrudController
                     foreach($value->attributesdata as $key => $val) {
                         $options[$val->attribute_name] = $val->attribute_name;
                     }
-                    $crudFields[]  = array(
+                    $crudFields[]  =[
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'checklist-new',
-                        'wrapper'   => ['class' => 'form-group col-md-4 pl-5'],
+                        'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
                         'options'   => $options,
-                    );
-                    $crudFields[]  = array(
+                        // 'options'   => [1, 2, 3, 4, 5],
+                    ];
+                    $crudFields[]  =[
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 2:
                     $options = [];
                     foreach($value->attributesdata as $key => $val) {
                         $options[$val->attribute_name] = $val->attribute_name;
                     }
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'select2_from_array',
                         'options'   =>  $options,
-                    );
-                    $crudFields[]  = array(
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 3:
-                    $crudFields[] = array(
-                        // 'name'      => $value->name,
-                        // 'label'     => ucFirst($value->name),
-                        // 'filename'     => "image_filename", // set to null if not needed
-                        // 'type'         => 'base64_image',
-                        // 'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
-                        // 'crop'         => true, // set to true to allow cropping, false to disable
-                        // 'src'          => NULL,
-
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'upload_multiple',
                         'upload'    => true,
                         'disk'      => 'uploads', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;
                         // optional:
-                        'temporary' => 10 // if using a service, such as S3, that requires you to make temporary URLs this will make a URL that is valid for the number of minutes specified
-                    );
-                    $crudFields[]  = array(
+                        'temporary' => 10
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 4:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'text',
-                    );
-                    $crudFields[]  = array(
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 5:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'textarea',
-                    );
-                    $crudFields[]  = array(
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 6:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'image',
-                        'upload'    => true,
-                    );
-                    $crudFields[]  = array(
+                        'crop'      => true,
+                        'aspect_ratio' => 1,
+                        'temporary' => 10
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 case 7:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'date',
-                    );
-                    $crudFields[]  = array(
+                    ];
+                    $crudFields[]  = [
                         'name'      => $value->name.'_id',
                         'type'      => 'hidden',
                         'value'     => $value->id
-                    );
+                    ];
                     break;
                 default:
 
@@ -317,9 +317,9 @@ class AdvertisementCrudController extends CrudController
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'checklist-new',
-                        'wrapper'   => ['class' => 'form-group col-md-4 pl-5'],
+                        'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
                         'options'   => $options,
-                        'value'     => (isset($addsData->value)) ? $addsData->value : ''
+                        'selected'     => (isset($addsData->value)) ? json_decode($addsData->value) : ''
                     ];
                     break;
                 case 2:
@@ -342,46 +342,49 @@ class AdvertisementCrudController extends CrudController
                     $crudFields[] = [
                         'name'          => $value->name,
                         'label'         => ucFirst($value->name),
-                        'filename'      => "image_filename", // set to null if not needed
-                        'type'          => 'base64_image',
-                        'aspect_ratio'  => 1, // set to 0 to allow any aspect ratio
-                        'crop'          => true, // set to true to allow cropping, false to disable
+                        'type'          => 'upload_multiple',
+                        'upload'        => true,
+                        'disk'          => 'uploads',
+                        'temporary'     => 10,
+                        'crop'          => true,
                         'src'           => NULL,
                         'value'         => (isset($addsData)) ? $addsData->value : ''
                     ];
                     break;
                 case 4:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'text',
                         'value'     => (isset($addsData)) ? $addsData->value : ''
-                    );
+                    ];
                     break;
                 case 5:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'textarea',
                         'value'     => (isset($addsData)) ? $addsData->value : ''
-                    );
+                    ];
                     break;
                 case 6:
-                    $crudFields[] = array(
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'image',
-                        'upload'    => true,
-                        'value'     => (isset($addsData)) ? $addsData->value : ''
-                    );
+                    $crudFields[] = [
+                        'name'          => $value->name,
+                        'label'         => ucFirst($value->name),
+                        'type'          => 'image-new',
+                        'crop'          => true,
+                        'aspect_ratio'  => 1,
+                        'src'           => NULL,
+                        'value'         => (isset($addsData)) ? $addsData->value : ''
+                    ];
                     break;
                 case 7:
-                    $crudFields[] = array(
+                    $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'date',
                         'value'     => (isset($addsData)) ? $addsData->value : ''
-                    );
+                    ];
                     break;
                 default:
             }
@@ -396,6 +399,7 @@ class AdvertisementCrudController extends CrudController
 
     public function store(Request $request)
     {
+        dd($request->all());
         $fiels=array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
@@ -425,6 +429,7 @@ class AdvertisementCrudController extends CrudController
 
     public function update(Request $request)
     {
+        dd($request->all());
         $fiels = array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
@@ -435,7 +440,6 @@ class AdvertisementCrudController extends CrudController
                 unset($fiels[$k]);
             }
         }
-
         $items = Advertisement::find($request->id);
         $items->category_id = $request->category_id;
         $items->save();
@@ -447,21 +451,27 @@ class AdvertisementCrudController extends CrudController
                 } else {
                     $ad_value = New AdvertisementValue;
                 }
+
+                if($request->hasFile()){
+                    dd($request->$value);
+                } else {
+
+                    $ad_value->value = $request->$value;
+                }
                 $ad_value->advertisement_id = $request->id;
                 $ad_value->attributes_id = $request->{$value . "_id"};
-                $ad_value->value = $request->$value;
+                // $ad_value->value = $request->$value;
                 $ad_value->name = $value;
                 $ad_value->save();
             }
             $attrIds[] = $request->{$value . "_id"};
         }
+        dd($value);
         $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
         return redirect()->back();
     }
     public function destroy($id)
     {
-        // Advertisement entry delete
-        // advertisement_value 
         Advertisement::where('id', $id)->delete();
         AdvertisementValue::where('advertisement_id', $id)->delete();
         return $this->crud->delete($id);
