@@ -118,6 +118,10 @@ class AdvertisementCrudController extends CrudController
             'type'    => 'script',
             'content' => 'js/user-js/advertisement.js'
         ]);
+        Widget::add([
+            'type'    => 'style',
+            'content' => 'css/image-new.css'
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -154,11 +158,10 @@ class AdvertisementCrudController extends CrudController
             'type'    => 'script',
             'content' => 'js/user-js/advertisement.js'
         ]);
-        Widget::add([
-            'type'    => 'style',
-            'content' => 'js/user-js/image-new.css'
-        ]);
-
+        // Widget::add([
+        //     'type'    => 'style',
+        //     'content' => 'js/user-js/image-new.css'
+        // ]);
     }
 
     public function getadvertisement(Request $request)
@@ -180,7 +183,6 @@ class AdvertisementCrudController extends CrudController
                         'type'      => 'checklist-new',
                         'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
                         'options'   => $options,
-                        // 'options'   => [1, 2, 3, 4, 5],
                     ];
                     $crudFields[]  =[
                         'name'      => $value->name.'_id',
@@ -211,8 +213,7 @@ class AdvertisementCrudController extends CrudController
                         'label'     => ucFirst($value->name),
                         'type'      => 'upload_multiple',
                         'upload'    => true,
-                        'disk'      => 'uploads', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;
-                        // optional:
+                        'disk'      => 'uploads',
                         'temporary' => 10
                     ];
                     $crudFields[]  = [
@@ -249,10 +250,7 @@ class AdvertisementCrudController extends CrudController
                     $crudFields[] = [
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
-                        'type'      => 'image',
-                        'crop'      => true,
-                        'aspect_ratio' => 1,
-                        'temporary' => 10
+                        'type'      => 'custom-image',
                     ];
                     $crudFields[]  = [
                         'name'      => $value->name.'_id',
@@ -369,13 +367,11 @@ class AdvertisementCrudController extends CrudController
                     break;
                 case 6:
                     $crudFields[] = [
-                        'name'          => $value->name,
-                        'label'         => ucFirst($value->name),
-                        'type'          => 'image-new',
-                        'crop'          => true,
-                        'aspect_ratio'  => 1,
-                        'src'           => NULL,
-                        'value'         => (isset($addsData)) ? $addsData->value : ''
+                        'name'      => $value->name,
+                        'label'     => ucFirst($value->name),
+                        'type'      => 'custom-image',
+                        'wrapper'   => ['class' => 'form-group col-md-12 image'],
+                        'value'     => (isset($addsData)) ? route('getStoragePath', ['image', $addsData->value]) : ''
                     ];
                     break;
                 case 7:
@@ -399,7 +395,7 @@ class AdvertisementCrudController extends CrudController
 
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $fiels=array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
@@ -417,11 +413,24 @@ class AdvertisementCrudController extends CrudController
             foreach($fiels as $value){
                 $attributes_id = $value.'_id';
                 $advertisement_value = New AdvertisementValue;
-                $advertisement_value->advertisement_id = $items->id;
-                $advertisement_value->value = $request->$value;
-                $advertisement_value->name = $value;
-                $advertisement_value->attributes_id = $request->$attributes_id;
-                $advertisement_value->save();
+            // if($value == 'Image'){
+                if($request->hasFile($value)){
+                    $file = $request->file($value);
+                    $filename = $file->getClientOriginalName();
+                    $file->move(storage_path('/app/public/image'),$filename);
+                    $advertisement_value->value = $filename;
+                    $advertisement_value->advertisement_id = $items->id;
+                    $advertisement_value->name = $value;
+                    $advertisement_value->attributes_id = $request->$attributes_id;
+                    $advertisement_value->save();
+                } else {
+                    $advertisement_value->advertisement_id = $items->id;
+                    $advertisement_value->value = $request->$value;
+                    $advertisement_value->name = $value;
+                    $advertisement_value->attributes_id = $request->$attributes_id;
+                    $advertisement_value->save();
+                }
+            // }
              }
         }
         return redirect()->back();
@@ -429,7 +438,8 @@ class AdvertisementCrudController extends CrudController
 
     public function update(Request $request)
     {
-        dd($request->all());
+        // dd($_FILES);
+
         $fiels = array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
@@ -446,27 +456,43 @@ class AdvertisementCrudController extends CrudController
         $attrIds = [];
         if($items->save()){
             foreach($fiels as $value){
-                if($request->{$value . "_id1"}){
-                    $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
-                } else {
-                    $ad_value = New AdvertisementValue;
-                }
-
-                if($request->hasFile()){
-                    dd($request->$value);
-                } else {
-
-                    $ad_value->value = $request->$value;
-                }
+                // if($value == 'poto'){
+                    // dd($value);
+                    if($request->{$value . "_id1"}){
+                        if($request->hasFile($value)){
+                            $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
+                            $path = storage_path('app/public/image/').$ad_value->value;
+                            if (file_exists($path)) {
+                                unlink($path);
+                            }
+                            $file = $request->file($value);
+                            $filename = $file->getClientOriginalName();
+                            $file->move(storage_path('/app/public/image'),$filename);
+                            $ad_value->value = $filename;
+                        }
+                    } else {
+                        $ad_value = New AdvertisementValue;
+                        if($request->hasFile($value)){
+                            $file = $request->file($value);
+                            $filename = $file->getClientOriginalName();
+                            $file->move(storage_path('/app/public/image'),$filename);
+                            $ad_value->value = $filename;
+                        }
+                    }
+                // }
                 $ad_value->advertisement_id = $request->id;
                 $ad_value->attributes_id = $request->{$value . "_id"};
-                // $ad_value->value = $request->$value;
+                if(!$request->hasFile($value)){
+                    dd('if');
+                $ad_value->value = $request->$value;
+                }
                 $ad_value->name = $value;
                 $ad_value->save();
             }
+
+
             $attrIds[] = $request->{$value . "_id"};
         }
-        dd($value);
         $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
         return redirect()->back();
     }

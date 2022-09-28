@@ -77,8 +77,8 @@ class CategoryCrudController extends CrudController
             'name'      => 'image',
             'label'     => 'Image',
             'type'      => 'image',
-            'height' => '30px',
-            'width'  => '30px',
+            'height' => '50px',
+            'width'  => '50px',
         ]);
 
 
