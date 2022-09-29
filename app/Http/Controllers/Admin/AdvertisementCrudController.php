@@ -105,6 +105,8 @@ class AdvertisementCrudController extends CrudController
 
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
+        CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages')]);
+        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
         CRUD::addfield(
             [
                 'name'     => 'my_custom_html',
@@ -118,6 +120,12 @@ class AdvertisementCrudController extends CrudController
             'type'    => 'script',
             'content' => 'js/user-js/advertisement.js'
         ]);
+        Widget::add()->type('script')
+            ->content('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js');
+        Widget::add()->type('script')
+            ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.js');
+        Widget::add()->type('style')
+            ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.css');
         Widget::add([
             'type'    => 'style',
             'content' => 'css/image-new.css'
@@ -142,7 +150,10 @@ class AdvertisementCrudController extends CrudController
         CRUD::setValidation(AdvertisementRequest::class);
         CRUD::field('id')->type('hidden')->wrapper(['class' => 'hidden_id']);
         CRUD::field('action')->type('hidden')->wrapper(['class' => 'action', 'id' => 'action', 'data-action' => route('geteditadvertisement')]);
+        CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages')]);
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
+        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
+
 
         CRUD::addfield(
             [
@@ -158,6 +169,12 @@ class AdvertisementCrudController extends CrudController
             'type'    => 'script',
             'content' => 'js/user-js/advertisement.js'
         ]);
+        Widget::add()->type('script')
+            ->content('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js');
+        Widget::add()->type('script')
+            ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.js');
+        Widget::add()->type('style')
+            ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.css');
         // Widget::add([
         //     'type'    => 'style',
         //     'content' => 'js/user-js/image-new.css'
@@ -209,12 +226,15 @@ class AdvertisementCrudController extends CrudController
                     break;
                 case 3:
                     $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'upload_multiple',
-                        'upload'    => true,
-                        'disk'      => 'uploads',
-                        'temporary' => 10
+                        'name'          => $value->name,
+                        'label'         => ucFirst($value->name),
+                        'type'          => 'dropzone',
+                        'upload_route'  => route('ajaxUploadImages'),
+                        'reorder_route' => 'reorder_images',
+                        'delete_route'  => 'delete_image',
+                        'disk'          => 'uploads/images/',
+                        'mimes'         => 'image/*',
+                        'filesize'      => 5,
                     ];
                     $crudFields[]  = [
                         'name'      => $value->name.'_id',
@@ -340,12 +360,13 @@ class AdvertisementCrudController extends CrudController
                     $crudFields[] = [
                         'name'          => $value->name,
                         'label'         => ucFirst($value->name),
-                        'type'          => 'upload_multiple',
-                        'upload'        => true,
-                        'disk'          => 'uploads',
-                        'temporary'     => 10,
-                        'crop'          => true,
-                        'src'           => NULL,
+                        'type'          => 'dropzone',
+                        'upload_route'  => route('ajaxUploadImages'),
+                        'reorder_route' => 'reorder_images',
+                        'delete_route'  => 'delete_image',
+                        'disk'          => 'uploads/images/',
+                        'mimes'         => 'image/*',
+                        'filesize'      => 5,
                         'value'         => (isset($addsData)) ? $addsData->value : ''
                     ];
                     break;
@@ -438,7 +459,7 @@ class AdvertisementCrudController extends CrudController
 
     public function update(Request $request)
     {
-        // dd($_FILES);
+        // dd($request->all());
 
         $fiels = array_keys($request->all());
         unset($fiels[0]);
@@ -454,6 +475,7 @@ class AdvertisementCrudController extends CrudController
         $items->category_id = $request->category_id;
         $items->save();
         $attrIds = [];
+        $i = 0;
         if($items->save()){
             foreach($fiels as $value){
                 // if($value == 'poto'){
@@ -461,7 +483,7 @@ class AdvertisementCrudController extends CrudController
                     if($request->{$value . "_id1"}){
                         if($request->hasFile($value)){
                             $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
-                            $path = storage_path('app/public/image/').$ad_value->value;
+                            $path = storage_path('/app/public/image/').$ad_value->value;
                             if (file_exists($path)) {
                                 unlink($path);
                             }
@@ -469,7 +491,10 @@ class AdvertisementCrudController extends CrudController
                             $filename = $file->getClientOriginalName();
                             $file->move(storage_path('/app/public/image'),$filename);
                             $ad_value->value = $filename;
+                        } else{
+                            $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
                         }
+
                     } else {
                         $ad_value = New AdvertisementValue;
                         if($request->hasFile($value)){
@@ -483,7 +508,6 @@ class AdvertisementCrudController extends CrudController
                 $ad_value->advertisement_id = $request->id;
                 $ad_value->attributes_id = $request->{$value . "_id"};
                 if(!$request->hasFile($value)){
-                    dd('if');
                 $ad_value->value = $request->$value;
                 }
                 $ad_value->name = $value;
@@ -501,5 +525,27 @@ class AdvertisementCrudController extends CrudController
         Advertisement::where('id', $id)->delete();
         AdvertisementValue::where('advertisement_id', $id)->delete();
         return $this->crud->delete($id);
+    }
+
+    public function ajaxUploadImages(Request $request)
+    {
+        if($request->file){
+            foreach($request->file as $key => $file){
+                $path = storage_path('/app/public/image');
+                $imageName = $file->getClientOriginalName();
+                $file->move($path,$imageName);
+            }
+        }
+        return $imageName;
+    }
+    public function ajaxRemoveImages(Request $request)
+    {
+        if($request->file){
+                $path = storage_path('/app/public/image/'). $request->file;
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+        return true;
     }
 }

@@ -26,6 +26,75 @@ $(document).ready(function () {
                     });
                     hidden_input.val(JSON.stringify(newValue));
                 });
+
+                    Dropzone.autoDiscover = false;
+                    var uploaded = false;
+                    var newValue = [];
+                    var oldValue = [];
+
+                    var dropzone = new Dropzone(".dropzone", {
+                        url: $('.ajaxUploadImages').data('action'),
+                        uploadMultiple: true,
+                        parallelUploads: 10,
+                        addRemoveLinks: true,
+                        sending: function(file, xhr, formData) {
+                            formData.append("_token", $('[name=_token').val());
+                        },
+                        error: function(file, response) {
+                            console.log('error');
+                            $(file.previewElement).find('.dz-error-message').remove();
+                            $(file.previewElement).remove();
+                        },removedfile: function(file) {
+                            console.log(file.name);
+                            $.ajax({
+                                url: $('.ajaxremoveImages').data('removeaction'),
+                                type: 'POST',
+                                data: {
+                                    file: file.name,
+                                },
+                            });
+
+                            var checkimage = $.inArray(file.name, newValue);
+                            if (checkimage != -1) {
+                                newValue.splice(checkimage, 1);
+                                $('.dropzone_hidden').val(newValue);
+                                file.previewElement.remove();
+                            }
+                            // console.log(newValue);
+                        },
+                        success : function(file, status) {
+                            var value  = file.name;
+                            if(value != ''){
+                                newValue.push(value);
+                            }
+                            $('.dropzone_hidden').val(newValue);
+                            // console.log(newValue);
+                        }
+                    });
+
+                    // Reorder images
+                    $(".dropzone").sortable({
+                        items: '.dz-preview',
+                        cursor: 'move',
+                        opacity: 0.5,
+                        containment: '.dropzone',
+                        distance: 20,
+                        scroll: true,
+                        tolerance: 'pointer',
+                        stop: function (event, ui) {
+                            // console.log('sortable stop');
+                            var image_order = [];
+                            $('.dz-preview').each(function() {
+                                var image_id = $(this).data('id');
+                                var image_path = $(this).data('path');
+                                image_order.push({ id: image_id, path: image_path});
+                            });
+                        }
+                    });
+
+                    $(document).on('click','.dz-preview a', function (e){
+                        alert('delete');
+                    });
             }
         });
     });
@@ -58,12 +127,10 @@ $(document).ready(function () {
                 });
                 $('form').attr('enctype', 'multipart/form-data');
                 $('.checklist input[type="checkbox"]').on('change',function () {
-                    alert('fd');
                     var el = $(this);
                     var element = el.closest('.checklist');
                     var hidden_input = el.closest('.checklist').find('input[type=hidden]');
                     var checkboxes = element.find('input[type=checkbox]');
-                    console.log(checkboxes);
                     var newValue = [];
                     checkboxes.each(function() {
                       if ($(this).is(':checked')) {
@@ -73,6 +140,69 @@ $(document).ready(function () {
                     });
                     hidden_input.val(JSON.stringify(newValue));
                 });
+                Dropzone.autoDiscover = false;
+                    var uploaded = false;
+                    var newValue = [];
+                    var oldValue = [];
+
+                    var dropzone = new Dropzone(".dropzone", {
+                        url: $('.ajaxUploadImages').data('action'),
+                        uploadMultiple: true,
+                        parallelUploads: 10,
+                        addRemoveLinks: true,
+                        sending: function(file, xhr, formData) {
+                            formData.append("_token", $('[name=_token').val());
+                        },
+                        error: function(file, response) {
+                            console.log('error');
+                            $(file.previewElement).find('.dz-error-message').remove();
+                            $(file.previewElement).remove();
+                        },removedfile: function(file) {
+                            console.log(file.name);
+                            $.ajax({
+                                url: $('.ajaxremoveImages').data('removeaction'),
+                                type: 'POST',
+                                data: {
+                                    file: file.name,
+                                },
+                            });
+
+                            var checkimage = $.inArray(file.name, newValue);
+                            if (checkimage != -1) {
+                                newValue.splice(checkimage, 1);
+                                $('.dropzone_hidden').val(newValue);
+                                file.previewElement.remove();
+                            }
+                            // console.log(newValue);
+                        },
+                        success : function(file, status) {
+                            var value  = file.name;
+                            if(value != ''){
+                                newValue.push(value);
+                            }
+                            $('.dropzone_hidden').val(newValue);
+                            // console.log(newValue);
+                        }
+                    });
+                    // Reorder images
+                    $(".dropzone").sortable({
+                        items: '.dz-preview',
+                        cursor: 'move',
+                        opacity: 0.5,
+                        containment: '.dropzone',
+                        distance: 20,
+                        scroll: true,
+                        tolerance: 'pointer',
+                        stop: function (event, ui) {
+                            // console.log('sortable stop');
+                            var image_order = [];
+                            $('.dz-preview').each(function() {
+                                var image_id = $(this).data('id');
+                                var image_path = $(this).data('path');
+                                image_order.push({ id: image_id, path: image_path});
+                            });
+                        }
+                    });
             }
         });
     });
