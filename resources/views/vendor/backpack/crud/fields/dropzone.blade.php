@@ -4,7 +4,9 @@
 <div class="form-group col-md-12">
 	<strong>{{ $field['label'] }}</strong> <br>
 	<div class="dropzone sortable dz-clickable sortable">
-        <input class="dropzone_hidden" name ="{{ $field['name'] }}" type="hidden">
+        <input class="dropzone_hidden" @if (isset($field['value']))
+        value='@json($field['value'])'
+        @endif name ="{{ $field['name'] }}" type="hidden">
 	    <div class="dz-message">
 	    	Drop files here or click to upload.
 	    </div>

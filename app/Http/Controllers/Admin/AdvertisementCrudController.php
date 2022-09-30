@@ -291,20 +291,16 @@ class AdvertisementCrudController extends CrudController
                     ];
                     break;
                 default:
-
             }
         }
-
         $this->crud->fields = $crudFields;
         $view = \View::make('vendor.backpack.crud.advertisement_form', [ 'fields' => $crudFields, 'action' => 'create' , 'crud' => $this->crud]);
         $view = $view->render();
         $view = html_entity_decode($view);
         return response()->json(array('success' => true, 'view'=>$view));
     }
-
     public function geteditadvertisement(Request $request)
     {
-
         $attributeData = Attributes::where('category_id', $request->selected)->get();
         $crudFields = [];
         foreach($attributeData as $key => $value) {
@@ -423,7 +419,7 @@ class AdvertisementCrudController extends CrudController
         unset($fiels[2]);
         unset($fiels[3]);
         foreach($fiels as $k=>$f){
-            if(substr($f, -3) == '_id' || $f == 'save_action'){
+            if(substr($f, -3) == '_id' || $f == 'save_action' || $f == 'dropzone'){
                 unset($fiels[$k]);
             }
         }
@@ -460,14 +456,13 @@ class AdvertisementCrudController extends CrudController
     public function update(Request $request)
     {
         // dd($request->all());
-
         $fiels = array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
         unset($fiels[2]);
         unset($fiels[4]);
         foreach($fiels as $k => $f){
-            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id'){
+            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id' || $f == 'dropzone'){
                 unset($fiels[$k]);
             }
         }
@@ -479,7 +474,6 @@ class AdvertisementCrudController extends CrudController
         if($items->save()){
             foreach($fiels as $value){
                 // if($value == 'poto'){
-                    // dd($value);
                     if($request->{$value . "_id1"}){
                         if($request->hasFile($value)){
                             $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
@@ -513,11 +507,10 @@ class AdvertisementCrudController extends CrudController
                 $ad_value->name = $value;
                 $ad_value->save();
             }
-
-
+        // dd($value);
             $attrIds[] = $request->{$value . "_id"};
         }
-        $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
+        // $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
         return redirect()->back();
     }
     public function destroy($id)
@@ -529,6 +522,7 @@ class AdvertisementCrudController extends CrudController
 
     public function ajaxUploadImages(Request $request)
     {
+        // $imageName = time().'.'.$request->image->extension();
         if($request->file){
             foreach($request->file as $key => $file){
                 $path = storage_path('/app/public/image');
@@ -541,7 +535,7 @@ class AdvertisementCrudController extends CrudController
     public function ajaxRemoveImages(Request $request)
     {
         if($request->file){
-                $path = storage_path('/app/public/image/'). $request->file;
+            $path = storage_path('/app/public/image/'). $request->file;
             if (file_exists($path)) {
                 unlink($path);
             }

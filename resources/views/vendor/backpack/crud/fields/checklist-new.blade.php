@@ -17,9 +17,9 @@
     <label>{!! $field['label'] !!}</label>
     @include('crud::fields.inc.translatable_icon')
 
-    <input type="hidden" value='@if (isset($field['selected']))
-    @json($field['selected'])
-    @endif' name="{{ $field['name'] }}">
+    <input type="hidden" @if (isset($field['selected']))
+                        value='@json($field['selected'])'
+                        @endif name="{{ $field['name'] }}">
 
     <div class="row">
         @foreach ($field['options'] as $key => $option)
