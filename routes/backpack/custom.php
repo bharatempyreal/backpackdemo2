@@ -34,4 +34,6 @@ Route::group([
     Route::get('geteditadvertisement', 'AdvertisementCrudController@geteditadvertisement')->name('geteditadvertisement');
     Route::post('ajax-upload-images', 'AdvertisementCrudController@ajaxUploadImages')->name('ajaxUploadImages');
     Route::post('ajax-remove-images', 'AdvertisementCrudController@ajaxRemoveImages')->name('ajaxremoveImages');
+    Route::post('editajax-remove-images', 'AdvertisementCrudController@editajaxRemoveImages')->name('editajaxremoveImages');
 });
+

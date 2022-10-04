@@ -7,6 +7,9 @@
         <input class="dropzone_hidden" @if (isset($field['value']))
         value='@json($field['value'])'
         @endif name ="{{ $field['name'] }}" type="hidden">
+
+        <input class="dropzone_path" name = "path" @if (isset($field['imager_path']))
+        value='@json($field['imager_path'])' @endif type="hidden">
 	    <div class="dz-message">
 	    	Drop files here or click to upload.
 	    </div>

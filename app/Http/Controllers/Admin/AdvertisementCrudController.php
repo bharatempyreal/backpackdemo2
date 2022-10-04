@@ -11,6 +11,7 @@ use App\Models\AdvertisementValue;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
 use App\Models\AttributesValue;
+use File;
 
 
 /**
@@ -150,7 +151,7 @@ class AdvertisementCrudController extends CrudController
         CRUD::setValidation(AdvertisementRequest::class);
         CRUD::field('id')->type('hidden')->wrapper(['class' => 'hidden_id']);
         CRUD::field('action')->type('hidden')->wrapper(['class' => 'action', 'id' => 'action', 'data-action' => route('geteditadvertisement')]);
-        CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages')]);
+        CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages'),'data-editremoveaction' => route('editajaxremoveImages'), ]);
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
         // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
 
@@ -183,6 +184,7 @@ class AdvertisementCrudController extends CrudController
 
     public function getadvertisement(Request $request)
     {
+        // dd('1');
         $attributeData = Attributes::where('category_id', $request->selected)->get();
         $crudFields = [];
         foreach($attributeData as $key => $value) {
@@ -301,6 +303,7 @@ class AdvertisementCrudController extends CrudController
     }
     public function geteditadvertisement(Request $request)
     {
+        // dd('2');
         $attributeData = Attributes::where('category_id', $request->selected)->get();
         $crudFields = [];
         foreach($attributeData as $key => $value) {
@@ -353,6 +356,16 @@ class AdvertisementCrudController extends CrudController
                     break;
                 case 3:
                     $quary = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
+                    // dd($quary);
+                    $images = [];
+                    $images_val = [];
+                    if(isset($addsData) && isset($addsData->value)){
+                        foreach(explode(',',$addsData->value) as $items){
+                            $images[] = route('getStoragePath', ['image', $items]);
+                            $images_val[] = $items;
+                            }
+                        }
+                    // dd($images_val);
                     $crudFields[] = [
                         'name'          => $value->name,
                         'label'         => ucFirst($value->name),
@@ -363,8 +376,10 @@ class AdvertisementCrudController extends CrudController
                         'disk'          => 'uploads/images/',
                         'mimes'         => 'image/*',
                         'filesize'      => 5,
-                        'value'         => (isset($addsData)) ? $addsData->value : ''
+                        'imager_path'   => $images,
+                        'value'         => $images_val
                     ];
+                    // dd($crudFields);
                     break;
                 case 4:
                     $crudFields[] = [
@@ -419,7 +434,7 @@ class AdvertisementCrudController extends CrudController
         unset($fiels[2]);
         unset($fiels[3]);
         foreach($fiels as $k=>$f){
-            if(substr($f, -3) == '_id' || $f == 'save_action' || $f == 'dropzone'){
+            if(substr($f, -3) == '_id' || $f == 'save_action' || $f == 'dropzone' || $f == 'path'){
                 unset($fiels[$k]);
             }
         }
@@ -430,11 +445,12 @@ class AdvertisementCrudController extends CrudController
             foreach($fiels as $value){
                 $attributes_id = $value.'_id';
                 $advertisement_value = New AdvertisementValue;
-            // if($value == 'Image'){
+
                 if($request->hasFile($value)){
                     $file = $request->file($value);
                     $filename = $file->getClientOriginalName();
                     $file->move(storage_path('/app/public/image'),$filename);
+
                     $advertisement_value->value = $filename;
                     $advertisement_value->advertisement_id = $items->id;
                     $advertisement_value->name = $value;
@@ -447,7 +463,6 @@ class AdvertisementCrudController extends CrudController
                     $advertisement_value->attributes_id = $request->$attributes_id;
                     $advertisement_value->save();
                 }
-            // }
              }
         }
         return redirect()->back();
@@ -462,7 +477,7 @@ class AdvertisementCrudController extends CrudController
         unset($fiels[2]);
         unset($fiels[4]);
         foreach($fiels as $k => $f){
-            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id' || $f == 'dropzone'){
+            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id' || $f == 'dropzone' || $f == 'path'){
                 unset($fiels[$k]);
             }
         }
@@ -473,7 +488,6 @@ class AdvertisementCrudController extends CrudController
         $i = 0;
         if($items->save()){
             foreach($fiels as $value){
-                // if($value == 'poto'){
                     if($request->{$value . "_id1"}){
                         if($request->hasFile($value)){
                             $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
@@ -498,7 +512,6 @@ class AdvertisementCrudController extends CrudController
                             $ad_value->value = $filename;
                         }
                     }
-                // }
                 $ad_value->advertisement_id = $request->id;
                 $ad_value->attributes_id = $request->{$value . "_id"};
                 if(!$request->hasFile($value)){
@@ -507,7 +520,6 @@ class AdvertisementCrudController extends CrudController
                 $ad_value->name = $value;
                 $ad_value->save();
             }
-        // dd($value);
             $attrIds[] = $request->{$value . "_id"};
         }
         // $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
@@ -522,23 +534,33 @@ class AdvertisementCrudController extends CrudController
 
     public function ajaxUploadImages(Request $request)
     {
-        // $imageName = time().'.'.$request->image->extension();
+
+        $imageNameArr = [];
         if($request->file){
             foreach($request->file as $key => $file){
-                $path = storage_path('/app/public/image');
-                $imageName = $file->getClientOriginalName();
+                $path = storage_path('/app/public/image/');
+                $imageName = uniqid(). '.' .File::extension($file->getClientOriginalName());;
                 $file->move($path,$imageName);
+                $imageNameArr[]=$imageName;
             }
         }
-        return $imageName;
+        return  response($imageNameArr);
     }
     public function ajaxRemoveImages(Request $request)
     {
         if($request->file){
             $path = storage_path('/app/public/image/'). $request->file;
             if (file_exists($path)) {
-                unlink($path);
+                fileDelete($path);
             }
+        }
+        return true;
+    }
+    public function editajaxRemoveImages(Request $request)
+    {
+        $path = $path = storage_path('/app/public/image/'). $request->file;;
+        if (file_exists($path)) {
+            fileDelete($path);
         }
         return true;
     }
