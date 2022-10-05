@@ -249,6 +249,7 @@ class AdvertisementCrudController extends CrudController
                         'name'      => $value->name,
                         'label'     => ucFirst($value->name),
                         'type'      => 'text',
+                        'value'     => (isset($value->attributesdata) && isset($value->attributesdata[0]) && $value->attributesdata[0]->attribute_name != '') ? $value->attributesdata[0]->attribute_name : '',
                     ];
                     $crudFields[]  = [
                         'name'      => $value->name.'_id',
@@ -552,6 +553,7 @@ class AdvertisementCrudController extends CrudController
     }
     public function ajaxRemoveImages(Request $request)
     {
+        // dd($request->all());
         if($request->file){
             $path = storage_path('/app/public/image/'). $request->file;
             if (file_exists($path)) {

@@ -271,7 +271,7 @@ class AttributesCrudController extends CrudController
                     $item->status = $value->status;
                     $item->save();
                 } else {
-                    $item =  AttributesValue::find($value->id);
+                    $item = new AttributesValue;
                     $item->attributes_id = $attributes_id;
                     $item->attribute_name = $value->attribute_name;
                     $item->status = $value->status;
