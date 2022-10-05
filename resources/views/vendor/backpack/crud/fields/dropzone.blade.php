@@ -75,10 +75,7 @@
 			    },
 			    success : function(file, status) {
 			    	console.log('success');
-
-			    	// clear the images in the dropzone
 			        $('.dropzone').empty();
-			        // repopulate the dropzone with all images (new and old)
 			        $.each(status.images, function(key, image_path) {
 		        	 	$('.dropzone').append('<div class="dz-preview" data-id="'+key+'" data-path="'+image_path+'"><img class="dropzone-thumbnail" src="{{ url('') }}/'+image_path+'" /><a class="dz-remove" href="javascript:void(0);" data-remove="'+key+'" data-path="'+image_path+'">Remove file</a></div>');
 			        });

@@ -303,7 +303,6 @@ class AdvertisementCrudController extends CrudController
     }
     public function geteditadvertisement(Request $request)
     {
-        // dd('2');
         $attributeData = Attributes::where('category_id', $request->selected)->get();
         $crudFields = [];
         foreach($attributeData as $key => $value) {
@@ -360,12 +359,18 @@ class AdvertisementCrudController extends CrudController
                     $images = [];
                     $images_val = [];
                     if(isset($addsData) && isset($addsData->value)){
-                        foreach(explode(',',$addsData->value) as $items){
+                        $all_images = $addsData->value;
+                        $all_images = ltrim($all_images, $all_images[0]);
+                        $all_images = rtrim($all_images, ']');
+                        $all_images = explode(',',$all_images);
+                        foreach($all_images as $items){
+                            $items = ltrim($items, $items[0]);
+                            $items = rtrim($items, '"');
+
                             $images[] = route('getStoragePath', ['image', $items]);
                             $images_val[] = $items;
                             }
                         }
-                    // dd($images_val);
                     $crudFields[] = [
                         'name'          => $value->name,
                         'label'         => ucFirst($value->name),
@@ -379,7 +384,6 @@ class AdvertisementCrudController extends CrudController
                         'imager_path'   => $images,
                         'value'         => $images_val
                     ];
-                    // dd($crudFields);
                     break;
                 case 4:
                     $crudFields[] = [
@@ -417,7 +421,6 @@ class AdvertisementCrudController extends CrudController
                 default:
             }
         }
-
         $this->crud->fields = $crudFields;
         $view = \View::make('vendor.backpack.crud.advertisement_form', [ 'fields' => $crudFields, 'action' => 'create' , 'crud' => $this->crud]);
         $view = $view->render();
@@ -536,10 +539,11 @@ class AdvertisementCrudController extends CrudController
     {
 
         $imageNameArr = [];
+        $i = 0;
         if($request->file){
             foreach($request->file as $key => $file){
                 $path = storage_path('/app/public/image/');
-                $imageName = uniqid(). '.' .File::extension($file->getClientOriginalName());;
+                $imageName = uniqid(). $i++. '.' .File::extension($file->getClientOriginalName());
                 $file->move($path,$imageName);
                 $imageNameArr[]=$imageName;
             }
@@ -551,16 +555,17 @@ class AdvertisementCrudController extends CrudController
         if($request->file){
             $path = storage_path('/app/public/image/'). $request->file;
             if (file_exists($path)) {
-                fileDelete($path);
+                unlink($path);
             }
         }
         return true;
     }
     public function editajaxRemoveImages(Request $request)
     {
-        $path = $path = storage_path('/app/public/image/'). $request->file;;
+        // dd($request->file);
+        $path =  $request->file;;
         if (file_exists($path)) {
-            fileDelete($path);
+            unlink($path);
         }
         return true;
     }
