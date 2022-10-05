@@ -17,3 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Auth::routes();
+// // Auth::routes(['verify' => true]);
+// Route::get('/login',[AdminController::class, 'admintableshow']);
+
+// Route::middleware(['auth'])->group(function () {
+
+// });
+
+
+
+
