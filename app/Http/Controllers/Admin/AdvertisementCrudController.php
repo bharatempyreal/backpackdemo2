@@ -553,18 +553,18 @@ class AdvertisementCrudController extends CrudController
     }
     public function ajaxRemoveImages(Request $request)
     {
-        // dd($request->all());
-        if($request->file){
-            $path = storage_path('/app/public/image/'). $request->file;
+        if(isset($request->file_name) && $request->file_name != ''){
+            $path = storage_path('/app/public/image/'). $request->file_name;
             if (file_exists($path)) {
-                unlink($path);
+                if(unlink($path)){
+                    return true;
+                }
             }
         }
-        return true;
+        return false;
     }
     public function editajaxRemoveImages(Request $request)
     {
-        // dd($request->file);
         $path =  $request->file;;
         if (file_exists($path)) {
             unlink($path);

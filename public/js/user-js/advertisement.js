@@ -50,7 +50,7 @@ $(document).ready(function() {
                             var dropzone = new Dropzone(".dropzone", {
                                 url: $('.ajaxUploadImages').data('action'),
                                 uploadMultiple: true,
-                                parallelUploads: 10,
+                                parallelUploads: 1,
                                 addRemoveLinks: true,
                                 sending: function(file, xhr, formData) {
                                     formData.append("_token", $('[name=_token').val());
@@ -62,7 +62,6 @@ $(document).ready(function() {
                                 },
                                 removedfile: function(file) {
                                     removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
-                                    $(file.previewElement).remove();
                                     var oldArr = [];
                                     var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
                                     hidden_value.forEach(function(item) {
@@ -75,10 +74,14 @@ $(document).ready(function() {
                                         url: $('.ajaxUploadImages').data('removeaction'),
                                         type: 'POST',
                                         data: {
-                                            file: file.name,
+                                            file_name: removefile,
                                         },
                                         success: function(response) {
-                                            $(this).closest('.dz-preview').remove();
+                                            if(response){
+                                                $(file.previewElement).remove();
+                                            }else{
+                                                alert('Somthing Went Wrong');
+                                            }
                                         }
                                     });
                                 },
@@ -92,11 +95,13 @@ $(document).ready(function() {
                                 oldArr.push(response_value[numberCreate]);
                                 $('.dropzone_hidden').val(JSON.stringify(oldArr));
                                 element = $('.dz-preview').last(response_value.length);
-                                element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-                                element.find('.dz-filename span').html(response_value[numberCreate]);
+                                // element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
+                                // element.find('.dz-filename span').html(response_value[numberCreate]);
+                                $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
+                                $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
                                 oldArr = [];
-                                console.log('numberCreate' + numberCreate);
-                                console.log('response_value' + (response_value.length - 1));
+                                // console.log('numberCreate' + numberCreate);
+                                // console.log('response_value' + (response_value.length - 1));
                                 if(numberCreate === (response_value.length - 1)) {
                                     numberCreate = 0;
                                 } else {
