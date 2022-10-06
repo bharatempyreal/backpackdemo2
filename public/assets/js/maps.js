@@ -10,8 +10,8 @@ var properties = {
             "latitude": 51.541599,
             "longitude": -0.112588,
             "address": "123 Kathal St. Tampa City",
-            "image": "img/properties/properties-list-1.jpg",
-            "type_icon": "img/favicon.png",
+            "image": "assets/img/properties/properties-list-1.jpg",
+            "type_icon": "assets/img/favicon.png",
             "description": "(1) posting signs/decals on local houses (lawn, front door, and windows) and (2) Wear advertising apparel (hats, t-shi rts, etc.)"
         },
         {
@@ -24,8 +24,8 @@ var properties = {
             "latitude": 51.538395,
             "longitude": -0.097418,
             "address": "123 Kathal St. Tampa City",
-            "image": "img/properties/properties-list-2.jpg",
-            "type_icon": "img/favicon.png",
+            "image": "assets/img/properties/properties-list-2.jpg",
+            "type_icon": "assets/img/favicon.png",
             "description": "(1) Wear advertising apparel (hats, t-shirts, etc.). "
         },
         {
@@ -38,8 +38,8 @@ var properties = {
             "latitude": 51.539212,
             "longitude": -0.118403,
             "address": "123 Kathal St. Tampa City",
-            "image": "img/properties/properties-list-3.jpg",
-            "type_icon": "img/favicon.png",
+            "image": "assets/img/properties/properties-list-3.jpg",
+            "type_icon": "assets/img/favicon.png",
             "description": "(1) Vehicle wrap"
         },
         {
@@ -52,15 +52,15 @@ var properties = {
             "latitude": 51.522340,
             "longitude": -0.037894,
             "address": "123 Kathal St. Tampa City",
-            "image": "img/properties/properties-list-1.jpg",
-            "type_icon": "img/favicon.png",
+            "image": "assets/img/properties/properties-list-1.jpg",
+            "type_icon": "assets/img/favicon.png",
             "description": "(1) Wear advertising apparel (hats, t-shirts, etc.).  "
         }
     ]
 };
 
 function drawInfoWindow(property) {
-    var image = 'img/logos/logo.png';
+    var image = 'assets/img/logos/logo.png';
     if (property.image) {
         image = property.image
     }
@@ -111,7 +111,7 @@ function drawInfoWindow(property) {
 }
 
 function insertPropertyToArray(property, layout) {
-    var image = 'img/logos/logo.png';
+    var image = 'assets/img/logos/logo.png';
     if (property.image) {
         image = property.image
     }
@@ -136,7 +136,7 @@ function insertPropertyToArray(property, layout) {
         description = property.description
     }
 
-    
+
     var price = 253.33;
     if (property.price) {
         price = property.price
@@ -301,7 +301,7 @@ function generateMap(latitude, longitude, mapProvider, layout) {
     var propertiesMarkers = [];
 
     $.each(properties.data, function (index, property) {
-        var icon = '<img src="img/logos/logo.png">';
+        var icon = '<img src="assets/img/logos/logo.png">';
         if (property.type_icon) {
             icon = '<img src="' + property.type_icon + '">';
         }

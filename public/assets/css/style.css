@@ -44,6 +44,8 @@
     --bc-yellow: #fcd33b;
     --fc-yellow: #fcd33b;
     --bc-darkgrey:  #D9D9D9;
+    --bc-lightgray:  #ECECEC;
+    --fc-gray: #838383;
 }
 @import url('../fonts/abel/able.css');
 html, body {
@@ -10259,4 +10261,102 @@ blockquote {
 .material-switch > input[type="checkbox"]:checked + label::after {
     background: var(--bc-yellow);
     left: 20px;
+}
+/*my wallet page*/
+.current-ad-section .current-ad-background{
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background: url(../img/Rectangle.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.current-balance-section .balance-section{
+    background-color: var(--bc-lightgray);
+    border-radius: 5px;
+    padding: 1rem;
+    min-height: 200px;
+}
+.current-balance-section .balance-section p{
+    color: var(--fc-gray);
+    line-height: 1.5;
+    margin-bottom: 0.85rem;
+}
+.current-balance-section .card-section{
+    border-radius: 5px;
+    padding: 1rem;
+    background: url('../img/adex-card.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 200px;
+}
+.current-balance-section .card-section h6,
+.current-balance-section .card-section p{
+    color: var(--bc-white);
+}
+.current-balance-section .card-section .last-line-show{
+    bottom: 0;
+    position: absolute;
+}
+.current-balance-section .card-section .last-line-show p{
+    margin-bottom: 0.5rem;
+}
+/*adex list*/
+.my-adex-asset-list .adex-asset-details-image{
+    border: 1px solid var(--bc-lightgray);
+    border-radius: 5px;
+}
+
+.my-adex-asset-list .adex-asset-details-image .adex-list-image{
+    width: 100%;
+}
+.my-adex-asset-list .adex-asset-details h5{
+    font-size: 20px;
+}
+.my-adex-asset-list .adex-asset-details p.adex-asset-details-address,
+.my-adex-asset-list .adex-asset-details p.adex-asset-details-ratting{
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--bc-darkgray);
+    margin-bottom: 0;
+}
+
+.my-adex-asset-list .adex-asset-details p.adex-asset-details-call,
+.my-adex-asset-list .adex-asset-details p.adex-asset-details-website{
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--fc-gray);
+    margin-bottom: 0;
+}
+.my-adex-asset-list .adex-contract-time{
+    text-align: center;
+}
+.my-adex-asset-list .adex-contract-time .adex-contract-time-day{
+    border: 1px solid var(--bc-lightgray);
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px 15px;
+    text-align: center;
+}
+.my-adex-asset-list .adex-contract-time .adex-contract-time-day p,
+.my-adex-asset-list .adex-contract-time .adex-contract-time-day h2{
+    margin-bottom: 0px;
+}
+.my-adex-asset-list .adex-contract-time .adex-contract-time-day p{
+    line-height: 1;
+    font-size: 14px;
+    color: var(--fc-gray);
+}
+
+.my-adex-asset-list .adex-asset-details-image,
+.my-adex-asset-list .adex-asset-details,
+.my-adex-asset-list .adex-contract-time{
+    margin: 10px 0px;
+}
+
+.my-adex-asset-list .current-ad-section .current-ad-row{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--bc-lightgray);
 }
