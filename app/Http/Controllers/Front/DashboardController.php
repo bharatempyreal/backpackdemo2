@@ -31,4 +31,9 @@ class DashboardController extends Controller
     {
         return view('front.auth.my-wallet');
     }
+    public function userlogout(Request $request)
+    {
+        auth()->logout();
+        return redirect()->route('login');
+    }
 }

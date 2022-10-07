@@ -44,6 +44,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/list-property', [App\Http\Controllers\Front\DashboardController::class, 'listproperty'])->name('list-property');
     Route::get('/my-adex', [App\Http\Controllers\Front\DashboardController::class, 'myadex'])->name('my-adex');
     Route::get('/my-wallet', [App\Http\Controllers\Front\DashboardController::class, 'mywallet'])->name('my-wallet');
+    Route::get('/user/logout', [App\Http\Controllers\Front\DashboardController::class, 'userlogout'])->name('user-logout');
+
+    Route::post('/createbusiness', [App\Http\Controllers\Front\BusinessController::class, 'createbusiness'])->name('createbusiness');
+    Route::post('/updatebusiness', [App\Http\Controllers\Front\BusinessController::class, 'updatebusiness'])->name('updatebusiness');
+    Route::post('/get-businessdata', [App\Http\Controllers\Front\BusinessController::class, 'getbusinessdata'])->name('getbusinessdata');
+    Route::post('/dropzone-image', [App\Http\Controllers\Front\BusinessController::class, 'dropimages'])->name('dropzone-image');
+    Route::post('/drop-remove-images', [App\Http\Controllers\Front\BusinessController::class, 'dropremoveimages'])->name('dropremoveImages');
 });
 
 
