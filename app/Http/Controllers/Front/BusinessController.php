@@ -25,6 +25,16 @@ class BusinessController extends Controller
             'state'=> $request->choosestate,
             'zipcode'=> $request->zipcode,
             'bioinformation'=> $request->message,
+            'asset_name' =>$request->assetname,
+            'asset_type' =>$request->asset_type,
+            'asset_image' =>$request->assetimage,
+            'asset_address' =>$request->assetaddress,
+            'asset_landmark' =>$request->assetlandmark,
+            'asset_city' =>$request->assetchoosecitys,
+            'asset_state' =>$request->assetchoosestate,
+            'asset_zipcode' =>$request->assetzipcode,
+            'asset_advertisement_requirements' =>$request->assetmessage,
+            'asset_property_gallery' =>$request->asset_property_gallery,
 
         ];
         $user = Business::create($data);
@@ -52,8 +62,32 @@ class BusinessController extends Controller
     public function getbusinessdata(Request $request)
     {
         $user = Business::where('user_id',$request->id)->first();
-        // dd($user);
-        return compact('user');
+        $images = [];
+        $images_val = [];
+            $all_images = $user->asset_image;
+            $all_images =  ltrim($all_images, $all_images[0]) ;
+            $all_images = rtrim($all_images, ']');
+            $all_images = explode(',',$all_images);
+            foreach($all_images as $items){
+                $items = ltrim($items, $items[0]);
+                $items = rtrim($items, '"');
+                $images[] = route('getStoragePath', ['image', $items]);
+                $images_val[] = $items;
+            }
+        $gallary_img = [];
+        $gallary_img_val = [];
+            $gallery_images = $user->asset_property_gallery;
+            $gallery_images = ltrim($gallery_images, $gallery_images[0]);
+            $gallery_images = rtrim($gallery_images, ']');
+            $gallery_images = explode(',',$gallery_images);
+            foreach($gallery_images as $items){
+                $items = ltrim($items, $items[0]);
+                // (isset($all_images) && !empty($all_images)) ? '';
+                $items = rtrim($items, '"');
+                $gallary_img[] = route('getStoragePath', ['image', $items]);
+                $gallary_img_val[] = $items;
+            }
+        return compact('user','images','gallary_img');
     }
     public function dropimages(Request $request)
     {
@@ -62,7 +96,7 @@ class BusinessController extends Controller
         if($request->file){
             foreach($request->file as $key => $file){
                 $path = storage_path('/app/public/image/');
-                $imageName = uniqid(). $i++. '.' .File::extension($file->getClientOriginalName());
+                $imageName = uniqid(). $i++ . '.' .File::extension($file->getClientOriginalName());
                 $file->move($path,$imageName);
                 $imageNameArr[]=$imageName;
             }

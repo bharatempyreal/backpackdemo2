@@ -107,8 +107,8 @@ class AdvertisementCrudController extends CrudController
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
         CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages')]);
-        CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
-        CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
+        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
+        // CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
         CRUD::addfield(
             [
                 'name'     => 'my_custom_html',
@@ -154,8 +154,8 @@ class AdvertisementCrudController extends CrudController
         CRUD::field('action')->type('hidden')->wrapper(['class' => 'action', 'id' => 'action', 'data-action' => route('geteditadvertisement')]);
         CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages'),'data-editremoveaction' => route('editajaxremoveImages'), ]);
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
-        CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
-        CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
+        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
+        // CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
 
 
 
@@ -498,7 +498,7 @@ class AdvertisementCrudController extends CrudController
         if($items->save()){
             foreach($fiels as $value){
                     if($request->{$value . "_id1"}){
-                        dd($request->Images);
+                        // dd($request->Images);
                         if($request->hasFile($value)){
                             $ad_value =  AdvertisementValue::find($request->{$value . "_id1"});
                             $old_img[]=$ad_value->value;
@@ -534,7 +534,7 @@ class AdvertisementCrudController extends CrudController
             }
             $attrIds[] = $request->{$value . "_id"};
         }
-        dd($new_img,$old_img);
+        // dd($new_img,$old_img);
         // $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
         return redirect()->back();
     }

@@ -51,6 +51,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/get-businessdata', [App\Http\Controllers\Front\BusinessController::class, 'getbusinessdata'])->name('getbusinessdata');
     Route::post('/dropzone-image', [App\Http\Controllers\Front\BusinessController::class, 'dropimages'])->name('dropzone-image');
     Route::post('/drop-remove-images', [App\Http\Controllers\Front\BusinessController::class, 'dropremoveimages'])->name('dropremoveImages');
+
+    Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {
+        $path = storage_path('app/public/'.$name.'/'.$filename);
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    })->name('getStoragePath');
 });
 
 

@@ -7,8 +7,20 @@ Adex - My Profile
 @section('style')
 <link rel="stylesheet" type="text/css"  href={{asset("assets/css/dropzone.css")}}>
 <link rel="stylesheet" href={{asset("assets/css/map.css")}} type="text/css">
+<style>
 
+    .dz-preview img {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+    div#myDropZone {
+        display: flex;
+    }
+</style>
 @endsection
+
+
 
 
 
@@ -21,7 +33,7 @@ Adex - My Profile
         <div class="row">
             <div class="col-md-12">
                 <div class="submit-address">
-                    <form id="ContactDetailsform" method="POST">
+                    <form id="ContactDetailsform" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h3 class="heading-2">Contact Details</h3>
                         <div class="row  mb-30">
@@ -98,32 +110,17 @@ Adex - My Profile
                                 </div>
                             </div>
                         </div>
-                        <div class="row text-center">
-                            <div class="col-md-12">
-                                <button id="ContactDetails" type="submit" class="btn btn-lg btn-theme-black-second">Save Changes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <hr class="my-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="submit-address">
-                    <form id="adInformation" method="POST" enctype="multipart/form-data">
-                        @csrf
                         <h3 class="heading-2">Ad Information</h3>
                         <div class="search-contents-sidebar mb-30">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
                                         <label>Asset Name</label>
-                                        <input type="text" class="input-text" name="assetname" placeholder="Asset Name">
+                                        <input type="text" class="input-text" id="assetname" name="assetname" placeholder="Asset Name">
                                     </div>
                                     <div class="form-group">
                                         <label>Asset Type</label>
-                                        <select class="selectpicker search-fields" name="apartment">
+                                        <select class="selectpicker search-fields" id="asset_type" name="asset_type">
                                             <option>Apartment</option>
                                             <option>House</option>
                                             <option>Commercial</option>
@@ -135,7 +132,8 @@ Adex - My Profile
                                 <div class="col-lg-6 col-md-6">
                                     <label>Asset Image</label>
                                     <div id="myDropZone"  class="dropzone mb-0 dropzone-design mb-50">
-                                    <input type="hidden" class="input-text assetimage" name="assetimage">
+                                    <input type="hidden" class="input-text assetimage" id="assetimage" name="assetimage">
+                                    <input type="hidden" class="input-text assetimage" id="assetimage_path" name="assetimage">
                                         <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                                     </div>
                                 </div>
@@ -147,19 +145,19 @@ Adex - My Profile
                             <div class="col-lg-4 col-md-4">
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input type="text" class="input-text" name="assetaddress"  placeholder="Address">
+                                    <input type="text" class="input-text" id="assetaddress" name="assetaddress"  placeholder="Address">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="form-group">
                                     <label>Landmark</label>
-                                    <input type="text" class="input-text" name="assetlandmark"  placeholder="Landmark">
+                                    <input type="text" class="input-text" id="assetlandmark" name="assetlandmark"  placeholder="Landmark">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <select class="selectpicker search-fields" name="assetchoosecitys">
+                                    <select class="selectpicker search-fields" id="assetchoosecitys" name="assetchoosecitys">
                                         <option>Choose Citys</option>
                                         <option>New York</option>
                                         <option>Los Angeles</option>
@@ -171,7 +169,7 @@ Adex - My Profile
                             <div class="col-lg-4 col-md-4">
                                 <div class="form-group">
                                     <label>State</label>
-                                    <select class="selectpicker search-fields" name="assetchoosestate">
+                                    <select class="selectpicker search-fields" id="assetchoosestate" name="assetchoosestate">
                                         <option>Choose State</option>
                                         <option>Alabama</option>
                                         <option>Alaska</option>
@@ -183,30 +181,37 @@ Adex - My Profile
                             <div class="col-lg-4 col-md-4">
                                 <div class="form-group">
                                     <label>Zip Code</label>
-                                    <input type="text" class="input-text" name="assetzipcode"  placeholder="22401">
+                                    <input type="text" class="input-text" id="assetzipcode" name="assetzipcode"  placeholder="22401">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group mb-2">
                                     <label>Advertisement Requirements</label>
-                                    <textarea class="input-text" name="assetmessage" placeholder="Advertisement Requirements"></textarea>
+                                    <textarea class="input-text" name="assetmessage" id="assetmessage" placeholder="Advertisement Requirements"></textarea>
                                 </div>
                             </div>
                         </div>
                         <h3 class="heading-2">Property Gallery</h3>
                         <div id="myDropZoneGallery" class="dropzone dropzone-design mb-50">
-                            <input type="hidden" class="input-text asset_property_gallery" name="asset_property_gallery">
+                            <input type="hidden" class="input-text asset_property_gallery" id="asset_property_gallery" name="asset_property_gallery">
                             <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                         </div>
                         <div class="row text-center">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-lg btn-theme-black-second">Submit</button>
+                                <button id="ContactDetails" type="submit" class="btn btn-lg btn-theme-black-second">Save Changes</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+                    <form id="adInformation" method="POST">
+                        @csrf
+                    </form>
+
+
+
     </div>
 </div>
 
@@ -223,7 +228,7 @@ Adex - My Profile
     var uploaded = false;
     var newValue = [];
     var oldValue = [];
-        var dropzone = new Dropzone("#myDropZone", {
+        var mydropzone = new Dropzone("#myDropZone", {
             url: "{{route('dropzone-image')}}",
             uploadMultiple: true,
             parallelUploads: 1,
@@ -306,10 +311,11 @@ Adex - My Profile
             },
             removedfile: function(file) {
                 removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
+                console.log("remov", file);
                 var oldArr = [];
                 var hidden_value = JSON.parse($('.asset_property_gallery').val() || '[]');
                 hidden_value.forEach(function(item) {
-                    if(removefile !== item)
+                    if(file.name !== item)
                         oldArr.push(item);
                 });
                 $('.asset_property_gallery').val(JSON.stringify(oldArr));
@@ -319,7 +325,7 @@ Adex - My Profile
                     type: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        file_name: removefile,
+                        file_name: file.name,
                     },
                     success: function(response) {
                         if(response){
@@ -355,8 +361,91 @@ Adex - My Profile
         }
     });
 
+
+
+            $(document).on('click','.dz-remove',function() {
+                removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
+                var oldArr = [];
+                var oldremoved = [];
+                var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
+                hidden_value.forEach(function(item) {
+                    if(removefile !== item)
+                        oldArr.push(item);
+                });
+                $('.dropzone_hidden').val(JSON.stringify(oldArr));
+                $(this).closest('.dz-preview').remove();
+
+            });
+            // var numberCreate = 0;
+            //     Dropzone.autoDiscover = true;
+            //     var uploaded = false;
+            //     var newValue = [];
+            //     var oldValue = [];
+            //     var dropzone = new Dropzone("#myDropZone", {
+            //         url: "{{route('dropzone-image')}}",
+            //         uploadMultiple: true,
+            //         parallelUploads: 10,
+            //         addRemoveLinks: true,
+            //         sending: function(file, xhr, formData) {
+            //             formData.append("_token", $('[name=_token').val());
+            //         },
+            //         error: function(file, response) {
+            //             console.log('error');
+            //             $(file.previewElement).find('.dz-error-message').remove();
+            //             $(file.previewElement).remove();
+            //         },
+            //         removedfile: function(file) {
+            //             removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
+            //             var oldArr = [];
+            //             var hidden_value = JSON.parse($('#assetimage').val() || '[]');
+            //             hidden_value.forEach(function(item) {
+            //                 if(removefile !== item)
+            //                     oldArr.push(item);
+            //             });
+            //             $('#assetimage').val(JSON.stringify(oldArr));
+            //             oldArr = [];
+            //             $.ajax({
+            //                 url: $('.ajaxUploadImages').data('removeaction'),
+            //                 type: 'POST',
+            //                 dataType:'json',
+            //                 data: {
+            //                     file_name: removefile,
+            //                 },
+            //                 success: function(response) {
+            //                     if(response){
+            //                         $(file.previewElement).remove();
+            //                     }else{
+            //                         alert('Somthing Went Wrong');
+            //                     }
+            //                 }
+            //             });
+            //         },
+            //         success: function(file, status, response) {
+            //             var oldArr = [];
+            //             var hidden_value = JSON.parse($('#assetimage').val() || '[]');
+            //             hidden_value.forEach(function(item) {
+            //                 oldArr.push(item);
+            //             });
+            //             var response_value = JSON.parse(response.currentTarget.response || '[]');
+            //             oldArr.push(response_value[numberCreate]);
+            //             $('#assetimage').val(JSON.stringify(oldArr));
+            //             element = $('.dz-preview').last(response_value.length);
+            //             // element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
+            //             // element.find('.dz-filename span').html(response_value[numberCreate]);
+            //             $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
+            //             $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
+            //             oldArr = [];
+            //             // console.log('numberCreate' + numberCreate);
+            //             // console.log('response_value' + (response_value.length - 1));
+            //             if(numberCreate === (response_value.length - 1)) {
+            //                 numberCreate = 0;
+            //             } else {
+            //                 numberCreate = numberCreate + 1;
+            //             }
+            //         }
+            //     });
+
 $(document).ready(function () {
-    // var id = "{{ Auth::user()->id }}";
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -372,19 +461,62 @@ $(document).ready(function () {
         },
         dataType: "json",
         success: function(data) {
-            console.log(data.user);
-            // $('#editid').val(id);
-            $('#businessname').val(data.businessname);
-            $('#email').val(data.email);
-            $('#phone').val(data.phone);
-            $('#address').val(data.address);
-            $('#landmark').val(data.landmark);
-            $('#city').val(data.city);
-            $('#state').val(data.state);
-            $('#zipcode').val(data.zipcode);
-            $('#bioInformation').val(data.bioInformation);
-            // $('#editpassword').val(data.password);
-            // $('#editsel_emp').empty().append($('<option/>').val(data.user.roles[0].id).text(data.user.roles[0].name)).val(data.user.roles[0].id);
+            $('#businessname').val(data.user.businessname);
+            $('#email').val(data.user.email);
+            $('#phone').val(data.user.phone);
+            $('#address').val(data.user.address);
+            $('#landmark').val(data.user.landmark);
+            $('#city').val(data.user.city);
+            $('#state').val(data.user.state);
+            $('#zipcode').val(data.user.zipcode);
+            $('#bioInformation').val(data.user.bioinformation);
+            $('#assetname').val(data.user.asset_name);
+            $('#asset_type').val(data.user.asset_type);
+            $('#assetimage').val(data.user.asset_image);
+            $('#assetimage_path').val(data.user.images);
+            // console.log(JSON.parse(data.user.asset_image));
+            $.each(data.images, function(key,value) {
+                var filename = value;
+                var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                var mockFile = { name: image_name[1]};
+                mydropzone.options.addedfile.call(mydropzone, mockFile);
+                mydropzone.options.thumbnail.call(mydropzone, mockFile, value);
+                mydropzone.emit("complete", mockFile);
+            });
+            $.each(data.gallary_img, function(key,value) {
+                var filename = value;
+                var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                var mockFile = { name: image_name[1]};
+                dropzone.options.addedfile.call(dropzone, mockFile);
+                dropzone.options.thumbnail.call(dropzone, mockFile, value);
+                dropzone.emit("complete", mockFile);
+            });
+            // $.each(data.images, function(key, image_path) {
+
+            //     $('.dropzone').append('<div class="dz-preview" data-id="'+key+'" data-path="'+image_path+'"><img class="dropzone-thumbnail" src="'+image_path+'" /><a class="dz-remove" href="javascript:void(0);" data-remove="'+key+'" data-path="'+image_path+'">Remove file</a></div>');
+            // });
+            $('#assetaddress').val(data.user.asset_address);
+            $('#assetlandmark').val(data.user.asset_landmark);
+            $('#assetchoosecitys').val(data.user.asset_city);
+            $('#assetchoosestate').val(data.user.asset_state);
+            $('#assetzipcode').val(data.user.asset_zipcode);
+            $('#assetmessage').val(data.user.asset_advertisement_requirements);
+            $('#asset_property_gallery').val(data.user.asset_property_gallery);
+
+            $(document).on('click','.dz-remove',function() {
+                alert('remove');
+                removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
+                var oldArr = [];
+                var oldremoved = [];
+                var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
+                hidden_value.forEach(function(item) {
+                    if(removefile !== item)
+                        oldArr.push(item);
+                });
+                $('.dropzone_hidden').val(JSON.stringify(oldArr));
+                $(this).closest('.dz-preview').remove();
+            });
+
         }
     });
 
@@ -419,7 +551,7 @@ $(document).ready(function () {
             });
             $.ajax({
                 type: "POST",
-                url: "{{route('createbusiness')}}",
+                url: "{{route('updatebusiness')}}",
                 data: formdata,
                 cache: false,
                 contentType: false,
@@ -433,25 +565,25 @@ $(document).ready(function () {
     });
     $("#adInformation").submit(function(e) {
                 e.preventDefault();
-        // if ($(this).valid()) {
-            var formdata = new FormData(this);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "POST",
-                url: "{{route('updatebusiness')}}",
-                data: formdata,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                    alert('update');
-                },
-            });
-        // }
+        // // if ($(this).valid()) {
+        //     var formdata = new FormData(this);
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "{{route('updatebusiness')}}",
+        //         data: formdata,
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false,
+        //         success: function(data) {
+        //             alert('update');
+        //         },
+        //     });
+        // // }
     });
 
 
