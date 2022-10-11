@@ -107,8 +107,8 @@ class AdvertisementCrudController extends CrudController
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
         CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages')]);
-        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
-        // CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
+        CRUD::field('removeImages')->type('hidden')->attributes(['class' => 'removeImages', 'id' => 'removeImages']);
+        CRUD::field('cancelImages')->type('hidden')->attributes(['class' => 'cancelImages', 'id' => 'cancelImages']);
         CRUD::addfield(
             [
                 'name'     => 'my_custom_html',
@@ -154,8 +154,8 @@ class AdvertisementCrudController extends CrudController
         CRUD::field('action')->type('hidden')->wrapper(['class' => 'action', 'id' => 'action', 'data-action' => route('geteditadvertisement')]);
         CRUD::field('dropzone')->type('hidden')->wrapper(['class' => 'ajaxUploadImages', 'id' => 'ajaxUploadImages', 'data-action' => route('ajaxUploadImages'), 'data-removeaction' => route('ajaxremoveImages'),'data-editremoveaction' => route('editajaxremoveImages'), ]);
         CRUD::field('category_id')->wrapper(['class' => 'form-group col-md-4 select_category','id' => 'select_category', 'data-action' => route('getadvertisement')]);
-        // CRUD::field('ajaxremoveImages')->type('hidden')->wrapper(['class' => 'ajaxremoveImages', 'id' => 'ajaxremoveImages', 'data-action' => route('ajaxremoveImages')]);
-        // CRUD::field('cancelremoveImages')->type('hidden')->wrapper(['class' => 'cancelremoveImages', 'id' => 'cancelremoveImages']);
+        CRUD::field('removeImages')->type('hidden')->attributes(['class' => 'removeImages', 'id' => 'removeImages']);
+        CRUD::field('cancelImages')->type('hidden')->attributes(['class' => 'cancelImages', 'id' => 'cancelImages']);
 
 
 
@@ -435,6 +435,7 @@ class AdvertisementCrudController extends CrudController
 
     public function store(Request $request)
     {
+        $removeImages =[];
         // dd($request->all());
         $fiels=array_keys($request->all());
         unset($fiels[0]);
@@ -442,9 +443,12 @@ class AdvertisementCrudController extends CrudController
         unset($fiels[2]);
         unset($fiels[3]);
         foreach($fiels as $k=>$f){
-            if(substr($f, -3) == '_id' || $f == 'save_action' || $f == 'dropzone' || $f == 'path'){
+            if(substr($f, -3) == '_id' || $f == 'save_action' || $f == 'dropzone' || $f == 'path' || $f == 'cancelImages' || $f == 'removeImages'){
                 unset($fiels[$k]);
             }
+        }
+        if(isset($request->removeImages) && $request->removeImages != ''){
+            $removeImages =json_decode($request->removeImages);
         }
         $items = new Advertisement;
         $items ->category_id = $request->category_id;
@@ -473,20 +477,32 @@ class AdvertisementCrudController extends CrudController
                 }
              }
         }
+        if(isset($removeImages) && !empty($removeImages)){
+            foreach($removeImages as $key => $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
         return redirect()->back();
     }
 
     public function update(Request $request)
     {
+        $removeImages =[];
         $fiels = array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);
         unset($fiels[2]);
         unset($fiels[4]);
         foreach($fiels as $k => $f){
-            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id' || $f == 'dropzone' || $f == 'path'){
+            if(substr($f, -3) == '_id' || substr($f, -4) == '_id1' || $f == 'save_action' || $f == 'id' || $f == 'dropzone' || $f == 'path' || $f == 'cancelImages' || $f == 'removeImages'){
                 unset($fiels[$k]);
             }
+        }
+        if(isset($request->removeImages) && $request->removeImages != ''){
+            $removeImages =json_decode($request->removeImages);
         }
         $items = Advertisement::find($request->id);
         $items->category_id = $request->category_id;
@@ -534,6 +550,16 @@ class AdvertisementCrudController extends CrudController
             }
             $attrIds[] = $request->{$value . "_id"};
         }
+
+        if(isset($removeImages) && !empty($removeImages)){
+            foreach($removeImages as $key => $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
+
         // dd($new_img,$old_img);
         // $delete = AdvertisementValue::whereNotIn('id',$attrIds)->where('attributes_id',$request->{$value . "_id"})->delete();
         return redirect()->back();
@@ -562,15 +588,16 @@ class AdvertisementCrudController extends CrudController
     }
     public function ajaxRemoveImages(Request $request)
     {
-        if(isset($request->file_name) && $request->file_name != ''){
-            $path = storage_path('/app/public/image/'). $request->file_name;
-            if (file_exists($path)) {
-                if(unlink($path)){
-                    return true;
+        if(isset($request['files']) && !empty($request['files'])){
+            foreach($request['files'] as $key => $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
                 }
             }
+            return true;
         }
-        return false;
+        return response(true);
     }
     public function editajaxRemoveImages(Request $request)
     {
