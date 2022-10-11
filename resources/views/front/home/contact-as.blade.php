@@ -4,6 +4,15 @@
 Adex - Contact Us page
 @endsection
 
+@section('style')
+<style>
+    .error{
+        color: red;
+        text-align: left;
+        display: block;
+    }
+</style>
+@endsection
 
 @section('content')
 <!-- Banner start -->
@@ -16,7 +25,8 @@ Adex - Contact Us page
             </div>
             <div class="row">
                 <div class="form-section align-self-center">
-                    <form action="#" method="GET" enctype="multipart/form-data">
+                    <form id="contact-asform" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="row">
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group name">
@@ -58,3 +68,57 @@ Adex - Contact Us page
 <!-- Banner end -->
 
 @endsection
+
+@section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#contact-asform').validate({
+                ignore: [],
+                rules: {
+                    "name": "required",
+                    "email": {email: true,required :true},
+                    "subject": "required",
+                    "phone": {required : true,minlength:10},
+                    "message": "required",
+                },
+                messages: {
+                    "name": "The Name field is required.",
+                    "email": {email:"Enter Valid Email!",required:"Enter Email!"},
+                    "subject": "The Subject field is required.",
+                    "phone": {minlength:"Please enter Valid Mobile No.",required:"Please enter Mobile No."},
+                    "message": "The Message field is required.",
+                },
+                errorPlacement: (error, element) => {
+                    error.appendTo(element.closest('div'));
+                }
+
+        });
+        $("#contact-asform").submit(function(e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                var formdata = new FormData(this);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{route('contact-as-store')}}",
+                    data: formdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        alert('success');
+                    },
+                });
+            }
+        });
+    });
+
+</script>
+@endsection
+

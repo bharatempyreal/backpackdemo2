@@ -134,6 +134,8 @@ Adex - My Profile
                                     <div id="myDropZone"  class="dropzone mb-0 dropzone-design mb-50">
                                     <input type="hidden" class="input-text assetimage" id="assetimage" name="assetimage">
                                     <input type="hidden" class="input-text assetimage" id="assetimage_path" name="assetimage">
+                                    <input type="hidden" class="input-text removeImages" id="removeImages" name="removeImages">
+                                    <input type="hidden" class="input-text cancelImages" id="cancelImages" name="cancelImages">
                                         <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                                     </div>
                                 </div>
@@ -242,7 +244,8 @@ Adex - My Profile
                 $(file.previewElement).remove();
             },
             removedfile: function(file) {
-                removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
+
+                removefile = $(file.previewElement).find('.dz-filename span').html();
                 var oldArr = [];
                 var hidden_value = JSON.parse($('.assetimage').val() || '[]');
                 hidden_value.forEach(function(item) {
@@ -251,21 +254,39 @@ Adex - My Profile
                 });
                 $('.assetimage').val(JSON.stringify(oldArr));
                 oldArr = [];
-                $.ajax({
-                    url: "{{route('dropremoveImages')}}",
-                    type: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        file_name: removefile,
-                    },
-                    success: function(response) {
-                        if(response){
-                            $(file.previewElement).remove();
-                        }else{
-                            alert('Somthing Went Wrong');
-                        }
-                    }
+
+                var oldremoved = [];
+                var removehidden_value =  JSON.parse($('.removeImages').val() || '[]');
+                removehidden_value.forEach(function(item) {
+                    oldremoved.push(item);
                 });
+                    oldremoved.push(removefile);
+                $('.removeImages').val(JSON.stringify(oldremoved));
+                    $(file.previewElement).remove();
+
+                var cancled = [];
+                var canclehidden_value =  JSON.parse($('.cancelImages').val() || '[]');
+                canclehidden_value.forEach(function(item) {
+                    cancled.push(item);
+                });
+                cancled.push(response_value[numberCreate]);
+                $('.cancelImages').val(JSON.stringify(cancled));
+
+                // $.ajax({
+                //     url: "{{route('dropremoveImages')}}",
+                //     type: 'POST',
+                //     data: {
+                //         _token: "{{ csrf_token() }}",
+                //         file_name: removefile,
+                //     },
+                //     success: function(response) {
+                //         if(response){
+                //             $(file.previewElement).remove();
+                //         }else{
+                //             alert('Somthing Went Wrong');
+                //         }
+                //     }
+                // });
             },
         success: function(file, status , response) {
             var oldArr = [];
@@ -309,13 +330,17 @@ Adex - My Profile
                 $(file.previewElement).find('.dz-error-message').remove();
                 $(file.previewElement).remove();
             },
+
             removedfile: function(file) {
-                removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
-                console.log("remov", file);
+                removefile = $(file.previewElement).find('.dz-filename span').html();
+                // alert(removefile);
+                // return false;
+                // removefile11 = $(file.previewElement).find('.dz-filename span').data('dz-name');
+                // console.log(removefile11);
                 var oldArr = [];
                 var hidden_value = JSON.parse($('.asset_property_gallery').val() || '[]');
                 hidden_value.forEach(function(item) {
-                    if(file.name !== item)
+                    if(removefile !== item)
                         oldArr.push(item);
                 });
                 $('.asset_property_gallery').val(JSON.stringify(oldArr));
@@ -325,7 +350,7 @@ Adex - My Profile
                     type: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        file_name: file.name,
+                        file_name: removefile,
                     },
                     success: function(response) {
                         if(response){
@@ -361,90 +386,6 @@ Adex - My Profile
         }
     });
 
-
-
-            $(document).on('click','.dz-remove',function() {
-                removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
-                var oldArr = [];
-                var oldremoved = [];
-                var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                hidden_value.forEach(function(item) {
-                    if(removefile !== item)
-                        oldArr.push(item);
-                });
-                $('.dropzone_hidden').val(JSON.stringify(oldArr));
-                $(this).closest('.dz-preview').remove();
-
-            });
-            // var numberCreate = 0;
-            //     Dropzone.autoDiscover = true;
-            //     var uploaded = false;
-            //     var newValue = [];
-            //     var oldValue = [];
-            //     var dropzone = new Dropzone("#myDropZone", {
-            //         url: "{{route('dropzone-image')}}",
-            //         uploadMultiple: true,
-            //         parallelUploads: 10,
-            //         addRemoveLinks: true,
-            //         sending: function(file, xhr, formData) {
-            //             formData.append("_token", $('[name=_token').val());
-            //         },
-            //         error: function(file, response) {
-            //             console.log('error');
-            //             $(file.previewElement).find('.dz-error-message').remove();
-            //             $(file.previewElement).remove();
-            //         },
-            //         removedfile: function(file) {
-            //             removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
-            //             var oldArr = [];
-            //             var hidden_value = JSON.parse($('#assetimage').val() || '[]');
-            //             hidden_value.forEach(function(item) {
-            //                 if(removefile !== item)
-            //                     oldArr.push(item);
-            //             });
-            //             $('#assetimage').val(JSON.stringify(oldArr));
-            //             oldArr = [];
-            //             $.ajax({
-            //                 url: $('.ajaxUploadImages').data('removeaction'),
-            //                 type: 'POST',
-            //                 dataType:'json',
-            //                 data: {
-            //                     file_name: removefile,
-            //                 },
-            //                 success: function(response) {
-            //                     if(response){
-            //                         $(file.previewElement).remove();
-            //                     }else{
-            //                         alert('Somthing Went Wrong');
-            //                     }
-            //                 }
-            //             });
-            //         },
-            //         success: function(file, status, response) {
-            //             var oldArr = [];
-            //             var hidden_value = JSON.parse($('#assetimage').val() || '[]');
-            //             hidden_value.forEach(function(item) {
-            //                 oldArr.push(item);
-            //             });
-            //             var response_value = JSON.parse(response.currentTarget.response || '[]');
-            //             oldArr.push(response_value[numberCreate]);
-            //             $('#assetimage').val(JSON.stringify(oldArr));
-            //             element = $('.dz-preview').last(response_value.length);
-            //             // element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-            //             // element.find('.dz-filename span').html(response_value[numberCreate]);
-            //             $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-            //             $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
-            //             oldArr = [];
-            //             // console.log('numberCreate' + numberCreate);
-            //             // console.log('response_value' + (response_value.length - 1));
-            //             if(numberCreate === (response_value.length - 1)) {
-            //                 numberCreate = 0;
-            //             } else {
-            //                 numberCreate = numberCreate + 1;
-            //             }
-            //         }
-            //     });
-
 $(document).ready(function () {
     $.ajaxSetup({
         headers: {
@@ -461,84 +402,87 @@ $(document).ready(function () {
         },
         dataType: "json",
         success: function(data) {
-            $('#businessname').val(data.user.businessname);
-            $('#email').val(data.user.email);
-            $('#phone').val(data.user.phone);
-            $('#address').val(data.user.address);
-            $('#landmark').val(data.user.landmark);
-            $('#city').val(data.user.city);
-            $('#state').val(data.user.state);
-            $('#zipcode').val(data.user.zipcode);
-            $('#bioInformation').val(data.user.bioinformation);
-            $('#assetname').val(data.user.asset_name);
-            $('#asset_type').val(data.user.asset_type);
-            $('#assetimage').val(data.user.asset_image);
-            $('#assetimage_path').val(data.user.images);
-            // console.log(JSON.parse(data.user.asset_image));
-            $.each(data.images, function(key,value) {
-                var filename = value;
-                var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
-                var mockFile = { name: image_name[1]};
-                mydropzone.options.addedfile.call(mydropzone, mockFile);
-                mydropzone.options.thumbnail.call(mydropzone, mockFile, value);
-                mydropzone.emit("complete", mockFile);
-            });
-            $.each(data.gallary_img, function(key,value) {
-                var filename = value;
-                var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
-                var mockFile = { name: image_name[1]};
-                dropzone.options.addedfile.call(dropzone, mockFile);
-                dropzone.options.thumbnail.call(dropzone, mockFile, value);
-                dropzone.emit("complete", mockFile);
-            });
-            // $.each(data.images, function(key, image_path) {
-
-            //     $('.dropzone').append('<div class="dz-preview" data-id="'+key+'" data-path="'+image_path+'"><img class="dropzone-thumbnail" src="'+image_path+'" /><a class="dz-remove" href="javascript:void(0);" data-remove="'+key+'" data-path="'+image_path+'">Remove file</a></div>');
-            // });
-            $('#assetaddress').val(data.user.asset_address);
-            $('#assetlandmark').val(data.user.asset_landmark);
-            $('#assetchoosecitys').val(data.user.asset_city);
-            $('#assetchoosestate').val(data.user.asset_state);
-            $('#assetzipcode').val(data.user.asset_zipcode);
-            $('#assetmessage').val(data.user.asset_advertisement_requirements);
-            $('#asset_property_gallery').val(data.user.asset_property_gallery);
-
-            $(document).on('click','.dz-remove',function() {
-                alert('remove');
-                removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
-                var oldArr = [];
-                var oldremoved = [];
-                var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                hidden_value.forEach(function(item) {
-                    if(removefile !== item)
-                        oldArr.push(item);
+            if(data != null){
+                $('#businessname').val(data.user.businessname);
+                $('#email').val(data.user.email);
+                $('#phone').val(data.user.phone);
+                $('#address').val(data.user.address);
+                $('#landmark').val(data.user.landmark);
+                $('#city').val(data.user.city);
+                $('#state').val(data.user.state);
+                $('#zipcode').val(data.user.zipcode);
+                $('#bioInformation').val(data.user.bioinformation);
+                $('#assetname').val(data.user.asset_name);
+                $('#asset_type').val(data.user.asset_type);
+                $('#assetimage').val(data.user.asset_image);
+                $('#assetimage_path').val(data.user.images);
+                // console.log(JSON.parse(data.user.asset_image));
+                $.each(data.images, function(key,value) {
+                    var filename = value;
+                    var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                    var mockFile = { name: image_name[1]};
+                    mydropzone.options.addedfile.call(mydropzone, mockFile);
+                    mydropzone.options.thumbnail.call(mydropzone, mockFile, value);
+                    mydropzone.emit("complete", mockFile);
                 });
-                $('.dropzone_hidden').val(JSON.stringify(oldArr));
-                $(this).closest('.dz-preview').remove();
-            });
+                $.each(data.gallary_img, function(key,value) {
+                    var filename = value;
+                    var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                    var mockFile = { name: image_name[1]};
+                    dropzone.options.addedfile.call(dropzone, mockFile);
+                    dropzone.options.thumbnail.call(dropzone, mockFile, value);
+                    dropzone.emit("complete", mockFile);
+                });
+                // $.each(data.images, function(key, image_path) {
 
-        }
-    });
+                    //     $('.dropzone').append('<div class="dz-preview" data-id="'+key+'" data-path="'+image_path+'"><img class="dropzone-thumbnail" src="'+image_path+'" /><a class="dz-remove" href="javascript:void(0);" data-remove="'+key+'" data-path="'+image_path+'">Remove file</a></div>');
+                    // });
+                    $('#assetaddress').val(data.user.asset_address);
+                    $('#assetlandmark').val(data.user.asset_landmark);
+                    $('#assetchoosecitys').val(data.user.asset_city);
+                    $('#assetchoosestate').val(data.user.asset_state);
+                    $('#assetzipcode').val(data.user.asset_zipcode);
+                    $('#assetmessage').val(data.user.asset_advertisement_requirements);
+                    $('#asset_property_gallery').val(data.user.asset_property_gallery);
 
-    // $('#userform').validate({
-    //             ignore: [],
-    //             rules: {
-    //                 "name": "required",
-    //                 "email": "required",
-    //                 "password": "required",
-    //                 "role": "required",
-    //             },
-    //             messages: {
-    //                 "name": "The Name field is required.",
-    //                 "email": "The Email field is required.",
-    //                 "password": "The Password field is required.",
-    //                 "role": "The Role field is required.",
-    //             },
-    //             errorPlacement: (error, element) => {
-    //                 error.appendTo(element.closest('div'));
-    //             }
-    //         });
+                    $(document).on('click','.dz-remove',function() {
+                        alert('remove');
+                        removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
+                        var oldArr = [];
+                        var oldremoved = [];
+                        var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
+                        hidden_value.forEach(function(item) {
+                            if(removefile !== item)
+                            oldArr.push(item);
+                        });
+                        $('.dropzone_hidden').val(JSON.stringify(oldArr));
+                        $(this).closest('.dz-preview').remove();
+                    });
 
+                }else{
+                    $('#businessname').val();
+                    $('#email').val();
+                    $('#phone').val();
+                    $('#address').val();
+                    $('#landmark').val();
+                    $('#city').val();
+                    $('#state').val();
+                    $('#zipcode').val();
+                    $('#bioInformation').val();
+                    $('#assetname').val();
+                    $('#asset_type').val();
+                    $('#assetimage').val();
+                    $('#assetimage_path').val();
+                    $('#assetaddress').val();
+                    $('#assetlandmark').val();
+                    $('#assetchoosecitys').val();
+                    $('#assetchoosestate').val();
+                    $('#assetzipcode').val();
+                    $('#assetmessage').val();
+                    $('#asset_property_gallery').val();
+                }
+            }
+        });
 
     $("#ContactDetailsform").submit(function(e) {
                 e.preventDefault();

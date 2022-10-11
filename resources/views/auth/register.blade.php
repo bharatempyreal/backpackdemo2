@@ -4,11 +4,8 @@
 Adex - Signup page
 @endsection
 @section('title')
-<style>
-    .invalid-feedback{
-        color: "#fff !important";
-    }
-</style>
+
+
 @endsection
 
 

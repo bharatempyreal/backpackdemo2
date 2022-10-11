@@ -55,7 +55,7 @@ class Category extends Model
     */
     public function attribute()
     {
-        return $this->hasMany(Attribute::class);
+        return $this->hasMany(Attributes::class);
     }
 
     public function attribute_value()
@@ -120,7 +120,7 @@ class Category extends Model
         }
     }
 
-    protected $appends = ['attributes', 'status'];
+    protected $appends = ['attributes', 'status_name'];
 
     public function getAttributesAttribute() {
         return (isset($this->attribute)) ? $this->attribute : [];
@@ -130,4 +130,9 @@ class Category extends Model
         return ($this->status) ? $this->typeStatus($this->status) : '-';
     }
 
+    public function getImageAttribute() {
+        // return('1');
+        return(getStorageUrl($this->attributes['image']));
+    //    return $this->attribute['image'] ? route('getStoragePath', $value) : [];
+    }
 }

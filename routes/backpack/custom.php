@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Category;
 
 // --------------------------
 // Custom Backpack Routes
@@ -27,6 +28,10 @@ Route::group([
         $response->header("Content-Type", $type);
         return $response;
     })->name('getStoragePath');
+    Route::get('imageshow',function(){
+       $data = Category::all()->toArray();
+       dd($data);
+    });
     Route::crud('attributes', 'AttributesCrudController');
     Route::crud('advertisement', 'AdvertisementCrudController');
 
@@ -35,5 +40,5 @@ Route::group([
     Route::post('ajax-upload-images', 'AdvertisementCrudController@ajaxUploadImages')->name('ajaxUploadImages');
     Route::post('ajax-remove-images', 'AdvertisementCrudController@ajaxRemoveImages')->name('ajaxremoveImages');
     Route::post('editajax-remove-images', 'AdvertisementCrudController@editajaxRemoveImages')->name('editajaxremoveImages');
+    Route::crud('contact-as', 'ContactAsCrudController');
 });
-

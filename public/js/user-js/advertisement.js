@@ -252,7 +252,6 @@ function getform() {
                                     oldArr.push(item);
                             });
                             $('.dropzone_hidden').val(JSON.stringify(oldArr));
-
                             // Add IN Remove Hidden
                             var oldremoved = [];
                             var removehidden_value =  JSON.parse($('.removeImages').val() || '[]');
@@ -261,7 +260,6 @@ function getform() {
                             });
                                 oldremoved.push(removefile);
                             $('.removeImages').val(JSON.stringify(oldremoved));
-
                                 $(file.previewElement).remove();
 
 

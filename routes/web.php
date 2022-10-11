@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/list-property', [App\Http\Controllers\Front\DashboardController::class, 'listproperty'])->name('list-property');
     Route::get('/my-adex', [App\Http\Controllers\Front\DashboardController::class, 'myadex'])->name('my-adex');
     Route::get('/my-wallet', [App\Http\Controllers\Front\DashboardController::class, 'mywallet'])->name('my-wallet');
+    Route::post('/contact-as/store', [App\Http\Controllers\Front\ContactasController::class, 'contactasstore'])->name('contact-as-store');
     Route::get('/user/logout', [App\Http\Controllers\Front\DashboardController::class, 'userlogout'])->name('user-logout');
 
     Route::post('/createbusiness', [App\Http\Controllers\Front\BusinessController::class, 'createbusiness'])->name('createbusiness');
