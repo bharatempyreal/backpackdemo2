@@ -41,4 +41,5 @@ Route::group([
     Route::post('ajax-remove-images', 'AdvertisementCrudController@ajaxRemoveImages')->name('ajaxremoveImages');
     Route::post('editajax-remove-images', 'AdvertisementCrudController@editajaxRemoveImages')->name('editajaxremoveImages');
     Route::crud('contact-as', 'ContactAsCrudController');
+    Route::crud('attributegroup', 'AttributegroupCrudController');
 });

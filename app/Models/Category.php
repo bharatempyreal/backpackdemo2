@@ -130,9 +130,5 @@ class Category extends Model
         return ($this->status) ? $this->typeStatus($this->status) : '-';
     }
 
-    public function getImageAttribute() {
-        // return('1');
-        return(getStorageUrl($this->attributes['image']));
-    //    return $this->attribute['image'] ? route('getStoragePath', $value) : [];
-    }
+
 }

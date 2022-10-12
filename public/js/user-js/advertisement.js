@@ -280,25 +280,6 @@ function getform() {
                             // });
                         },
                         success: function(file, status, response) {
-                            // var oldArr = [];
-                            // var number = 0;
-                            // var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                            // hidden_value.forEach(function(item) {
-                            //     oldArr.push(item);
-                            // });
-                            // var response_value = JSON.parse(response.currentTarget.response || '[]');
-                            // oldArr.push(response_value[number]);
-                            // $('.dropzone_hidden').val(JSON.stringify(oldArr));
-                            // oldArr = [];
-                            // $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value);
-                            // $(file.previewTemplate).find('.dz-filename span').html(response_value);
-                            // if(number == response_value.lenght) {
-                            //     number = 0;
-                            // } else {
-                            //     number = parseInt(number) + 1;
-                            // }
-
-
                             var oldArr = [];
                             var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
                             hidden_value.forEach(function(item) {

@@ -37,6 +37,14 @@ class BusinessController extends Controller
             'asset_property_gallery' =>$request->asset_property_gallery,
 
         ];
+        if(isset($removeImages) && !empty($removeImages)){
+            foreach($removeImages as $key => $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
         $user = Business::create($data);
         return true ;
     }
@@ -45,6 +53,7 @@ class BusinessController extends Controller
         // dd($request->all());
         $id = Auth::user()->id;
         $business = Business::where('user_id',$id)->first();
+
         if (is_null($business)) {
             $data = [
                 'user_id'=> Auth::user()->id,
@@ -59,7 +68,7 @@ class BusinessController extends Controller
                 'bioinformation'=> $request->message,
                 'asset_name' =>$request->assetname,
                 'asset_type' =>$request->asset_type,
-                'asset_image' =>$request->assetimage,
+                'asset_image' =>(isset($request->assetimage) && $request->assetimage != '')?$request->assetimage : '',
                 'asset_address' =>$request->assetaddress,
                 'asset_landmark' =>$request->assetlandmark,
                 'asset_city' =>$request->assetchoosecitys,
@@ -69,9 +78,24 @@ class BusinessController extends Controller
                 'asset_property_gallery' =>$request->asset_property_gallery,
             ];
             $user = Business::create($data);
+            if(isset($request->removeImages) && !empty($request->removeImages)){
+                foreach(json_decode($request->removeImages) as $key => $file){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
+            if(isset($request->galleryremoveImages) && !empty($request->galleryremoveImages)){
+                foreach(json_decode($request->galleryremoveImages) as $key => $file){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
             return true ;
          }else{
-
              $business->businessname = $request->businessname;
              $business->email = $request->email;
              $business->phone = $request->phone;
@@ -84,17 +108,39 @@ class BusinessController extends Controller
 
              $business->asset_name = $request->assetname;
              $business->asset_type = $request->asset_type;
-             $business->asset_image = $request->assetimage;
+
+            $business->asset_image = (isset($request->assetimage) && $request->assetimage != '' && count(json_decode($request->assetimage))>0)?$request->assetimage : '';
              $business->asset_address = $request->assetaddress;
              $business->asset_landmark = $request->assetlandmark;
              $business->asset_city = $request->assetchoosecitys;
              $business->asset_state = $request->assetchoosestate;
              $business->asset_zipcode = $request->assetzipcode;
              $business->asset_advertisement_requirements = $request->assetmessage;
-             $business->asset_property_gallery = $request->asset_property_gallery;
+             if(empty(json_decode($request->asset_property_gallery))){
+                $business->asset_property_gallery = null;
+            }else{
+               $business->asset_property_gallery = $request->asset_property_gallery;
+            }
              $business->save();
-
              $response['data']     = 'success';
+             if(isset($request->removeImages) && !empty($request->removeImages)){
+                $removeImages = $request->removeImages;
+                foreach(json_decode($removeImages) as $file){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
+             if(isset($request->galleryremoveImages) && !empty($request->galleryremoveImages)){
+                $galleryremoveImages = $request->galleryremoveImages;
+                foreach(json_decode($galleryremoveImages) as $file){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
              return response()->json($response);
             }
     }
@@ -104,33 +150,38 @@ class BusinessController extends Controller
         if (is_null($user)) {
             return false;
         }else{
-
             $images = [];
             $images_val = [];
-            $all_images = $user->asset_image;
-            $all_images =  ltrim($all_images, $all_images[0]) ;
-            $all_images = rtrim($all_images, ']');
-            $all_images = explode(',',$all_images);
-            foreach($all_images as $items){
-                $items = ltrim($items, $items[0]);
-                $items = rtrim($items, '"');
-                $images[] = route('getStoragePath', ['image', $items]);
-                $images_val[] = $items;
+            if($user->asset_image != null){
+                $all_images = $user->asset_image;
+                $all_images =  ltrim($all_images, $all_images[0]) ;
+                $all_images = rtrim($all_images, ']');
+                $all_images = explode(',',$all_images);
+                if($all_images != null){
+                    foreach($all_images as $items){
+                        $items = ltrim($items, $items[0]);
+                        $items = rtrim($items, '"');
+                        $images[] = route('getStoragePath', ['image', $items]);
+                        $images_val[] = $items;
+                    }
+                }
             }
             $gallary_img = [];
             $gallary_img_val = [];
-            $gallery_images = $user->asset_property_gallery;
-            $gallery_images = ltrim($gallery_images, $gallery_images[0]);
-            $gallery_images = rtrim($gallery_images, ']');
-            $gallery_images = explode(',',$gallery_images);
-            foreach($gallery_images as $items){
-                $items = ltrim($items, $items[0]);
-                // (isset($all_images) && !empty($all_images)) ? '';
-                $items = rtrim($items, '"');
-                $gallary_img[] = route('getStoragePath', ['image', $items]);
-                $gallary_img_val[] = $items;
+            if($user->asset_property_gallery != null){
+                $gallery_images = $user->asset_property_gallery;
+                $gallery_images = ltrim($gallery_images, $gallery_images[0]);
+                $gallery_images = rtrim($gallery_images, ']');
+                $gallery_images = explode(',',$gallery_images);
+                foreach($gallery_images as $items){
+                    $items = ltrim($items, $items[0]);
+                    // (isset($all_images) && !empty($all_images)) ? '';
+                    $items = rtrim($items, '"');
+                    $gallary_img[] = route('getStoragePath', ['image', $items]);
+                    $gallary_img_val[] = $items;
+                }
             }
-            return compact('user','images','gallary_img');
+                return compact('user','images','gallary_img');
         }
     }
     public function dropimages(Request $request)
@@ -158,5 +209,14 @@ class BusinessController extends Controller
             }
         }
         return false;
+    }
+    public function editdropajaxRemoveImages(Request $request)
+    {
+        // dd($request->all());
+        $path =  $request->file;;
+        if (file_exists($path)) {
+            unlink($path);
+        }
+        return true;
     }
 }

@@ -196,6 +196,8 @@ Adex - My Profile
                         <h3 class="heading-2">Property Gallery</h3>
                         <div id="myDropZoneGallery" class="dropzone dropzone-design mb-50">
                             <input type="hidden" class="input-text asset_property_gallery" id="asset_property_gallery" name="asset_property_gallery">
+                            <input type="hidden" class="input-text galleryremoveImages" id="galleryremoveImages" name="galleryremoveImages">
+                            <input type="hidden" class="input-text gallerycancelImages" id="gallerycancelImages" name="gallerycancelImages">
                             <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                         </div>
                         <div class="row text-center">
@@ -244,7 +246,6 @@ Adex - My Profile
                 $(file.previewElement).remove();
             },
             removedfile: function(file) {
-
                 removefile = $(file.previewElement).find('.dz-filename span').html();
                 var oldArr = [];
                 var hidden_value = JSON.parse($('.assetimage').val() || '[]');
@@ -330,13 +331,8 @@ Adex - My Profile
                 $(file.previewElement).find('.dz-error-message').remove();
                 $(file.previewElement).remove();
             },
-
             removedfile: function(file) {
                 removefile = $(file.previewElement).find('.dz-filename span').html();
-                // alert(removefile);
-                // return false;
-                // removefile11 = $(file.previewElement).find('.dz-filename span').data('dz-name');
-                // console.log(removefile11);
                 var oldArr = [];
                 var hidden_value = JSON.parse($('.asset_property_gallery').val() || '[]');
                 hidden_value.forEach(function(item) {
@@ -345,21 +341,31 @@ Adex - My Profile
                 });
                 $('.asset_property_gallery').val(JSON.stringify(oldArr));
                 oldArr = [];
-                $.ajax({
-                    url: "{{route('dropremoveImages')}}",
-                    type: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        file_name: removefile,
-                    },
-                    success: function(response) {
-                        if(response){
-                            $(file.previewElement).remove();
-                        }else{
-                            alert('Somthing Went Wrong');
-                        }
-                    }
+                // Add IN Remove Hidden
+                var oldremoved = [];
+                var removehidden_value =  JSON.parse($('.galleryremoveImages').val() || '[]');
+                removehidden_value.forEach(function(item) {
+                    oldremoved.push(item);
                 });
+                    oldremoved.push(removefile);
+                $('.galleryremoveImages').val(JSON.stringify(oldremoved));
+                    $(file.previewElement).remove();
+
+                // $.ajax({
+                //     url: "{{route('dropremoveImages')}}",
+                //     type: 'POST',
+                //     data: {
+                //         _token: "{{ csrf_token() }}",
+                //         file_name: removefile,
+                //     },
+                //     success: function(response) {
+                //         if(response){
+                //             $(file.previewElement).remove();
+                //         }else{
+                //             alert('Somthing Went Wrong');
+                //         }
+                //     }
+                // });
             },
         success: function(file, status , response) {
             var oldArr = [];
@@ -530,10 +536,46 @@ $(document).ready(function () {
         // // }
     });
 
-
+    $( window ).bind('beforeunload', function(){
+        var cancle = JSON.parse($('.removeImages').val() || '[]');
+        var url = "{{route('ajaxremoveImages')}}";
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType:'json',
+            data: {
+                files: cancle,
+                _token:"{{ csrf_token() }}"
+            },
+            success: function(response) {
+                return true;
+            }
+        });
+    });
+    // $(document).on('click','.cancle_btn',function(e){
+    //     var event = e;
+    //     // e.preventDefault();
+    //     var cancle = JSON.parse($('.cancelImages').val() || '[]');
+    //     var url = "{{route('editajaxremoveImages')}}";
+    //     $.ajax({
+    //         url: url,
+    //         type: 'POST',
+    //         dataType:'json',
+    //         data: {
+    //             files: cancle,
+    //         },
+    //         success: function(response) {
+    //             return event;
+    //         }
+    //     });
+    // });
 
 });
-
 </script>
 
 
