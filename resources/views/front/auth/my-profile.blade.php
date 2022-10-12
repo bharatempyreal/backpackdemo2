@@ -133,7 +133,7 @@ Adex - My Profile
                                     <label>Asset Image</label>
                                     <div id="myDropZone"  class="dropzone mb-0 dropzone-design mb-50">
                                     <input type="hidden" class="input-text assetimage" id="assetimage" name="assetimage">
-                                    <input type="hidden" class="input-text assetimage" id="assetimage_path" name="assetimage">
+                                    <input type="hidden" class="input-text assetimage_path" id="assetimage_path" name="assetimage_path">
                                     <input type="hidden" class="input-text removeImages" id="removeImages" name="removeImages">
                                     <input type="hidden" class="input-text cancelImages" id="cancelImages" name="cancelImages">
                                         <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
@@ -209,13 +209,6 @@ Adex - My Profile
                 </div>
             </div>
         </div>
-
-                    <form id="adInformation" method="POST">
-                        @csrf
-                    </form>
-
-
-
     </div>
 </div>
 
@@ -299,13 +292,23 @@ Adex - My Profile
             oldArr.push(response_value[numberCreate]);
             $('.assetimage').val(JSON.stringify(oldArr));
             element = $('.dz-preview').last(response_value.length);
-            // element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-            // element.find('.dz-filename span').html(response_value[numberCreate]);
             $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
             $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
             oldArr = [];
-            // console.log('numberCreate' + numberCreate);
-            // console.log('response_value' + (response_value.length - 1));
+            if(numberCreate === (response_value.length - 1)) {
+                numberCreate = 0;
+            } else {
+                numberCreate = numberCreate + 1;
+            }
+
+            // Add IN cancled Hidden
+            var cancled = [];
+            var canclehidden_value =  JSON.parse($('.cancelImages').val() || '[]');
+            canclehidden_value.forEach(function(item) {
+                cancled.push(item);
+            });
+            cancled.push(response_value[numberCreate]);
+            $('.cancelImages').val(JSON.stringify(cancled));
             if(numberCreate === (response_value.length - 1)) {
                 numberCreate = 0;
             } else {
@@ -341,6 +344,7 @@ Adex - My Profile
                 });
                 $('.asset_property_gallery').val(JSON.stringify(oldArr));
                 oldArr = [];
+
                 // Add IN Remove Hidden
                 var oldremoved = [];
                 var removehidden_value =  JSON.parse($('.galleryremoveImages').val() || '[]');
@@ -351,21 +355,13 @@ Adex - My Profile
                 $('.galleryremoveImages').val(JSON.stringify(oldremoved));
                     $(file.previewElement).remove();
 
-                // $.ajax({
-                //     url: "{{route('dropremoveImages')}}",
-                //     type: 'POST',
-                //     data: {
-                //         _token: "{{ csrf_token() }}",
-                //         file_name: removefile,
-                //     },
-                //     success: function(response) {
-                //         if(response){
-                //             $(file.previewElement).remove();
-                //         }else{
-                //             alert('Somthing Went Wrong');
-                //         }
-                //     }
-                // });
+                var cancled = [];
+                var canclehidden_value =  JSON.parse($('.galleryremoveImages').val() || '[]');
+                canclehidden_value.forEach(function(item) {
+                    cancled.push(item);
+                });
+                cancled.push(response_value[numberCreate]);
+                $('.galleryremoveImages').val(JSON.stringify(cancled));
             },
         success: function(file, status , response) {
             var oldArr = [];
@@ -377,13 +373,23 @@ Adex - My Profile
             oldArr.push(response_value[numberCreate]);
             $('.asset_property_gallery').val(JSON.stringify(oldArr));
             element = $('.dz-preview').last(response_value.length);
-            // element.find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-            // element.find('.dz-filename span').html(response_value[numberCreate]);
             $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
             $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
             oldArr = [];
-            // console.log('numberCreate' + numberCreate);
-            // console.log('response_value' + (response_value.length - 1));
+            if(numberCreate === (response_value.length - 1)) {
+                numberCreate = 0;
+            } else {
+                numberCreate = numberCreate + 1;
+            }
+
+            // Add IN cancled Hidden
+            var cancled = [];
+            var canclehidden_value =  JSON.parse($('.gallerycancelImages').val() || '[]');
+            canclehidden_value.forEach(function(item) {
+                cancled.push(item);
+            });
+            cancled.push(response_value[numberCreate]);
+            $('.gallerycancelImages').val(JSON.stringify(cancled));
             if(numberCreate === (response_value.length - 1)) {
                 numberCreate = 0;
             } else {
@@ -492,6 +498,8 @@ $(document).ready(function () {
 
     $("#ContactDetailsform").submit(function(e) {
                 e.preventDefault();
+            $('.cancelImages').val('');
+            $('.gallerycancelImages').val('');
         // if ($(this).valid()) {
             var formdata = new FormData(this);
             $.ajaxSetup({
@@ -537,8 +545,8 @@ $(document).ready(function () {
     });
 
     $( window ).bind('beforeunload', function(){
-        var cancle = JSON.parse($('.removeImages').val() || '[]');
-        var url = "{{route('ajaxremoveImages')}}";
+        var cancle = JSON.parse($('.cancelImages').val() || '[]');
+        var url = "{{route('dropremoveImages')}}";
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -553,27 +561,28 @@ $(document).ready(function () {
                 _token:"{{ csrf_token() }}"
             },
             success: function(response) {
+            }
+        });
+        var gallerycancelImages = JSON.parse($('.gallerycancelImages').val() || '[]');
+        var url = "{{route('dropremoveImages')}}";
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType:'json',
+            data: {
+                files: gallerycancelImages,
+                _token:"{{ csrf_token() }}"
+            },
+            success: function(response) {
                 return true;
             }
         });
     });
-    // $(document).on('click','.cancle_btn',function(e){
-    //     var event = e;
-    //     // e.preventDefault();
-    //     var cancle = JSON.parse($('.cancelImages').val() || '[]');
-    //     var url = "{{route('editajaxremoveImages')}}";
-    //     $.ajax({
-    //         url: url,
-    //         type: 'POST',
-    //         dataType:'json',
-    //         data: {
-    //             files: cancle,
-    //         },
-    //         success: function(response) {
-    //             return event;
-    //         }
-    //     });
-    // });
 
 });
 </script>

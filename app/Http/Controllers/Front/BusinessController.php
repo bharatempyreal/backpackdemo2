@@ -75,7 +75,7 @@ class BusinessController extends Controller
                 'asset_state' =>$request->assetchoosestate,
                 'asset_zipcode' =>$request->assetzipcode,
                 'asset_advertisement_requirements' =>$request->assetmessage,
-                'asset_property_gallery' =>$request->asset_property_gallery,
+                'asset_property_gallery' =>(isset($request->asset_property_gallery) && $request->asset_property_gallery != '')?$request->asset_property_gallery : '',
             ];
             $user = Business::create($data);
             if(isset($request->removeImages) && !empty($request->removeImages)){
@@ -96,6 +96,7 @@ class BusinessController extends Controller
             }
             return true ;
          }else{
+            // dd($request->all());
              $business->businessname = $request->businessname;
              $business->email = $request->email;
              $business->phone = $request->phone;
@@ -105,22 +106,16 @@ class BusinessController extends Controller
              $business->state = $request->choosestate;
              $business->zipcode = $request->zipcode;
              $business->bioinformation = $request->message;
-
              $business->asset_name = $request->assetname;
              $business->asset_type = $request->asset_type;
-
-            $business->asset_image = (isset($request->assetimage) && $request->assetimage != '' && count(json_decode($request->assetimage))>0)?$request->assetimage : '';
+             $business->asset_image = (isset($request->assetimage) && $request->assetimage != '' && count(json_decode($request->assetimage))>0)?$request->assetimage : '';
              $business->asset_address = $request->assetaddress;
              $business->asset_landmark = $request->assetlandmark;
              $business->asset_city = $request->assetchoosecitys;
              $business->asset_state = $request->assetchoosestate;
              $business->asset_zipcode = $request->assetzipcode;
              $business->asset_advertisement_requirements = $request->assetmessage;
-             if(empty(json_decode($request->asset_property_gallery))){
-                $business->asset_property_gallery = null;
-            }else{
-               $business->asset_property_gallery = $request->asset_property_gallery;
-            }
+             $business->asset_property_gallery = (isset($request->asset_property_gallery) && $request->asset_property_gallery != '' && count(json_decode($request->asset_property_gallery))>0)?$request->asset_property_gallery : '';
              $business->save();
              $response['data']     = 'success';
              if(isset($request->removeImages) && !empty($request->removeImages)){
@@ -200,15 +195,17 @@ class BusinessController extends Controller
     }
     public function dropremoveimages(Request $request)
     {
-        if(isset($request->file_name) && $request->file_name != ''){
-            $path = storage_path('/app/public/image/'). $request->file_name;
-            if (file_exists($path)) {
-                if(unlink($path)){
-                    return true;
+        // dd($request->all());
+        if(isset($request['files']) && !empty($request['files'])){
+            foreach($request['files'] as $key => $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
                 }
             }
+            return true;
         }
-        return false;
+        return response(true);
     }
     public function editdropajaxRemoveImages(Request $request)
     {

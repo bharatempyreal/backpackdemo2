@@ -6,6 +6,7 @@ use App\Http\Requests\AttributesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use App\Models\Attributes;
+use App\Models\Attributegroup;
 use App\Models\AttributesValue;
 use Backpack\CRUD\app\Library\Widget;
 
@@ -75,12 +76,20 @@ class AttributesCrudController extends CrudController
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id');
         CRUD::addField([
+            'name'      => 'attributegroup',
+            'type'      => 'select2',
+            'label'     => 'Attribute Group',
+            'attribute' => 'name',
+            'model'     => "App\Models\Attributegroup",
+        ]);
+        CRUD::addField([
             'name'    => 'category_type',
             'type'    => 'select2_from_array',
             'label'   => 'Type',
             'wrapper' => ['class' => 'form-group col-md-4 select-test','id' => 'select'],
             'options' => Attributes::typeData(),
         ]);
+
         CRUD::addField([
             'name'    => 'name',
             'type'    => 'text',
@@ -148,6 +157,13 @@ class AttributesCrudController extends CrudController
 
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id');
+        CRUD::addField([
+            'name'      => 'attributegroup',
+            'type'      => 'select2',
+            'label'     => 'Attribute Group',
+            'attribute' => 'name',
+            'model'     => "App\Models\Attributegroup",
+        ]);
         CRUD::addField([
             'name'    => 'category_type',
             'type'    => 'select2_from_array',
