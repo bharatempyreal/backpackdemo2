@@ -4,6 +4,7 @@
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- External CSS libraries -->
     <link rel="stylesheet" type="text/css" href={{ asset("assets/css/bootstrap.min.css") }}>
@@ -14,6 +15,8 @@
     <link rel="stylesheet" type="text/css" href={{ asset("assets/fonts/linearicons/style.css") }}>
     <link rel="stylesheet" type="text/css"  href={{ asset("assets/css/jquery.mCustomScrollbar.css") }}>
     <link rel="stylesheet" type="text/css"  href={{ asset("assets/css/slick.css") }}>
+    <link rel="stylesheet" type="text/css"  href={{ asset("assets/css/bootstrap-select.min.css") }}>
+
 
     <!-- Custom stylesheet -->
     <link rel="stylesheet" type="text/css" href={{ asset("assets/css/style.css") }}>
@@ -66,6 +69,13 @@
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src={{ asset("assets/js/ie10-viewport-bug-workaround.js") }}></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
 @yield('script')
 
 

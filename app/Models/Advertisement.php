@@ -40,6 +40,9 @@ class Advertisement extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+    public function created_by_data(){
+        return $this->belongsTo(User::class,'created_by','id');
+    }
     public function advertisedata() {
         return $this->hasMany(AdvertisementValue::class);
     }

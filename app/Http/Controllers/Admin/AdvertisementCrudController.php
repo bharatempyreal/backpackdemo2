@@ -12,7 +12,7 @@ use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
 use App\Models\AttributesValue;
 use File;
-
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AdvertisementCrudController
@@ -51,6 +51,7 @@ class AdvertisementCrudController extends CrudController
     {
         // CRUD::field('category_id');
         $this->crud->addColumns(['category_id']);
+        $this->crud->addColumn(['label' => 'Created User','type' => 'relationship','name' =>'created_by_data']);
 
         // $this->crud->addColumn('Name', [
         //     'label' => 'Name',
@@ -79,14 +80,14 @@ class AdvertisementCrudController extends CrudController
     {
         $this->crud->set('show.setFromDb', false);
         CRUD::addColumn('category_id');
+        CRUD::addColumn('created_by_data');
         CRUD::addColumn([
             'name'      => 'advertise_name',
             'label'     => 'Advertisement Name',
             'type'     => 'closure',
             'function' => function($entry) {
                 $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
-                return view('vendor.return.advertisement_namedata
-                ', ['entry' => $entry])->render();
+                return view('vendor.return.advertisement_namedata', ['entry' => $entry])->render();
             }
         ]);
         CRUD::addColumn([
@@ -452,6 +453,7 @@ class AdvertisementCrudController extends CrudController
         }
         $items = new Advertisement;
         $items ->category_id = $request->category_id;
+        $items->created_by = auth()->user()->id;
         $items->save();
         if($items->save()){
             foreach($fiels as $value){
@@ -506,6 +508,7 @@ class AdvertisementCrudController extends CrudController
         }
         $items = Advertisement::find($request->id);
         $items->category_id = $request->category_id;
+        $items->updated_by = auth()->user()->id;
         $items->save();
         $attrIds = [];
         $old_img = [];
