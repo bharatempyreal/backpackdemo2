@@ -21,11 +21,21 @@ class AdvertisementController extends Controller
             'message'=>'Somthig Went Wrong',
         ];
         if(isset($request->category_id) && $request->category_id != ''){
-            $attribute = Attributes::where('category_id',$request->category_id)->get();
+            $attribute_grop_ids = Attributes::where('category_id',$request->category_id)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+            $data=[];
+            if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
+                foreach($attribute_grop_ids as $id){
+                    $result = Attributes::with('attributegroup')->where('category_id',$request->category_id)->where('attributegroup_id',$id)->get();
+                    if(isset($result) && !empty($result)){
+                        $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
+                    }
+                }
+            }
+            // dd($data);
             $response = [
                 'status'=>true,
                 'message'=>'Data Get Successfully',
-                'data'=>$attribute
+                'data'=>$data
             ];
         }
         return response($response);

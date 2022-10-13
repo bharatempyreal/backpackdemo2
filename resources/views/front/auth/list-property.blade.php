@@ -4,6 +4,13 @@
 Adex - List-Property
 @endsection
 
+@section('style')
+<style>
+    .checkbox label::before {
+        margin-left: -16px;
+    }
+</style>
+@endsection
 
 @section('content')
 
@@ -25,21 +32,23 @@ Adex - List-Property
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="col-lg-4 col-md-6">
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select class="selectpicker search-fields" id="category_id" name="1">
-                            @foreach ($category_data as $category)
-                            <option value="{{ $category->id }}">{{ (isset($category->name) && $category->name != '') ?  $category->name :'' }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <form>
-                    <div class="form_section">
+                <div class="submit-address">
+                    <form>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select class="selectpicker search-fields" id="category_id" name="1">
+                                    @foreach ($category_data as $category)
+                                    <option value="{{ $category->id }}">{{ (isset($category->name) && $category->name != '') ?  $category->name :'' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form_section">
 
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -47,6 +56,7 @@ Adex - List-Property
 @endsection
 
 @section('script')
+<script src="{{ asset('js/htmlreturn.js') }}"></script>
 <script>
     $(document).on('change','#category_id',function(){
         var category_id=$(this).val();
@@ -60,6 +70,25 @@ Adex - List-Property
                 },
                 success:function(response){
                     console.log(response);
+                    if(response.status){
+                        $('.form_section').html('');
+                        // First Paramete = Lable Second Parameter = Name
+                        var html = '';
+                            html += startDiv('row','');
+                            html += inputtext('Name','name');
+                            html += inputemail('Email','email');
+                            html += select('Color','color');
+                            html += inputdate('To Date','to_date');
+                            html += textarea('Notes','notes');
+                            html += chekboxes();
+                            html += dropzone();
+                            html += closeDiv();
+                        $('.form_section').append(html);
+                    }else{
+                        alert(response.message)
+                    }
+
+                    $('.selectpicker').selectpicker();
                 }
             });
         }else{
