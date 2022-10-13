@@ -50,7 +50,7 @@ class Attributes extends Model
     public static function typeStatus($id = null) {
         $status = [
             1 => "Active",
-            2 => "Deactive",
+            0 => "Deactive",
         ];
         return ($id) ? $status[$id] : $status;
     }
@@ -65,12 +65,15 @@ class Attributes extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+    public function attributegroup() {
+        return $this->belongsTo(Attributegroup::class);
+    }
 
     public function attributesdata() {
         return $this->hasMany(AttributesValue::class, 'attributes_id');
     }
 
-    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +92,7 @@ class Attributes extends Model
     }
 
     public function getStatusNameAttribute() {
-        return ($this->status) ? $this->typeStatus($this->status) : '-';
+        return ($this->status) ? $this->typeStatus($this->status) : 'Deactive';
     }
 
     public function getAttributesvalueAttribute() {

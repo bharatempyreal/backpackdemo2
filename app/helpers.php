@@ -11,4 +11,13 @@ if(!function_exists('getStorageUrl')){
         return $response;
     }
 }
+
+if(!function_exists('asset_storage')){
+    function asset_storage(){
+        $p = asset('');
+        $p=str_replace("public/", "",$p);
+        $p.="storage/app/public/image/";
+        return $p;
+    }
+}
 ?>

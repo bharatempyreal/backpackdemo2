@@ -52,6 +52,7 @@ class AttributesCrudController extends CrudController
     {
         CRUD::column('id');
         CRUD::column('category_id');
+        CRUD::column('attributegroup_id');
         CRUD::column('name');
         CRUD::column('type_name')->label('Category Type');
         CRUD::column('status_name')->label('Status');
@@ -76,7 +77,7 @@ class AttributesCrudController extends CrudController
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id');
         CRUD::addField([
-            'name'      => 'attributegroup',
+            'name'      => 'attributegroup_id',
             'type'      => 'select2',
             'label'     => 'Attribute Group',
             'attribute' => 'name',
@@ -158,7 +159,7 @@ class AttributesCrudController extends CrudController
         CRUD::field('id')->type('hidden');
         CRUD::field('category_id');
         CRUD::addField([
-            'name'      => 'attributegroup',
+            'name'      => 'attributegroup_id',
             'type'      => 'select2',
             'label'     => 'Attribute Group',
             'attribute' => 'name',
@@ -227,6 +228,7 @@ class AttributesCrudController extends CrudController
     {
         $this->crud->set('show.setFromDb', false);
         CRUD::column('name');
+        CRUD::column('attributegroup_id');
         CRUD::addColumn('type_name');
         CRUD::addColumn('status_name');
 
@@ -247,9 +249,11 @@ class AttributesCrudController extends CrudController
     }
     public function store(AttributesRequest $request)
     {
+        // dd($request->all());
         $response = $this->traitStore();
         $attributes_id = $this->crud->entry->id;
         $json = json_decode($request['attributes']);
+
         if(count($json) && $json[0]->attributes_value != null ){
             foreach(json_decode($request['attributes']) as $value) {
                 $items_sub = new AttributesValue();
@@ -259,7 +263,7 @@ class AttributesCrudController extends CrudController
                 $items_sub->status = $value->attributes_status;
                 }
                 else{
-                    $items_sub->status = "0";
+                    $items_sub->status = "1";
                 }
                 $items_sub->save();
             }
@@ -272,6 +276,7 @@ class AttributesCrudController extends CrudController
         $data = Attributes::find($request->id);
         $data->category_id   = $request->category_id;
         $data->category_type    = $request->category_type;
+        $data->attributegroup_id    = $request->attributegroup_id;
         $data->name    = $request->name;
         $data->status = $request->status;
         $data->save();

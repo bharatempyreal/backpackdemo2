@@ -11,6 +11,7 @@ use App\Models\AdvertisementValue;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
 use App\Models\AttributesValue;
+use App\Models\Attributegroup;
 use File;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,21 +83,20 @@ class AdvertisementCrudController extends CrudController
         CRUD::addColumn('category_id');
         CRUD::addColumn('created_by_data');
         CRUD::addColumn([
-            'name'      => 'advertise_name',
-            'label'     => 'Advertisement Name',
-            'type'     => 'closure',
-            'function' => function($entry) {
-                $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
-                return view('vendor.return.advertisement_namedata', ['entry' => $entry])->render();
-            }
-        ]);
-        CRUD::addColumn([
             'name'      => 'advertisement',
             'label'     => 'Advertisement Value',
             'type'     => 'closure',
             'function' => function($entry) {
-                $entry = AdvertisementValue::whereIn('id',Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray())->get();
-                return view('vendor.return.advertisement_valuedata', ['entry' => $entry])->render();
+                $entry = Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray();
+                $entry = AdvertisementValue::where('advertisement_id',$entry[0])->get();
+                foreach($entry as $value){
+                    $attribute = $value ->attribute;
+                }
+                $attributegroup_name = Attributegroup::where('id',$attribute->attributegroup_id)->get();
+                foreach($attributegroup_name as $name){
+                    $groupname = $name->name;
+                }
+                return view('vendor.return.advertisement_valuedata', ['entry' => $entry,'groupname'=>$groupname, 'attribute'=>$attribute])->render();
             }
         ]);
     }
@@ -437,6 +437,7 @@ class AdvertisementCrudController extends CrudController
     public function store(Request $request)
     {
         $removeImages =[];
+        $i = 0;
         // dd($request->all());
         $fiels=array_keys($request->all());
         unset($fiels[0]);
@@ -462,8 +463,9 @@ class AdvertisementCrudController extends CrudController
 
                 if($request->hasFile($value)){
                     $file = $request->file($value);
-                    $filename = $file->getClientOriginalName();
-                    $file->move(storage_path('/app/public/image'),$filename);
+                    $path = storage_path('/app/public/image/');
+                    $filename = uniqid(). $i++. '.' .File::extension($file->getClientOriginalName());
+                    $file->move($path,$filename);
 
                     $advertisement_value->value = $filename;
                     $advertisement_value->advertisement_id = $items->id;
@@ -526,8 +528,9 @@ class AdvertisementCrudController extends CrudController
                                 unlink($path);
                             }
                             $file = $request->file($value);
-                            $filename = $file->getClientOriginalName();
-                            $file->move(storage_path('/app/public/image'),$filename);
+                            $filepath = storage_path('/app/public/image/');
+                            $filename = uniqid(). $i++. '.' .File::extension($file->getClientOriginalName());
+                            $file->move($filepath,$filename);
                             $new_img[] = $filename;
                             $ad_value->value = $filename;
                         } else{

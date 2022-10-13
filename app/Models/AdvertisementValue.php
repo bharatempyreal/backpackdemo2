@@ -14,6 +14,9 @@ class AdvertisementValue extends Model
     public function advertisementdata() {
         return $this->hasMany(AdvertisementValue::class, 'id','advertisement_id');
     }
+    public function attribute() {
+        return $this->belongsTo(Attributes::class,'attributes_id');
+    }
 
 
 
