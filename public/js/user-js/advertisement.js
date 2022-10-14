@@ -29,7 +29,6 @@ $(document).ready(function() {
                             hidden_input.val(JSON.stringify(newValue));
                         });
                         $(document).on('click','.dz-remove',function() {
-                            alert('remo');
                             $(this).closest('.dz-preview').remove();
                             var remove_img = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name') || '';
                             var oldArr = [];

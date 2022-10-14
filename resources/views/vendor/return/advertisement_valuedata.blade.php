@@ -1,11 +1,6 @@
 <div>
-    {{-- @foreach($attributegroup_name as $name)
-        $groupname  = $name->name;
-        {{dd($name->name)}}
-    @endforeach --}}
-    {{-- {{dd($attribute->attributegroup_id)}} --}}
-    
-    <h4>Group: {{$groupname}}</h4>
+@foreach ($data as $key=>$value )
+    <h4>Group:{{$key}}</h4>
     <table class="table">
         <thead>
           <tr>
@@ -14,25 +9,28 @@
           </tr>
         </thead>
         <tbody>
-            @foreach ($entry as $data )
-            {{-- {{ dd($data->attribute)}} --}}
-                <tr>
-                    <td>{{ $data->name }}</td>
-                    @if ($data->attribute->category_type == 6)
-                        <td><img src="{{asset_storage() . $data->value}}" style="height: 50px"/></td>
-                    @elseif ($data->attribute->category_type == 3)
-                        <td>
-                            @foreach (json_decode($data->value) as $value)
-                            <img src="{{asset_storage() . $value}}" style="height: 50px"/>
-                            @endforeach
-                        </td>
-                    @else
-                        <td>{{ $data->value }}</td>
+            @foreach ($value as $val )
+                @foreach ($val->advertisement_data as $v)
+                    @if($v->advertisement_id == $adid)
+                        <tr>
+                            <td>{{ $v->name }}</td>
+                            @if ($val->category_type == 6)
+                            <td><img src="{{asset_storage() . $v->value}}" style="height: 50px"/></td>
+                            @elseif ($val->category_type == 3)
+                            <td>
+                                @foreach (json_decode($v->value) as $value)
+                                <img src="{{asset_storage() . $value}}" style="height: 50px"/>
+                                @endforeach
+                            </td>
+                            @else
+                            <td>{{ $v->value }}</td>
+                            @endif
+                        </tr>
                     @endif
-                </tr>
+                @endforeach
             @endforeach
-
         </tbody>
-
     </table>
+@endforeach
+
 </div>

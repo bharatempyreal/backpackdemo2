@@ -307,6 +307,7 @@ class AttributesCrudController extends CrudController
     public function destroy($id)
     {
         AttributesValue::where('attributes_id',$id)->delete();
+        // AdvertisementValue::where('attributes_id',$id)->delete();
         return $this->crud->delete($id);
     }
 

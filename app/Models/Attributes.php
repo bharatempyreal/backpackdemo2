@@ -73,6 +73,10 @@ class Attributes extends Model
         return $this->hasMany(AttributesValue::class, 'attributes_id');
     }
 
+    public function advertisement_data(){
+        return $this->hasMany(AdvertisementValue::class,'attributes_id','id');
+    }
+
 
 
     /*
