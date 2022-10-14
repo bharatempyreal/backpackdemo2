@@ -20,4 +20,11 @@ if(!function_exists('asset_storage')){
         return $p;
     }
 }
+
+if(!function_exists('myisset')){
+    function myisset($data){
+
+        return (isset($data) && $data != '') ? $data : '';
+    }
+}
 ?>

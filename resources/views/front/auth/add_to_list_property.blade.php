@@ -26,25 +26,27 @@ Adex - List-Property
         </div>
     </div>
 </div>
-
+<div class="container pt-3">
+    <a class="btn btn-primary" href="{{ route('list-property') }}">Back</a>
+</div>
 <!-- Submit Property start -->
 <div class="submit-property content-area">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="submit-address">
-                        <div class="row">
-                            <div class="col-md-12 row">
-                                {{-- {{ dd($category_data) }} --}}
-                                @foreach ($category_data as $category)
-                                <div class="col-md-3 category" data-id={{ $category->id }}>
-                                    <img src="{{ (myisset($category->image) != '') ? $category->image :'' }}" alt="{{ myisset($category->name) }}" style="height: 60px; weight:60px;">
-                                    <h6>{{ myisset($category->name) }}</h6>
-                                    <p>{{ myisset($category->details) }}</p>
-                                </div>
-                                @endforeach
+                    <form action="{{ route('saveListProperty') }}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="category_id" name="category_id" value="{{ myisset($category_id) }}">
+                        @csrf
+                        <div class="form_section">
+
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-lg btn-theme-yellow-second">Submit</button>
                             </div>
                         </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -55,14 +57,8 @@ Adex - List-Property
 @section('script')
 <script src="{{ asset('js/htmlreturn.js') }}"></script>
 <script>
-    $(document).on('click','.category',function(){
-        var category_id = $(this).data('id');
-        if(category_id != ''){
-            window.location.href="{{ url('/add-list-property/') }}/"+category_id;
-        }
-    });
-    $(document).on('change','#category_id',function(){
-        var category_id=$(this).val();
+    $(document).ready(function(){
+        var category_id=$('#category_id').val();
         if(category_id != ''){
             $.ajax({
                 url:"{{ route('getAttributeAsPerCategory') }}",
@@ -101,11 +97,13 @@ Adex - List-Property
                                                         // 1 = checkbox
                                                         var options=value1.attributesvalue;
                                                         html += chekboxes(value1.name,value1.name,options);
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '2':
                                                         // 2 = dropdown
                                                         var options=value1.attributesvalue;
                                                         html += select(value1.name,value1.name,options);
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '3':
                                                         // 3 = multipleimages
@@ -114,10 +112,12 @@ Adex - List-Property
                                                     case '4':
                                                         // 4 = textbox
                                                         html += inputtext(value1.name,value1.name);
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '5':
                                                         // 5 = textarea
                                                         html += textarea(value1.name,value1.name);
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '6':
                                                         // 6 = Image
@@ -126,6 +126,7 @@ Adex - List-Property
                                                     case '7':
                                                         // 7 = date
                                                         html += inputdate(value1.name,value1.name);
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     default:
                                                         alert('Somthing Went Wrong');

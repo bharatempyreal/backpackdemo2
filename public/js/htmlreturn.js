@@ -44,35 +44,32 @@ function textarea(label = '',name=''){
 }
 
 function dropzone(label = '',name=''){
-    var html='<h3 class="heading-2">'+label+'</h3>';
+    var html="";
+        // html='<h3 class="heading-2">'+label+'</h3>';
+        html+='<div class="col-md-12">';
         html+='<div id="myDropZone" class="dropzone dropzone-design mb-50">';
         html+='<div class="dz-default dz-message"><span>Drop files here to upload</span></div>';
+        html+='</div>';
         html+='</div>';
     return html;
 }
 
-function chekboxes(){
+function chekboxes(label = '',name='',value=[]){
     var html=''
         html +='<div class="col-md-12">';
-        html +='<label class="margin-t-10">Features</label>';
+        html +='<label class="margin-t-10">'+label+'</label>';
         html +='<div class="row">';
         html +='<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">';
-        html +='<div class="checkbox checkbox-theme checkbox-circle">';
-        html +='<input id="checkbox1" type="checkbox">';
-        html +='<label for="checkbox1">Free Parking</label>';
-        html +='</div>';
-        html +='<div class="checkbox checkbox-theme checkbox-circle">';
-        html +='<input id="checkbox2" type="checkbox">';
-        html +='<label for="checkbox2">Air Condition</label>';
-        html +='</div>';
-        html +='<div class="checkbox checkbox-theme checkbox-circle">';
-        html +='<input id="checkbox3" type="checkbox">';
-        html +='<label for="checkbox3">Places to seat</label>';
-        html +='</div>';
-        html +='<div class="checkbox checkbox-theme checkbox-circle">';
-        html +='<input id="checkbox4" type="checkbox">';
-        html +='<label for="checkbox4">Swimming Pool</label>';
-        html +='</div>';
+        if(value.length>0){
+            $.each(value, function( i, v ) {
+                if(v.status){
+                    html +='<div class="checkbox checkbox-theme checkbox-circle">';
+                    html +='<input id="'+v.attribute_name+'" type="checkbox" name="'+v.attribute_name+'" value="1">';
+                    html +='<label for="'+v.attribute_name+'">'+v.attribute_name+'</label>';
+                    html +='</div>';
+                }
+            });
+        }
         html +='</div>';
         html +='</div>';
         html +='</div>';
@@ -86,7 +83,9 @@ function select(label='', name='',options=[]){
         html+='<select class="selectpicker search-fields" name="'+name+'" placeholder="Select '+label+'">';
         if(options.length>0){
             $.each(options, function( index, value ) {
-                html+='<option value="'+index+'">'+value+'</option>';
+                if(value.status){
+                    html+='<option value="'+value.attribute_name+'">'+value.attribute_name+'</option>';
+                }
               });
         }else{
             html+='<option value="1">Select '+label+'</option>';
@@ -100,5 +99,11 @@ function select(label='', name='',options=[]){
 
 function closeDiv(){
     var html='</div>';
+    return html;
+}
+
+function inputhidden(name='',value=''){
+    var html="";
+        html += '<input type="hidden" name="'+name+'_id" value="'+value+'">';
     return html;
 }

@@ -55,7 +55,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Advertisement
     Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
+    Route::get('/add-list-property/{id}', [App\Http\Controllers\Front\AdvertisementController::class, 'addListProperty'])->name('addListProperty');
     Route::post('/getAttributeAsPerCategory',[App\Http\Controllers\Front\AdvertisementController::class, 'getAttributeAsPerCategory'])->name('getAttributeAsPerCategory');
+    Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
 
     Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {
         $path = storage_path('app/public/'.$name.'/'.$filename);
