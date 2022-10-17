@@ -197,7 +197,6 @@ class AdvertisementCrudController extends CrudController
     {
         $attributeData = Attributes::where('category_id', $request->selected)->with('attributegroup')->get();
         $attribute_grop_ids = Attributes::where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
-        // dd($attribute_grop_ids);
         $data=[];
         if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
             foreach($attribute_grop_ids as $id){
@@ -207,10 +206,10 @@ class AdvertisementCrudController extends CrudController
                 }
             }
         }
-        $crudFields = [];
-        foreach($data as $key => $val) {
-            $crudFields1 = [];
-            foreach($val as $value){
+        $crudFields1 = [];
+        foreach($data as $k => $val) {
+            $crudFields = [];
+            foreach($val as $key => $value){
                 switch ($value->category_type) {
                     case 1:
                         $options = [];
@@ -326,138 +325,159 @@ class AdvertisementCrudController extends CrudController
                 }
             }
             $crudFields1[]  = [
-                'name'      => 'group',
-                'type'      => 'custom-repeatable',
-                'label'     => "grp".$key,
-                'group'     => $key,
+                   // repeatable
+                    'name'  => 'group'.$k,
+                    'label' => 'Group : ' . ucfirst($k),
+                    'type'  => 'customrepeatable',
+                    'fields' => $crudFields
             ];
         }
         // dd($crudFields1);
-        $this->crud->fields = [$crudFields,$crudFields1];
-        $view = \View::make('vendor.backpack.crud.advertisement_form', ['crudFields1'=>$crudFields1, 'fields' => $crudFields, 'action' => 'create' , 'crud' => $this->crud]);
+        $this->crud->fields = $crudFields1;
+        $view = \View::make('vendor.backpack.crud.advertisement_form', ['fields' => $crudFields1, 'action' => 'create' , 'crud' => $this->crud]);
         $view = $view->render();
         $view = html_entity_decode($view);
         return response()->json(array('success' => true, 'view'=>$view));
     }
     public function geteditadvertisement(Request $request)
     {
-        $attributeData = Attributes::where('category_id', $request->selected)->get();
-        $crudFields = [];
-        foreach($attributeData as $key => $value) {
-            $addsData = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
-
-            $crudFields[]  = [
-                'name'      => $value->name.'_id',
-                'type'      => 'hidden',
-                'value'     => $value->id
-            ];
-
-            if(isset($addsData)) {
-                $crudFields[]  = [
-                    'name'      => $value->name.'_id1',
-                    'type'      => 'hidden',
-                    'value'     => $addsData->id
-                ];
-            }
-            switch ($value->category_type) {
-                case 1:
-                    $options = [];
-                    foreach($value->attributesdata as $key => $val) {
-                        $options[$val->attribute_name] = $val->attribute_name;
-                    }
-                    $crudFields[]  = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'checklist-new',
-                        'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
-                        'options'   => $options,
-                        'selected'     => (isset($addsData->value)) ? json_decode($addsData->value) : ''
-                    ];
-                    break;
-                case 2:
-                    $options = [];
-                    foreach($value->attributesdata as $key => $val) {
-                        $options[$val->attribute_name] = $val->attribute_name;
-                    }
-                    $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'select2_from_array',
-                        'options'   =>  $options,
-                        'value'     => (isset($addsData)) ? $addsData->value : ''
-                    ];
-
-                    break;
-                case 3:
-                    $quary = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
-                    $images = [];
-                    $images_val = [];
-                    if(isset($addsData) && isset($addsData->value)){
-                        $all_images = $addsData->value;
-                        $all_images = ltrim($all_images, $all_images[0]);
-                        $all_images = rtrim($all_images, ']');
-                        $all_images = explode(',',$all_images);
-                        foreach($all_images as $items){
-                            $items = ltrim($items, $items[0]);
-                            $items = rtrim($items, '"');
-
-                            // $images[] = getStorageUrl('image/'.$items);
-                            $images[] = route('getStoragePath', ['image', $items]);
-                            $images_val[] = $items;
-                            }
-                        }
-                    $crudFields[] = [
-                        'name'          => $value->name,
-                        'label'         => ucFirst($value->name),
-                        'type'          => 'dropzone',
-                        'upload_route'  => route('ajaxUploadImages'),
-                        'reorder_route' => 'reorder_images',
-                        'delete_route'  => 'delete_image',
-                        'disk'          => 'uploads/images/',
-                        'mimes'         => 'image/*',
-                        'filesize'      => 5,
-                        'imager_path'   => $images,
-                        'value'         => $images_val
-                    ];
-                    break;
-                case 4:
-                    $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'text',
-                        'value'     => (isset($addsData)) ? $addsData->value : ''
-                    ];
-                    break;
-                case 5:
-                    $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'textarea',
-                        'value'     => (isset($addsData)) ? $addsData->value : ''
-                    ];
-                    break;
-                case 6:
-                    $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'custom-image',
-                        'wrapper'   => ['class' => 'form-group col-md-12 image'],
-                        'value'     => (isset($addsData)) ? route('getStoragePath', ['image', $addsData->value]) : ''
-                    ];
-                    break;
-                case 7:
-                    $crudFields[] = [
-                        'name'      => $value->name,
-                        'label'     => ucFirst($value->name),
-                        'type'      => 'date',
-                        'value'     => (isset($addsData)) ? $addsData->value : ''
-                    ];
-                    break;
-                default:
+        // $attributeData = Attributes::where('category_id', $request->selected)->get();
+        $attributeData = Attributes::where('category_id', $request->selected)->with('attributegroup')->get();
+        $attribute_grop_ids = Attributes::where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+        $data=[];
+        if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
+            foreach($attribute_grop_ids as $id){
+                $result = Attributes::with('attributegroup')->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
+                if(isset($result) && !empty($result)){
+                    $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
+                }
             }
         }
-        $this->crud->fields = $crudFields;
-        $view = \View::make('vendor.backpack.crud.advertisement_form', [ 'fields' => $crudFields, 'action' => 'create' , 'crud' => $this->crud]);
+        $crudFields1 = [];
+        foreach($data as $k =>$val){
+            $crudFields = [];
+            foreach($val as $key => $value) {
+                $addsData = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
+                $crudFields[]  = [
+                    'name'      => $value->name.'_id',
+                    'type'      => 'hidden',
+                    'value'     => $value->id
+                ];
+
+                if(isset($addsData)) {
+                    $crudFields[]  = [
+                        'name'      => $value->name.'_id1',
+                        'type'      => 'hidden',
+                        'value'     => $addsData->id
+                    ];
+                }
+                switch ($value->category_type) {
+                    case 1:
+                        $options = [];
+                        foreach($value->attributesdata as $key => $val2) {
+                            $options[$val2->attribute_name] = $val2->attribute_name;
+                        }
+                        $crudFields[]  = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'checklist-new',
+                            'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
+                            'options'   => $options,
+                            'selected'     => (isset($addsData->value)) ? json_decode($addsData->value) : ''
+                        ];
+                        break;
+                    case 2:
+                        $options = [];
+                        foreach($value->attributesdata as $key => $val2) {
+                            $options[$val2->attribute_name] = $val2->attribute_name;
+                        }
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'select2_from_array',
+                            'options'   =>  $options,
+                            'value'     => (isset($addsData)) ? $addsData->value : ''
+                        ];
+
+                        break;
+                    case 3:
+                        $quary = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
+                        $images = [];
+                        $images_val = [];
+                        if(isset($addsData) && isset($addsData->value)){
+                            $all_images = $addsData->value;
+                            $all_images = ltrim($all_images, $all_images[0]);
+                            $all_images = rtrim($all_images, ']');
+                            $all_images = explode(',',$all_images);
+                            foreach($all_images as $items){
+                                $items = ltrim($items, $items[0]);
+                                $items = rtrim($items, '"');
+
+                                // $images[] = getStorageUrl('image/'.$items);
+                                $images[] = route('getStoragePath', ['image', $items]);
+                                $images_val[] = $items;
+                                }
+                            }
+                        $crudFields[] = [
+                            'name'          => $value->name,
+                            'label'         => ucFirst($value->name),
+                            'type'          => 'dropzone',
+                            'upload_route'  => route('ajaxUploadImages'),
+                            'reorder_route' => 'reorder_images',
+                            'delete_route'  => 'delete_image',
+                            'disk'          => 'uploads/images/',
+                            'mimes'         => 'image/*',
+                            'filesize'      => 5,
+                            'imager_path'   => $images,
+                            'value'         => $images_val
+                        ];
+                        break;
+                    case 4:
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'text',
+                            'value'     => (isset($addsData)) ? $addsData->value : ''
+                        ];
+                        break;
+                    case 5:
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'textarea',
+                            'value'     => (isset($addsData)) ? $addsData->value : ''
+                        ];
+                        break;
+                    case 6:
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'custom-image',
+                            'wrapper'   => ['class' => 'form-group col-md-12 image'],
+                            'value'     => (isset($addsData)) ? route('getStoragePath', ['image', $addsData->value]) : ''
+                        ];
+                        break;
+                    case 7:
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'date',
+                            'value'     => (isset($addsData)) ? $addsData->value : ''
+                        ];
+                        break;
+                    default:
+                }
+            }
+                $crudFields1[]  = [
+                    // repeatable
+                     'name'  => 'group'.$k,
+                     'label' => 'Group : ' . ucfirst($k),
+                     'type'  => 'customrepeatable',
+                     'fields' => $crudFields
+             ];
+        }
+        $this->crud->fields = $crudFields1;
+        $view = \View::make('vendor.backpack.crud.advertisement_form', [ 'fields' => $crudFields1, 'action' => 'create' , 'crud' => $this->crud]);
         $view = $view->render();
         $view = html_entity_decode($view);
         return response()->json(array('success' => true, 'view'=>$view));
@@ -467,7 +487,6 @@ class AdvertisementCrudController extends CrudController
     {
         $removeImages =[];
         $i = 0;
-        // dd($request->all());
         $fiels=array_keys($request->all());
         unset($fiels[0]);
         unset($fiels[1]);

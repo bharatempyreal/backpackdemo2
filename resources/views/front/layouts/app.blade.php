@@ -75,6 +75,12 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    $(document).ajaxSend(function(){
+        $('.page_loader').fadeIn(250);
+    });
+    $(document).ajaxComplete(function(){
+        $('.page_loader').fadeOut(250);
+    });
     </script>
 @yield('script')
 
