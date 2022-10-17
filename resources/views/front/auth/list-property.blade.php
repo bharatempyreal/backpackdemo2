@@ -15,7 +15,7 @@ Adex - List-Property
 @section('content')
 
 <!-- Sub banner start -->
-<div class="sub-banner" style="background: rgba(0, 0, 0, 0.04) url(assets/img/banner/banner-1.jpg) top left repeat;">
+<div class="sub-banner" style="background: rgba(0, 0, 0, 0.04) url({{ asset('assets/img/banner/banner-1.jpg') }}) top left repeat;">
     <div class="container">
         <div class="page-name">
             <h1>List Your Property</h1>
@@ -72,7 +72,6 @@ Adex - List-Property
                     category_id:category_id
                 },
                 success:function(response){
-                    console.log(response);
                     if(response.status){
                         $('.form_section').html('');
                         // First Paramete = Lable Second Parameter = Name

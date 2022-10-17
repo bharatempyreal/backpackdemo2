@@ -43,11 +43,11 @@ function textarea(label = '',name=''){
     return html;
 }
 
-function dropzone(label = '',name=''){
+function adddropzone(label = '',name='',attr=''){
     var html="";
         // html='<h3 class="heading-2">'+label+'</h3>';
-        html+='<div class="col-md-12">';
-        html+='<div id="myDropZone" class="dropzone dropzone-design mb-50">';
+        html+='<div class="col-md-12 dropzone_box" '+attr+'>';
+        html+='<div id="" class="dropzone dropzone-design mb-50" >';
         html+='<div class="dz-default dz-message"><span>Drop files here to upload</span></div>';
         html+='</div>';
         html+='</div>';
@@ -102,8 +102,8 @@ function closeDiv(){
     return html;
 }
 
-function inputhidden(name='',value=''){
+function inputhidden(name='',value='', classname=''){
     var html="";
-        html += '<input type="hidden" name="'+name+'_id" value="'+value+'">';
+        html += '<input type="hidden" class="'+classname+'" name="'+name+'_id" value="'+value+'">';
     return html;
 }

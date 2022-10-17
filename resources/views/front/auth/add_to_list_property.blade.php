@@ -19,7 +19,7 @@ Adex - List-Property
 @section('content')
 
 <!-- Sub banner start -->
-<div class="sub-banner" style="background: rgba(0, 0, 0, 0.04) url(assets/img/banner/banner-1.jpg) top left repeat;">
+<div class="sub-banner" style="background: rgba(0, 0, 0, 0.04) url({{ asset('assets/img/banner/banner-1.jpg') }}) top left repeat;">
     <div class="container">
         <div class="page-name">
             <h1>List Your Property</h1>
@@ -75,7 +75,6 @@ Adex - List-Property
                     category_id:category_id
                 },
                 success:function(response){
-                    console.log(response);
                     if(response.status){
                         $('.form_section').html('');
                         // First Paramete = Lable Second Parameter = Name
@@ -90,13 +89,13 @@ Adex - List-Property
                             // html += dropzone();
                             // html += closeDiv();
                             // 1 = checkbox, 2 = dropdown, 3 = multipleimages, 4 = textbox, 5 = textarea, 6 = Image, 7 = date
+                            // inputhidden(name='',value='', classname='')
                             if(Object.keys(response.data).length>0){
                                 $.each(response.data, function( index, value ) {
                                     html +='<h3 class="heading-2">'+index+'</h3>';
                                     html += startDiv('row','');
                                     if(value.length>0){
                                         $.each(value,function(index1,value1){
-                                            console.log(value1)
                                             if(value1.status){
                                                 var jsLang = 'jquery';
                                                 switch (value1.category_type) {
@@ -114,7 +113,9 @@ Adex - List-Property
                                                     break;
                                                     case '3':
                                                         // 3 = multipleimages
-                                                        html += dropzone(value1.name);
+                                                        html += adddropzone(value1.name,'','data-name="'+(value1.name).replace(/ /g,"_")+'"');
+                                                        html += inputhidden((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+
                                                     break;
                                                     case '4':
                                                         // 4 = textbox
@@ -143,11 +144,85 @@ Adex - List-Property
                                     }
                                     html += closeDiv();
                                 });
+                                html += inputhidden('cancelImages','','cancelImages');
+                                html += inputhidden('removeImages','','removeImages');
                             }
                         $('.form_section').append(html);
                     }else{
                         alert(response.message)
                     }
+                    $(".dropzone").each(function(i_d,v_d) {
+                        console.log(v_d)
+                    });
+
+                    // $(".dropzone").each(function(i_d,v_d) {
+                    //     alert(78);
+                    //     Dropzone.autoDiscover = false;
+
+                    //     var url = "{{ route('ajaxUploadImages') }}";
+                    //      new Dropzone(".dropzone", {
+                    //     url: url,
+                    //     uploadMultiple: true,
+                    //     parallelUploads: 1,
+                    //     addRemoveLinks: true,
+                    //     sending: function(file, xhr, formData) {
+                    //         formData.append("_token", $('[name=_token').val());
+                    //     },
+                    //     error: function(file, response) {
+                    //         console.log('error');
+                    //         $(file.previewElement).find('.dz-error-message').remove();
+                    //         $(file.previewElement).remove();
+                    //     },
+                    //     removedfile: function(file) {
+                    //         removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
+                    //         console.log(removefile)
+                    //         var dropzone_hidden = $(file.previewTemplate).closest('.dropzone_box').parent().find('.dropzone_hidden');
+                    //         var oldArr = [];
+                    //         var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
+                    //         hidden_value.forEach(function(item) {
+                    //             if (removefile !== item){
+                    //                 console.log(item)
+                    //                 oldArr.push(item);
+                    //             }
+                    //         });
+                    //         dropzone_hidden.val(JSON.stringify(oldArr));
+
+                    //         // Add IN Remove Hidden
+                    //         var oldremoved = [];
+                    //         var removehidden_value = JSON.parse($('.removeImages').val() || '[]');
+                    //         removehidden_value.forEach(function(item) {
+                    //             oldremoved.push(item);
+                    //         });
+                    //         oldremoved.push(removefile);
+                    //         $('.removeImages').val(JSON.stringify(oldremoved));
+                    //         $(file.previewElement).remove();
+                    //     },
+                    //     success: function(file, status, response) {
+                    //         var dropzone_hidden = $(file.previewTemplate).closest('.dropzone_box').parent().find('.dropzone_hidden');
+                    //         var oldArr = [];
+                    //         var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
+                    //         hidden_value.forEach(function(item) {
+                    //             oldArr.push(item);
+                    //         });
+                    //         var response_value = JSON.parse(response.currentTarget.response || '[]');
+                    //         oldArr.push(response_value);
+                    //         dropzone_hidden.val(JSON.stringify(oldArr));
+
+
+                    //         $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value);
+                    //         $(file.previewTemplate).find('.dz-filename span').html(response_value);
+
+                    //         // Add IN cancled Hidden
+                    //         var cancled = [];
+                    //         var canclehidden_value = JSON.parse($('.cancelImages').val() || '[]');
+                    //         canclehidden_value.forEach(function(item) {
+                    //             cancled.push(item);
+                    //         });
+                    //         cancled.push(response_value);
+                    //         $('.cancelImages').val(JSON.stringify(cancled));
+                    //     }
+                    // });
+                // });
 
                     $('.selectpicker').selectpicker();
                 }
@@ -155,147 +230,6 @@ Adex - List-Property
         }else{
             alert('Somthing Went Wrong');
         }
-        {{-- #### --}}
-        var selected = category_id;
-        $.ajax({
-            url: $(this).data('action'),
-            type: "GET",
-            data: { selected },
-            dataType: 'json',
-            success: function(data) {
-                ele.add('.htmlview').html(data.view);
-                ele.removeClass('d-none');
-                $('form').attr('enctype', 'multipart/form-data');
-                $('.checklist input[type="checkbox"]').on('change', function() {
-                    var el = $(this);
-                    var element = el.closest('.checklist');
-                    var hidden_input = el.closest('.checklist').find('input[type=hidden]');
-                    var checkboxes = element.find('input[type=checkbox]');
-                    var newValue = [];
-                    checkboxes.each(function() {
-                        if ($(this).is(':checked')) {
-                            var id = $(this).val();
-                            newValue.push(id);
-                        }
-                    });
-                    hidden_input.val(JSON.stringify(newValue));
-                });
-                $(document).on('click', '.dz-remove', function() {
-                    $(this).closest('.dz-preview').remove();
-                    var remove_img = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name') || '';
-                    var oldArr = [];
-                    var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                    hidden_value.forEach(function(item) {
-                        if (remove_img !== item)
-                            oldArr.push(item);
-                    });
-                    $('.dropzone_hidden').val(JSON.stringify(oldArr));
-                    oldArr = [];
-                });
-                var numberCreate = 0;
-                Dropzone.autoDiscover = true;
-                var uploaded = false;
-                var newValue = [];
-                var oldValue = [];
-
-                var dropzone = new Dropzone(".dropzone", {
-                    url: $('.ajaxUploadImages').data('action'),
-                    uploadMultiple: true,
-                    parallelUploads: 1,
-                    addRemoveLinks: true,
-                    sending: function(file, xhr, formData) {
-                        formData.append("_token", $('[name=_token').val());
-                    },
-                    error: function(file, response) {
-                        console.log('error');
-                        $(file.previewElement).find('.dz-error-message').remove();
-                        $(file.previewElement).remove();
-                    },
-                    removedfile: function(file) {
-                        removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
-                        var oldArr = [];
-                        var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                        hidden_value.forEach(function(item) {
-                            if (removefile !== item)
-                                oldArr.push(item);
-                        });
-                        $('.dropzone_hidden').val(JSON.stringify(oldArr));
-
-                        // Add IN Remove Hidden
-                        var oldremoved = [];
-                        var removehidden_value = JSON.parse($('.removeImages').val() || '[]');
-                        removehidden_value.forEach(function(item) {
-                            oldremoved.push(item);
-                        });
-                        oldremoved.push(removefile);
-                        $('.removeImages').val(JSON.stringify(oldremoved));
-                        $(file.previewElement).remove();
-
-                        // $.ajax({
-                        //     url: $('.ajaxUploadImages').data('removeaction'),
-                        //     type: 'POST',
-                        //     data: {
-                        //         file_name: removefile,
-                        //     },
-                        //     success: function(response) {
-                        //         if(response){
-                        //             $(file.previewElement).remove();
-                        //         }else{
-                        //             alert('Somthing Went Wrong');
-                        //         }
-                        //     }
-                        // });
-                    },
-                    success: function(file, status, response) {
-                        var oldArr = [];
-                        var hidden_value = JSON.parse($('.dropzone_hidden').val() || '[]');
-                        hidden_value.forEach(function(item) {
-                            oldArr.push(item);
-                        });
-                        var response_value = JSON.parse(response.currentTarget.response || '[]');
-                        oldArr.push(response_value[numberCreate]);
-                        $('.dropzone_hidden').val(JSON.stringify(oldArr));
-
-
-                        $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value[numberCreate]);
-                        $(file.previewTemplate).find('.dz-filename span').html(response_value[numberCreate]);
-
-                        // Add IN cancled Hidden
-                        var cancled = [];
-                        var canclehidden_value = JSON.parse($('.cancelImages').val() || '[]');
-                        canclehidden_value.forEach(function(item) {
-                            cancled.push(item);
-                        });
-                        cancled.push(response_value[numberCreate]);
-                        $('.cancelImages').val(JSON.stringify(cancled));
-                        if (numberCreate === (response_value.length - 1)) {
-                            numberCreate = 0;
-                        } else {
-                            numberCreate = numberCreate + 1;
-                        }
-                    }
-                });
-                // Reorder images
-                $(".dropzone").sortable({
-                    items: '.dz-preview',
-                    cursor: 'move',
-                    opacity: 0.5,
-                    containment: '.dropzone',
-                    distance: 20,
-                    scroll: true,
-                    tolerance: 'pointer',
-                    stop: function(event, ui) {
-                        var image_order = [];
-                        $('.dz-preview').each(function() {
-                            var image_id = $(this).data('id');
-                            var image_path = $(this).data('path');
-                            image_order.push({ id: image_id, path: image_path });
-                        });
-                    }
-                });
-            }
-        });
-        {{-- #### --}}
     });
 </script>
 @endsection
