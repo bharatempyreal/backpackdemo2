@@ -215,8 +215,9 @@ Adex - Market Place
                 </div>
             </div>
             <div class="clearfix"></div>
+            <div class="fetching-properties fp hidden-sm hidden-xs">
 
-            <div class="fetching-properties fp hidden-sm hidden-xs"></div>
+            </div>
         </div>
         <div class="col-xl-6 col-lg-5">
             <div class="row">
@@ -238,4 +239,49 @@ Adex - Market Place
 <script src={{ asset("assets/js/jquery.magnific-popup.min.js")}}></script>
 <script src={{ asset("assets/js/jquery.countdown.js")}}></script>
 <script src={{ asset("assets/js/maps.js")}}></script>
+
+
+<script>
+$(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url:"{{ route('ListingProperty') }}",
+        type:'post',
+        dataType:'json',
+        success:function(response){
+            // console.log(response.listing[0].id);
+            // console.log(response.listing);
+            var html='';
+            if((response.listing).length>0){
+                $.each(response.listing, function (index, property) {
+                    console.log(property);
+                        html += '<div class="card property-box-2 map-property-box property-hover">';
+                        html += '<div class="row">';
+                        html +='<div class="col-lg-5 col-md-5 col-pad">';
+                        html += '</div>';
+                        html +='<div class="col-lg-7 col-md-7 col-pad row">';
+                        if((property.advertisedata).length>0){
+                            $.each(property.advertisedata,function(i,v){
+                                html +='<div class="pr-2">'+v.name+' :-</div>';
+                                html +='<div class="">'+v.value+'</div>';
+                                html +='<div class="col-md-12"></div>'
+                            })
+                        }
+                        html +='</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                }
+                $('.fetching-properties').append(html);
+
+
+
+        }
+    });
+});
+</script>
 @endsection

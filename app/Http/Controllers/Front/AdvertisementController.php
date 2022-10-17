@@ -103,4 +103,20 @@ class AdvertisementController extends Controller
         }
         return redirect()->back();
     }
+
+    // advertisemet listing add bharat
+
+    public function ListingProperty(Request $request)
+    {
+        $listing  = Advertisement::with(['advertisedata','category'])->get();
+        foreach($listing as $k =>$v){
+            // dd($v->category);
+        }
+        $response = [
+            'status'=>true,
+            'message'=>'Data Get Successfully',
+            'listing'=>$listing
+        ];
+        return response($response);
+    }
 }
