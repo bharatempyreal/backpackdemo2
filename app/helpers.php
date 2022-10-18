@@ -23,8 +23,18 @@ if(!function_exists('asset_storage')){
 
 if(!function_exists('myisset')){
     function myisset($data){
-
         return (isset($data) && $data != '') ? $data : '';
+    }
+}
+if (! function_exists('old_empty_or_null')) {
+    function old_empty_or_null($key, $empty_value = '')
+    {
+        $key = square_brackets_to_dots($key);
+        $old_inputs = session()->getOldInput();
+        if (\Arr::has($old_inputs, $key)) {
+            return \Arr::get($old_inputs, $key) ?? $empty_value;
+        }
+        return null;
     }
 }
 ?>

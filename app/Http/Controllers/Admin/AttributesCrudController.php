@@ -29,7 +29,6 @@ class AttributesCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
 
 
-
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -37,6 +36,8 @@ class AttributesCrudController extends CrudController
      */
     public function setup()
     {
+        // $data = Attributes::all();
+        // dd($data);
         CRUD::setModel(\App\Models\Attributes::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/attributes');
         CRUD::setEntityNameStrings('attributes', 'attributes');
@@ -50,11 +51,14 @@ class AttributesCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        // dd(is_default);
         CRUD::column('id');
         CRUD::column('category_id');
         CRUD::column('attributegroup_id');
         CRUD::column('name');
-        CRUD::column('type_name')->label('Category Type');
+        CRUD::column('is_default_name')->label('Default');
+        CRUD::column('is_compulsory_name')->label('Compulsory');
+        CRUD::addcolumn('type_name');
         CRUD::column('status_name')->label('Status');
 
         /**
@@ -106,6 +110,28 @@ class AttributesCrudController extends CrudController
                     1 => 'Active',
                 ],
                 'inline' => true,
+                'default' => '1'
+            ],
+        );
+        CRUD::addField(
+            [
+                'name'  => 'is_default',
+                'type'  => 'switch',
+                'label'    => 'Default',
+                'color'    => 'primary',
+                'onLabel' => '✓',
+                'offLabel' => '✕',
+            ],
+        );
+        CRUD::addField(
+            [
+                'name'  => 'compulsory',
+                'type'  => 'switch',
+                'label'    => 'Compulsory',
+                'color'    => 'primary',
+                'onLabel' => '✓',
+                'offLabel' => '✕',
+                'default' => '1'
             ],
         );
         CRUD::addfield([
@@ -128,6 +154,7 @@ class AttributesCrudController extends CrudController
                         1 => 'Active',
                     ],
                     'inline' => true,
+                    'default' => '1'
                 ],
             ],
             'new_item_label'  => 'Add Attribute',
@@ -189,6 +216,26 @@ class AttributesCrudController extends CrudController
                 'inline' => true,
             ],
         );
+        CRUD::addField(
+            [
+                'name'  => 'is_default',
+                'type'  => 'switch',
+                'label'    => 'Default',
+                'color'    => 'primary',
+                'onLabel' => '✓',
+                'offLabel' => '✕',
+            ],
+        );
+        CRUD::addField(
+            [
+                'name'  => 'compulsory',
+                'type'  => 'switch',
+                'label'    => 'Compulsory',
+                'color'    => 'primary',
+                'onLabel' => '✓',
+                'offLabel' => '✕',
+            ],
+        );
         CRUD::addfield([
             'name'  => 'attributesvalue',
             'label' => 'Attributes Value',
@@ -229,9 +276,10 @@ class AttributesCrudController extends CrudController
         $this->crud->set('show.setFromDb', false);
         CRUD::column('name');
         CRUD::column('attributegroup_id');
-        CRUD::addColumn('type_name');
+        CRUD::Column('type_name')->label('Category Type');
         CRUD::addColumn('status_name');
-
+        CRUD::column('is_default_name')->label('Default');
+        CRUD::addColumn('is_compulsory_name');
         CRUD::addColumn([
             'name'      => 'attribute_value',
             'label'     => 'Attribute Value',
@@ -273,10 +321,13 @@ class AttributesCrudController extends CrudController
     }
     public function update(AttributesRequest $request)
     {
+        // dd($request->all());
         $data = Attributes::find($request->id);
         $data->category_id   = $request->category_id;
         $data->category_type    = $request->category_type;
         $data->attributegroup_id    = $request->attributegroup_id;
+        $data->is_default = $request->is_default;
+        $data->compulsory = $request->compulsory;
         $data->name    = $request->name;
         $data->status = $request->status;
         $data->save();

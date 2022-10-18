@@ -23,7 +23,7 @@ class Attributes extends Model
     // protected $hidden = [];
     // protected $dates = [];
 
-    protected $appends = ['type_name', 'status_name', 'attributesvalue'];
+    protected $appends = ['type_name','is_default_name','is_compulsory_name', 'status_name', 'attributesvalue'];
 
     // protected $app = ['status'];
 
@@ -93,6 +93,12 @@ class Attributes extends Model
 
     public function getTypeNameAttribute() {
         return ($this->category_type) ? $this->typeData($this->category_type) : '-';
+    }
+    public function getIsDefaultNameAttribute($val) {
+        return (isset($this->is_default) && $this->is_default == '1') ? 'Yes' : 'No';
+    }
+    public function getIsCompulsoryNameAttribute() {
+        return (isset($this->compulsory) && $this->compulsory == '1') ? 'Yes' : 'No';
     }
 
     public function getStatusNameAttribute() {

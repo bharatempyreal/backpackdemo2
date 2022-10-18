@@ -134,6 +134,8 @@ class AdvertisementCrudController extends CrudController
             ->content('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js');
         Widget::add()->type('script')
             ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.js');
+        Widget::add()->type('script')
+            ->content('https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js');
         Widget::add()->type('style')
             ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.css');
         Widget::add([
@@ -165,8 +167,6 @@ class AdvertisementCrudController extends CrudController
         CRUD::field('removeImages')->type('hidden')->attributes(['class' => 'removeImages', 'id' => 'removeImages']);
         CRUD::field('cancelImages')->type('hidden')->attributes(['class' => 'cancelImages', 'id' => 'cancelImages']);
 
-
-
         CRUD::addfield(
             [
                 'name'     => 'my_custom_html',
@@ -183,6 +183,10 @@ class AdvertisementCrudController extends CrudController
         ]);
         Widget::add()->type('script')
             ->content('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js');
+
+        Widget::add()->type('script')
+            ->content('https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js');
+
         Widget::add()->type('script')
             ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.js');
         Widget::add()->type('style')
@@ -195,12 +199,12 @@ class AdvertisementCrudController extends CrudController
 
     public function getadvertisement(Request $request)
     {
-        $attributeData = Attributes::where('category_id', $request->selected)->with('attributegroup')->get();
-        $attribute_grop_ids = Attributes::where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+        $attributeData = Attributes::where('is_default',0)->where('category_id', $request->selected)->with('attributegroup')->get();
+        $attribute_grop_ids = Attributes::where('is_default',0)->where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
         $data=[];
         if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
             foreach($attribute_grop_ids as $id){
-                $result = Attributes::with('attributegroup')->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
+                $result = Attributes::with('attributegroup')->where('is_default',0)->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
                 if(isset($result) && !empty($result)){
                     $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
                 }
@@ -212,6 +216,8 @@ class AdvertisementCrudController extends CrudController
             foreach($val as $key => $value){
                 switch ($value->category_type) {
                     case 1:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $options = [];
                         foreach($value->attributesdata as $key => $val) {
                             $options[$val->attribute_name] = $val->attribute_name;
@@ -220,9 +226,14 @@ class AdvertisementCrudController extends CrudController
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'checklist-new',
-                            'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
+                            'attributes'=> $attr,
+                            'wrapper'   => [
+                                'class' => 'form-group col-md-4 checklist'],
                             'options'   => $options,
-                            // 'group'     => $key,
+                            'validationRules' => ($value->compulsory ==1)?'required':'',
+                            'validationMessages' => [
+                                'required' => ucFirst($value->name).' is required',
+                            ]
                         ];
                         $crudFields[]  =[
                             'name'      => $value->name.'_id',
@@ -231,6 +242,8 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 2:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $options = [];
                         foreach($value->attributesdata as $key => $val) {
                             $options[$val->attribute_name] = $val->attribute_name;
@@ -240,7 +253,7 @@ class AdvertisementCrudController extends CrudController
                             'label'     => ucFirst($value->name),
                             'type'      => 'select2_from_array',
                             'options'   =>  $options,
-                            // 'group'     => $key,
+                            'attributes'   => $attr,
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -249,6 +262,8 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 3:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'          => $value->name,
                             'label'         => ucFirst($value->name),
@@ -259,6 +274,7 @@ class AdvertisementCrudController extends CrudController
                             'disk'          => 'uploads/images/',
                             'mimes'         => 'image/*',
                             'filesize'      => 5,
+                            'attributes'   => $attr,
                             // 'group'         => $key,
                         ];
                         $crudFields[]  = [
@@ -268,12 +284,18 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 4:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'text',
+                            'attributes'   => $attr,
                             'value'     => (isset($value->attributesdata) && isset($value->attributesdata[0]) && $value->attributesdata[0]->attribute_name != '') ? $value->attributesdata[0]->attribute_name : '',
-                            // 'group'     => $key,
+                            // 'validationRules' =>'required',
+                            // 'validationMessages' => [
+                            //     'required' => ucFirst($value->name).' is required',
+                            // ]
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -282,10 +304,13 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 5:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'textarea',
+                            'attributes'   => $attr,
                             // 'group'     => $key,
                         ];
                         $crudFields[]  = [
@@ -295,11 +320,13 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 6:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'custom-image',
-                            // 'group'     => $key,
+                            'attributes'   => $attr,
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -308,11 +335,13 @@ class AdvertisementCrudController extends CrudController
                         ];
                         break;
                     case 7:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'date',
-                            // 'group'     => $key,
+                            'attributes'   => $attr,
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -332,7 +361,6 @@ class AdvertisementCrudController extends CrudController
                     'fields' => $crudFields
             ];
         }
-        // dd($crudFields1);
         $this->crud->fields = $crudFields1;
         $view = \View::make('vendor.backpack.crud.advertisement_form', ['fields' => $crudFields1, 'action' => 'create' , 'crud' => $this->crud]);
         $view = $view->render();
@@ -342,12 +370,12 @@ class AdvertisementCrudController extends CrudController
     public function geteditadvertisement(Request $request)
     {
         // $attributeData = Attributes::where('category_id', $request->selected)->get();
-        $attributeData = Attributes::where('category_id', $request->selected)->with('attributegroup')->get();
-        $attribute_grop_ids = Attributes::where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+        $attributeData = Attributes::where('is_default',0)->where('category_id', $request->selected)->with('attributegroup')->get();
+        $attribute_grop_ids = Attributes::where('is_default',0)->where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
         $data=[];
         if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
             foreach($attribute_grop_ids as $id){
-                $result = Attributes::with('attributegroup')->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
+                $result = Attributes::with('attributegroup')->where('is_default',0)->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
                 if(isset($result) && !empty($result)){
                     $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
                 }
@@ -398,7 +426,6 @@ class AdvertisementCrudController extends CrudController
                             'options'   =>  $options,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];
-
                         break;
                     case 3:
                         $quary = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
@@ -468,13 +495,13 @@ class AdvertisementCrudController extends CrudController
                     default:
                 }
             }
-                $crudFields1[]  = [
+                $crudFields1[] = [
                     // repeatable
                      'name'  => 'group'.$k,
                      'label' => 'Group : ' . ucfirst($k),
                      'type'  => 'customrepeatable',
                      'fields' => $crudFields
-             ];
+                ];
         }
         $this->crud->fields = $crudFields1;
         $view = \View::make('vendor.backpack.crud.advertisement_form', [ 'fields' => $crudFields1, 'action' => 'create' , 'crud' => $this->crud]);
@@ -508,7 +535,6 @@ class AdvertisementCrudController extends CrudController
             foreach($fiels as $value){
                 $attributes_id = $value.'_id';
                 $advertisement_value = New AdvertisementValue;
-
                 if($request->hasFile($value)){
                     $file = $request->file($value);
                     $path = storage_path('/app/public/image/');

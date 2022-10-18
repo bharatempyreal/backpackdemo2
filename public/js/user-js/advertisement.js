@@ -78,21 +78,6 @@ $(document).ready(function() {
                         oldremoved.push(removefile);
                         $('.removeImages').val(JSON.stringify(oldremoved));
                         $(file.previewElement).remove();
-
-                        // $.ajax({
-                        //     url: $('.ajaxUploadImages').data('removeaction'),
-                        //     type: 'POST',
-                        //     data: {
-                        //         file_name: removefile,
-                        //     },
-                        //     success: function(response) {
-                        //         if(response){
-                        //             $(file.previewElement).remove();
-                        //         }else{
-                        //             alert('Somthing Went Wrong');
-                        //         }
-                        //     }
-                        // });
                     },
                     success: function(file, status, response) {
                         var oldArr = [];
@@ -347,9 +332,13 @@ $(document).on('click', '.cancle_btn', function(e) {
         }
     });
 });
-
+$(document).ready(function(){
+    $('form').validate();
+})
 $(document).on('submit', 'form', function() {
     $('.cancelImages').val('');
+
+
 })
 
 $(window).bind('beforeunload', function() {
@@ -368,6 +357,3 @@ $(window).bind('beforeunload', function() {
     });
 });
 
-// function createform() {
-
-// }

@@ -115,6 +115,7 @@ class CategoryCrudController extends CrudController
                 1 => 'Active',
             ],
             'inline' => true,
+            'default' => '1'
         ]);
         Widget::add([
             'type'    => 'script',

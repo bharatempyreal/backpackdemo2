@@ -277,10 +277,7 @@ $(document).ready(function() {
                     });
                 }
                 $('.fetching-properties').append(html);
-
-
-
-        }
+            }
     });
 });
 </script>
