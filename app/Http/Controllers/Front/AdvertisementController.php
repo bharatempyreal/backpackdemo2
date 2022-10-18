@@ -50,6 +50,7 @@ class AdvertisementController extends Controller
     }
 
     public function saveListProperty(Request $request){
+        // dd($request->all());
         $removeImages =[];
         $i = 0;
         // dd($request->all());
@@ -95,13 +96,27 @@ class AdvertisementController extends Controller
         }
         if(isset($removeImages) && !empty($removeImages)){
             foreach($removeImages as $key => $file){
-                $path = storage_path('/app/public/image/'). $file;
+                $path = storage_path('/app/public/image/'). $file[0];
                 if (file_exists($path)) {
                     unlink($path);
                 }
             }
         }
         return redirect()->back();
+    }
+
+    public function ajaxremoveImagesFront(Request $request)
+    {
+        if(isset($request['files']) && !empty($request['files'])){
+            foreach($request['files'] as $key => $file){
+                $path = storage_path('/app/public/image/'). $file[0];
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            return true;
+        }
+        return response(true);
     }
 
     // advertisemet listing add bharat

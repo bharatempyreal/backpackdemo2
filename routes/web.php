@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/getAttributeAsPerCategory',[App\Http\Controllers\Front\AdvertisementController::class, 'getAttributeAsPerCategory'])->name('getAttributeAsPerCategory');
     Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
     Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
+    Route::post('/ajaxremoveImagesFront',[App\Http\Controllers\Front\AdvertisementController::class, 'ajaxremoveImagesFront'])->name('ajaxremoveImagesFront');
 
     Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {
         $path = storage_path('app/public/'.$name.'/'.$filename);
