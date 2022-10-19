@@ -29,17 +29,18 @@ class AdvertisementController extends Controller
             'message'=>'Somthig Went Wrong',
         ];
         if(isset($request->category_id) && $request->category_id != ''){
-            $attribute_grop_ids = Attributes::where('category_id',$request->category_id)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+            $attribute_grop_ids = Attributes::where('category_id',$request->category_id)->orWhere('is_default','1')->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
             $data=[];
             if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
                 foreach($attribute_grop_ids as $id){
-                    $result = Attributes::with('attributegroup')->where('category_id',$request->category_id)->where('attributegroup_id',$id)->get();
+                    $result = Attributes::with('attributegroup')->where(function($q) use($request){
+                        $q->where('category_id',$request->category_id)->orWhere('is_default','1');
+                    })->where('attributegroup_id',$id)->get();
                     if(isset($result) && !empty($result)){
                         $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
                     }
                 }
             }
-            // dd($data);
             $response = [
                 'status'=>true,
                 'message'=>'Data Get Successfully',

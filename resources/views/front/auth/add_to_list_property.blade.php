@@ -34,7 +34,8 @@ Adex - List-Property
     </div>
 </div>
 <div class="container pt-3">
-    <a class="btn btn-primary cancle_btn" data-img_remove_url="{{ route('ajaxremoveImagesFront') }}" data-href="{{ route('list-property') }}">Back</a>
+    {{-- <a class="btn btn-primary cancle_btn" data-img_remove_url="{{ route('ajaxremoveImagesFront') }}" data-href="{{ route('list-property') }}">Back</a> --}}
+    <span class="cancle_btn" data-img_remove_url="{{ route('ajaxremoveImagesFront') }}" data-href=""></span>
 </div>
 <!-- Submit Property start -->
 <div class="submit-property content-area">
@@ -64,6 +65,7 @@ Adex - List-Property
 @section('script')
 {{-- #### --}}
 <script src="{{ asset('assets/js/dropzone.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
 {{-- #### --}}
 <script src="{{ asset('js/htmlreturn.js') }}"></script>
 <script>
@@ -101,45 +103,67 @@ Adex - List-Property
                                         $.each(value,function(index1,value1){
                                             if(value1.status){
                                                 var jsLang = 'jquery';
+                                                var attr = '';
                                                 switch (value1.category_type) {
                                                     case '1':
                                                         // 1 = checkbox
                                                         var options=value1.attributesvalue;
-                                                        html += chekboxes(value1.name,value1.name,options);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
+                                                        html += chekboxes(value1.name, value1.name, options, attr);
+                                                        html += inputhidden(value1.name,value1.category_type,'',attr);
                                                     break;
                                                     case '2':
                                                         // 2 = dropdown
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
                                                         var options=value1.attributesvalue;
-                                                        html += select(value1.name,value1.name,options);
+                                                        html += select(value1.name, value1.name, options, attr);
                                                         html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '3':
                                                         // 3 = multipleimages
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
                                                         html += adddropzone(value1.name,'','');
-                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
                                                         html += inputhidden(value1.name,value1.category_type);
 
                                                     break;
                                                     case '4':
                                                         // 4 = textbox
-                                                        html += inputtext(value1.name,value1.name);
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
+                                                        html += inputtext(value1.name,value1.name,'',attr);
                                                         html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '5':
                                                         // 5 = textarea
-                                                        html += textarea(value1.name,value1.name);
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
+                                                        html += textarea(value1.name,value1.name,'',attr);
                                                         html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '6':
                                                         // 6 = Image
-                                                        html += dropzone(value1.name);
-                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
+                                                        html += adddropzone(value1.name,'','');
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
                                                         html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '7':
                                                         // 7 = date
-                                                        html += inputdate(value1.name,value1.name);
+                                                        if(value1.compulsory == 1){
+                                                            attr = 'required';
+                                                        }
+                                                        html += inputdate(value1.name,value1.name,'',attr);
                                                         html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     default:
@@ -230,6 +254,35 @@ Adex - List-Property
         }else{
             alert('Somthing Went Wrong');
         }
+
+        $('form').validate({
+            ignore: [],
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-error').addClass('has-success');
+            },
+            errorPlacement: function (error, element) {
+                if(element.hasClass('selectpicker')) {
+                    error.insertAfter(element.parent());
+                }else if(element.hasClass('dropify')) {
+                    error.insertAfter($('#category-image-upload .dropify-wrapper'));
+                }
+                else if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else if (element.prop('type') === 'radio' && element.parent('.radio-inline').length) {
+                    error.insertAfter(element.parent().parent());
+                }
+                else if (element.prop('type') === 'checkbox' || element.prop('type') === 'radio') {
+                    error.appendTo(element.parent().parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            }
+        });
     });
 
 $(document).on('click', '.cancle_btn', function(e) {

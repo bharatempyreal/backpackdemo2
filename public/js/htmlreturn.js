@@ -3,47 +3,47 @@ function startDiv(classes='', html=''){
     return html;
 }
 
-function inputtext(label = '', name=''){
+function inputtext(label = '', name='',classname="",attr=''){
     var html='<div class="col-md-4">';
         html+='<div class="form-group">';
         html+='<label>'+label+'</label>';
-        html+='<input type="text" class="input-text" name="'+name+'" placeholder="Enter '+label+'">';
+        html+='<input type="text" class="input-text" name="'+name+'" placeholder="Enter '+label+'" '+attr+'>';
         html+='</div>';
         html+='</div>';
     return html;
 }
 
-function inputemail(label = '', name=''){
+function inputemail(label = '', name='',classname="",attr=''){
     var html='<div class="col-md-4">';
         html+='<div class="form-group">';
         html+='<label>'+label+'</label>';
-        html+='<input type="email" class="input-text" name="'+name+'" placeholder="Enter '+label+'">';
+        html+='<input type="email" class="input-text" name="'+name+'" placeholder="Enter '+label+'" '+attr+'>';
         html+='</div>';
         html+='</div>';
   return html;
 }
 
-function inputdate(label = '',name=''){
+function inputdate(label = '',name='',classname="",attr=''){
     var html='<div class="col-lg-4 col-md-6">';
         html+='<div class="form-group">';
         html+='<label>'+label+'</label>';
-        html+='<input type="date" class="input-text" name="'+name+'" placeholder="Select '+label+'">';
+        html+='<input type="date" class="input-text" name="'+name+'" placeholder="Select '+label+'" '+attr+'>';
         html+='</div>';
         html+='</div>';
         return html;
 }
 
-function textarea(label = '',name=''){
+function textarea(label = '',name='',classname="",attr=''){
     var html='<div class="col-md-12">';
         html+='<div class="form-group mb-0">';
         html+='<label>'+label+'</label>';
-        html+='<textarea class="input-text" name="'+name+'" placeholder="'+label+'"></textarea>';
+        html+='<textarea class="input-text" name="'+name+'" placeholder="'+label+'" '+attr+'></textarea>';
         html+='</div>';
         html+='</div>';
     return html;
 }
 
-function adddropzone(label = '',name='',attr=''){
+function adddropzone(label = '',name='',classname="",attr=''){
     var html="";
         // html='<h3 class="heading-2">'+label+'</h3>';
         html+='<div class="col-md-12 dropzone_box" '+attr+'>';
@@ -54,7 +54,7 @@ function adddropzone(label = '',name='',attr=''){
     return html;
 }
 
-function chekboxes(label = '',name='',value=[]){
+function chekboxes(label = '',name='',value=[],attr=''){
     var html=''
         html +='<div class="col-md-12">';
         html +='<label class="margin-t-10">'+label+'</label>';
@@ -64,7 +64,7 @@ function chekboxes(label = '',name='',value=[]){
             $.each(value, function( i, v ) {
                 if(v.status){
                     html +='<div class="checkbox checkbox-theme checkbox-circle">';
-                    html +='<input id="'+v.attribute_name+'" type="checkbox" name="'+v.attribute_name+'" value="1">';
+                    html +='<input id="'+v.attribute_name+'" type="checkbox" name="'+v.attribute_name+'" value="1" '+attr+'>';
                     html +='<label for="'+v.attribute_name+'">'+v.attribute_name+'</label>';
                     html +='</div>';
                 }
@@ -76,19 +76,18 @@ function chekboxes(label = '',name='',value=[]){
     return html;
 }
 
-function select(label='', name='',options=[]){
+function select(label='', name='',options=[],attr=''){
     var html='<div class="col-lg-4 col-md-6">';
         html+='<div class="form-group">';
         html+='<label>'+label+'</label>';
-        html+='<select class="selectpicker search-fields" name="'+name+'" placeholder="Select '+label+'">';
+        html+='<select class="selectpicker search-fields" name="'+name+'" placeholder="Select '+label+'" '+attr+'>';
         if(options.length>0){
+            html+='<option value="">Select '+label+'</option>';
             $.each(options, function( index, value ) {
                 if(value.status){
                     html+='<option value="'+value.attribute_name+'">'+value.attribute_name+'</option>';
                 }
               });
-        }else{
-            html+='<option value="1">Select '+label+'</option>';
         }
         html+='</select>';
         html+='</div>';
@@ -102,14 +101,14 @@ function closeDiv(){
     return html;
 }
 
-function inputhidden(name='',value='', classname=''){
+function inputhidden(name='',value='', classname='',attr=''){
     var html="";
-        html += '<input type="hidden" class="'+classname+'" name="'+name+'_id" value="'+value+'">';
+        html += '<input type="hidden" class="'+classname+'" name="'+name+'_id" value="'+value+'" '+attr+'>';
     return html;
 }
 
-function inputhiddenfordropzone(name='',value='', classname=''){
+function inputhiddenfordropzone(name='',value='', classname='',attr=''){
     var html="";
-        html += '<input type="hidden" class="'+classname+'" name="'+name+'">';
+        html += '<input type="hidden" class="'+classname+'" name="'+name+'" '+attr+'>';
     return html;
 }
