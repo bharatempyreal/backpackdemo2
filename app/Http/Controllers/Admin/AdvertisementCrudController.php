@@ -90,11 +90,15 @@ class AdvertisementCrudController extends CrudController
                 $adid = $entry->id;
                 // $entry = Advertisement::where('category_id',$entry->category_id)->pluck('id')->toArray();
                 // $entrys = AdvertisementValue::where('advertisement_id',$entry[0])->get();
-                $attribute_grop_ids = Attributes::where('category_id',$entry->category_id)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+                $attribute_grop_ids = Attributes::where(function($q) use($entry){
+                    $q->where('category_id',$entry->category_id)->orWhere('is_default',1);
+                })->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
                 $data=[];
                 if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
                     foreach($attribute_grop_ids as $id){
-                        $result = Attributes::with('attributegroup','attributesdata','advertisement_data')->where('category_id',$entry->category_id)->where('attributegroup_id',$id)
+                        $result = Attributes::with('attributegroup','attributesdata','advertisement_data')->where(function($q) use($entry){
+                            $q->where('category_id',$entry->category_id)->orWhere('is_default',1);
+                        })->where('attributegroup_id',$id)
                         ->whereHas('advertisement_data',function ($q) use($adid){
                             $q->where('advertisement_id',$adid);
                         })->get();
@@ -103,6 +107,7 @@ class AdvertisementCrudController extends CrudController
                         }
                     }
                 }
+                // dd($data);
                 return view('vendor.return.advertisement_valuedata', ['data' => $data, 'adid' =>$adid])->render();
             }
         ]);
@@ -191,20 +196,26 @@ class AdvertisementCrudController extends CrudController
             ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.js');
         Widget::add()->type('style')
             ->content('https://rawgit.com/enyo/dropzone/master/dist/dropzone.css');
-        // Widget::add([
-        //     'type'    => 'style',
-        //     'content' => 'js/user-js/image-new.css'
-        // ]);
+            Widget::add([
+                'type'    => 'style',
+                'content' => 'css/image-new.css'
+            ]);
     }
 
     public function getadvertisement(Request $request)
     {
-        $attributeData = Attributes::where('is_default',0)->where('category_id', $request->selected)->with('attributegroup')->get();
-        $attribute_grop_ids = Attributes::where('is_default',0)->where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+        $attributeData = Attributes::where(function($q) use($request){
+            $q->where('category_id',$request->selected)->orWhere('is_default',1);
+        })->with('attributegroup')->get();
+        $attribute_grop_ids = Attributes::where(function($q) use($request){
+            $q->where('category_id',$request->selected)->orWhere('is_default',1);
+        })->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
         $data=[];
         if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
             foreach($attribute_grop_ids as $id){
-                $result = Attributes::with('attributegroup')->where('is_default',0)->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
+                $result = Attributes::with('attributegroup')->where(function($q) use($request){
+                    $q->where('category_id',$request->selected)->orWhere('is_default',1);
+                })->where('attributegroup_id',$id)->get();
                 if(isset($result) && !empty($result)){
                     $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
                 }
@@ -227,13 +238,8 @@ class AdvertisementCrudController extends CrudController
                             'label'     => ucFirst($value->name),
                             'type'      => 'checklist-new',
                             'attributes'=> $attr,
-                            'wrapper'   => [
-                                'class' => 'form-group col-md-4 checklist'],
+                            'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
                             'options'   => $options,
-                            'validationRules' => ($value->compulsory ==1)?'required':'',
-                            'validationMessages' => [
-                                'required' => ucFirst($value->name).' is required',
-                            ]
                         ];
                         $crudFields[]  =[
                             'name'      => $value->name.'_id',
@@ -275,7 +281,6 @@ class AdvertisementCrudController extends CrudController
                             'mimes'         => 'image/*',
                             'filesize'      => 5,
                             'attributes'   => $attr,
-                            // 'group'         => $key,
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -292,10 +297,6 @@ class AdvertisementCrudController extends CrudController
                             'type'      => 'text',
                             'attributes'   => $attr,
                             'value'     => (isset($value->attributesdata) && isset($value->attributesdata[0]) && $value->attributesdata[0]->attribute_name != '') ? $value->attributesdata[0]->attribute_name : '',
-                            // 'validationRules' =>'required',
-                            // 'validationMessages' => [
-                            //     'required' => ucFirst($value->name).' is required',
-                            // ]
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -311,7 +312,6 @@ class AdvertisementCrudController extends CrudController
                             'label'     => ucFirst($value->name),
                             'type'      => 'textarea',
                             'attributes'   => $attr,
-                            // 'group'     => $key,
                         ];
                         $crudFields[]  = [
                             'name'      => $value->name.'_id',
@@ -347,7 +347,6 @@ class AdvertisementCrudController extends CrudController
                             'name'      => $value->name.'_id',
                             'type'      => 'hidden',
                             'value'     => $value->id,
-                            // 'group'     => $key,
                         ];
                         break;
                     default:
@@ -370,12 +369,19 @@ class AdvertisementCrudController extends CrudController
     public function geteditadvertisement(Request $request)
     {
         // $attributeData = Attributes::where('category_id', $request->selected)->get();
-        $attributeData = Attributes::where('is_default',0)->where('category_id', $request->selected)->with('attributegroup')->get();
-        $attribute_grop_ids = Attributes::where('is_default',0)->where('category_id',$request->selected)->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
+        $attributeData = Attributes::where(function($q) use($request){
+            $q->where('category_id',$request->selected)->orWhere('is_default',1);
+        })->with('attributegroup')->get();
+
+        $attribute_grop_ids = Attributes::where(function($q) use($request){
+            $q->where('category_id',$request->selected)->orWhere('is_default',1);
+        })->groupBY('attributegroup_id')->pluck('attributegroup_id')->toArray();
         $data=[];
         if(isset($attribute_grop_ids) && !empty($attribute_grop_ids)){
             foreach($attribute_grop_ids as $id){
-                $result = Attributes::with('attributegroup')->where('is_default',0)->where('category_id',$request->selected)->where('attributegroup_id',$id)->get();
+                $result =Attributes::with('attributegroup')->where(function($q) use($request){
+                    $q->where('category_id',$request->selected)->orWhere('is_default',1);
+                })->where('attributegroup_id',$id)->get();
                 if(isset($result) && !empty($result)){
                     $data[(isset($result[0]->attributegroup->name) && $result[0]->attributegroup->name != '') ? $result[0]->attributegroup->name : 'Extra']=$result;
                 }
@@ -401,6 +407,8 @@ class AdvertisementCrudController extends CrudController
                 }
                 switch ($value->category_type) {
                     case 1:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $options = [];
                         foreach($value->attributesdata as $key => $val2) {
                             $options[$val2->attribute_name] = $val2->attribute_name;
@@ -410,11 +418,14 @@ class AdvertisementCrudController extends CrudController
                             'label'     => ucFirst($value->name),
                             'type'      => 'checklist-new',
                             'wrapper'   => ['class' => 'form-group col-md-4 checklist'],
+                            'attributes'=> $attr,
                             'options'   => $options,
                             'selected'     => (isset($addsData->value)) ? json_decode($addsData->value) : ''
                         ];
                         break;
                     case 2:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $options = [];
                         foreach($value->attributesdata as $key => $val2) {
                             $options[$val2->attribute_name] = $val2->attribute_name;
@@ -424,10 +435,13 @@ class AdvertisementCrudController extends CrudController
                             'label'     => ucFirst($value->name),
                             'type'      => 'select2_from_array',
                             'options'   =>  $options,
+                            'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];
                         break;
                     case 3:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $quary = AdvertisementValue::where([['advertisement_id',$request->id],['attributes_id', $value->id]])->first();
                         $images = [];
                         $images_val = [];
@@ -454,41 +468,54 @@ class AdvertisementCrudController extends CrudController
                             'delete_route'  => 'delete_image',
                             'disk'          => 'uploads/images/',
                             'mimes'         => 'image/*',
+                            'attributes'    => $attr,
                             'filesize'      => 5,
                             'imager_path'   => $images,
                             'value'         => $images_val
                         ];
                         break;
                     case 4:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'text',
+                            'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];
                         break;
                     case 5:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'textarea',
+                            'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];
                         break;
                     case 6:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'custom-image',
                             'wrapper'   => ['class' => 'form-group col-md-12 image'],
+                            'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? route('getStoragePath', ['image', $addsData->value]) : ''
                         ];
                         break;
                     case 7:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
                         $crudFields[] = [
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'date',
+                            'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];
                         break;

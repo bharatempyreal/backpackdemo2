@@ -160,11 +160,11 @@ Adex - My Profile
                                 <div class="form-group">
                                     <label>City</label>
                                     <select class="selectpicker search-fields" id="assetchoosecitys" name="assetchoosecitys">
-                                        <option>Choose Citys</option>
-                                        <option>New York</option>
-                                        <option>Los Angeles</option>
-                                        <option>Chicago</option>
-                                        <option>Brooklyn</option>
+                                        <option value="">Choose Citys</option>
+                                        <option value="New York">New York</option>
+                                        <option value="Los Angeles">Los Angeles</option>
+                                        <option value="Chicago">Chicago</option>
+                                        <option value="Brooklyn">Brooklyn</option>
                                     </select>
                                 </div>
                             </div>
@@ -265,22 +265,6 @@ Adex - My Profile
                 });
                 cancled.push(response_value[numberCreate]);
                 $('.cancelImages').val(JSON.stringify(cancled));
-
-                // $.ajax({
-                //     url: "{{route('dropremoveImages')}}",
-                //     type: 'POST',
-                //     data: {
-                //         _token: "{{ csrf_token() }}",
-                //         file_name: removefile,
-                //     },
-                //     success: function(response) {
-                //         if(response){
-                //             $(file.previewElement).remove();
-                //         }else{
-                //             alert('Somthing Went Wrong');
-                //         }
-                //     }
-                // });
             },
         success: function(file, status , response) {
             var oldArr = [];
@@ -420,18 +404,17 @@ $(document).ready(function () {
                 $('#phone').val(data.user.phone);
                 $('#address').val(data.user.address);
                 $('#landmark').val(data.user.landmark);
-                $('#city').val(data.user.city);
+                $("#city").selectpicker('val', data.user.city);
                 $('#state').val(data.user.state);
                 $('#zipcode').val(data.user.zipcode);
                 $('#bioInformation').val(data.user.bioinformation);
                 $('#assetname').val(data.user.asset_name);
-                $('#asset_type').val(data.user.asset_type);
+                $("#asset_type").selectpicker('val', data.user.asset_type);
                 $('#assetimage').val(data.user.asset_image);
                 $('#assetimage_path').val(data.user.images);
-                // console.log(JSON.parse(data.user.asset_image));
                 $.each(data.images, function(key,value) {
                     var filename = value;
-                    var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                    var image_name = filename.split('/');
                     var mockFile = { name: image_name[1]};
                     mydropzone.options.addedfile.call(mydropzone, mockFile);
                     mydropzone.options.thumbnail.call(mydropzone, mockFile, value);
@@ -439,7 +422,7 @@ $(document).ready(function () {
                 });
                 $.each(data.gallary_img, function(key,value) {
                     var filename = value;
-                    var image_name = filename.split("http://localhost/bharat/backpackdemo2/public/get-storage-path/image/");
+                    var image_name = filename.split('/');
                     var mockFile = { name: image_name[1]};
                     dropzone.options.addedfile.call(dropzone, mockFile);
                     dropzone.options.thumbnail.call(dropzone, mockFile, value);
@@ -451,8 +434,8 @@ $(document).ready(function () {
                     // });
                     $('#assetaddress').val(data.user.asset_address);
                     $('#assetlandmark').val(data.user.asset_landmark);
-                    $('#assetchoosecitys').val(data.user.asset_city);
-                    $('#assetchoosestate').val(data.user.asset_state);
+                    $("#assetchoosecitys").selectpicker('val', data.user.asset_city);
+                    $("#assetchoosestate").selectpicker('val', data.user.asset_state);
                     $('#assetzipcode').val(data.user.asset_zipcode);
                     $('#assetmessage').val(data.user.asset_advertisement_requirements);
                     $('#asset_property_gallery').val(data.user.asset_property_gallery);
@@ -515,7 +498,6 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 success: function(data) {
-                    alert('success');
                 },
             });
         // }

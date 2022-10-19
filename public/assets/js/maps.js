@@ -1,61 +1,61 @@
 var properties = {
     "data": [
-        {
-            "id": 1,
-            "title": "Captial Ale House",
-            "is_featured": true,
-            'businesstype': 'Restaurant / Tavern',
-            'date': '5 days ago',
-            "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
-            "latitude": 51.541599,
-            "longitude": -0.112588,
-            "address": "123 Kathal St. Tampa City",
-            "image": "assets/img/properties/properties-list-1.jpg",
-            "type_icon": "assets/img/favicon.png",
-            "description": "(1) posting signs/decals on local houses (lawn, front door, and windows) and (2) Wear advertising apparel (hats, t-shi rts, etc.)"
-        },
-        {
-            "id": 2,
-            "title": "Benny Vitali’s",
-            "is_featured": true,
-            'businesstype': 'Pizza Restaurant',
-            'date': '5 days ago',
-            "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
-            "latitude": 51.538395,
-            "longitude": -0.097418,
-            "address": "123 Kathal St. Tampa City",
-            "image": "assets/img/properties/properties-list-2.jpg",
-            "type_icon": "assets/img/favicon.png",
-            "description": "(1) Wear advertising apparel (hats, t-shirts, etc.). "
-        },
-        {
-            "id": 3,
-            "title": "Rebellion Bourbon Bar & Kitchen",
-            "is_featured": true,
-            'businesstype': 'Restaurant / Bar',
-            'date': '5 days ago',
-            "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
-            "latitude": 51.539212,
-            "longitude": -0.118403,
-            "address": "123 Kathal St. Tampa City",
-            "image": "assets/img/properties/properties-list-3.jpg",
-            "type_icon": "assets/img/favicon.png",
-            "description": "(1) Vehicle wrap"
-        },
-        {
-            "id": 4,
-            "title": "Cowboy Jacks Fredericksburg",
-            "is_featured": true,
-            'businesstype': 'Restaurant / Bar',
-            'date': '5 days ago',
-            "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
-            "latitude": 51.522340,
-            "longitude": -0.037894,
-            "address": "123 Kathal St. Tampa City",
-            "image": "assets/img/properties/properties-list-1.jpg",
-            "type_icon": "assets/img/favicon.png",
-            "description": "(1) Wear advertising apparel (hats, t-shirts, etc.).  "
-        }
+        // {
+        //     "id": 1,
+        //     "title": "Captial Ale House",
+        //     "is_featured": true,
+        //     'businesstype': 'Restaurant / Tavern',
+        //     'date': '10 days ago',
+        //     "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
+        //     "latitude": 51.541599,
+        //     "longitude": -0.112588,
+        //     "address": "123 Kathal St. Tampa City",
+        //     "image": "assets/img/properties/properties-list-1.jpg",
+        //     "type_icon": "assets/img/favicon.png",
+        //     "description": "(1) posting signs/decals on local houses (lawn, front door, and windows) and (2) Wear advertising apparel (hats, t-shi rts, etc.)"
+        // },
+        // {
+        //     "id": 2,
+        //     "title": "Benny Vitali’s",
+        //     "is_featured": true,
+        //     'businesstype': 'Pizza Restaurant',
+        //     'date': '5 days ago',
+        //     "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
+        //     "latitude": 51.538395,
+        //     "longitude": -0.097418,
+        //     "address": "123 Kathal St. Tampa City",
+        //     "image": "assets/img/properties/properties-list-2.jpg",
+        //     "type_icon": "assets/img/favicon.png",
+        //     "description": "(1) Wear advertising apparel (hats, t-shirts, etc.). "
+        // },
+        // {
+        //     "id": 3,
+        //     "title": "Rebellion Bourbon Bar & Kitchen",
+        //     "is_featured": true,
+        //     'businesstype': 'Restaurant / Bar',
+        //     'date': '5 days ago',
+        //     "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
+        //     "latitude": 51.539212,
+        //     "longitude": -0.118403,
+        //     "address": "123 Kathal St. Tampa City",
+        //     "image": "assets/img/properties/properties-list-3.jpg",
+        //     "type_icon": "assets/img/favicon.png",
+        //     "description": "(1) Vehicle wrap"
+        // },
+        // {
+        //     "id": 4,
+        //     "title": "Cowboy Jacks Fredericksburg",
+        //     "is_featured": true,
+        //     'businesstype': 'Restaurant / Bar',
+        //     'date': '5 days ago',
+        //     "rating": '<div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>  <i class="fa fa-star"></i> <i class="fa fa-star-half-full"></i><span>( 4.5 Reviews )</span>  </div>',
+        //     "latitude": 51.522340,
+        //     "longitude": -0.037894,
+        //     "address": "12334 33123 Kathal St. Tampa City",
+        //     "image": "assets/img/properties/properties-list-1.jpg",
+        //     "type_icon": "assets/img/favicon.png",
+        //     "description": "(1) Wear advertising apparel (hats, t-shirts, etc.).  "
+        // }
     ]
 };
 

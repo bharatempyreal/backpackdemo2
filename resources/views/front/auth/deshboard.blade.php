@@ -33,11 +33,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav w-100">
-                    <a href="{{route('my-profile')}}" class="nav-item nav-link active">General Information</a>
-                    <a href="{{route('security')}}" class="nav-item nav-link">Security</a>
-                    <a href="{{route('notification')}}" class="nav-item nav-link">Notification</a>
-                    <a href="{{route('my-wallet')}}" class="nav-item nav-link">My Wallet</a>
-                    <a href="{{route('my-adex')}}" class="nav-item nav-link">My ADEX</a>
+                    <a href="{{route('my-profile')}}" class="nav-item nav-link {{ request()->is('my-profile') ? 'active' : ''}}">General Information</a>
+                    <a href="{{route('security')}}" class="nav-item nav-link {{ request()->is('security') ? 'active' : ''}}">Security</a>
+                    <a href="{{route('notification')}}" class="nav-item nav-link {{ request()->is('notification') ? 'active' : ''}}">Notification</a>
+                    <a href="{{route('my-wallet')}}" class="nav-item nav-link {{ request()->is('my-wallet') ? 'active' : ''}}">My Wallet</a>
+                    <a href="{{route('my-adex')}}" class="nav-item nav-link {{ request()->is('my-adex') ? 'active' : ''}}">My ADEX</a>
                 </div>
             </div>
         </nav>
