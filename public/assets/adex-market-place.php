@@ -269,6 +269,4 @@
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 
 </body>
-
-<!-- Mirrored from storage.googleapis.com/theme-vessel-items/checking-sites/housy-2-html/HTML/properties-map-leftside-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 29 Sep 2022 10:54:03 GMT -->
 </html>

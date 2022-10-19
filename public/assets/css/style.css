@@ -1,41 +1,3 @@
-/*------------------------------------------------------------------
-[Table of contents]
-    1. Top Header / .top-header
-    2. Main Header / .main-header
-    3. Home Page Banner (Main Home) / .banner
-    4. Banner Search Box / .search-area
-    5. Recent Properties / .recent-properties
-    6. Articles Tips / .articles-tips
-    7. Application Counter / .counters
-    8. Partner / .partners-block
-    9. Testimonials / .testimonial-section
-    10. Map Content /.map-content
-    11. Map Content Sidebar /.map-content-sidebar
-    12. Single Page Banner / .sub-banner
-    13. Properties List View / .listing-properties-box
-    14. Properties Grid View / .recent-properties-box
-    15. Single Property Details / .properties-details-page
-    16. Listing Page Sidebar /.sidebar
-    17. Pricing Table /.pricing-container
-    18. Agent Contact Form /.agent-widget
-    19. Properties Comments /.properties-comments
-    20. Help Center /.helping-center
-    21. Specifications /.specifications
-    22. My Profile /.my-profile
-    23. My Properties Box /.my-properties-box
-    24. Submit Property /.submit-property
-    25. Blog /.blog-body
-    26. Contact Form /.contact-form
-    27. Signup/Login Wrapper /.form-content-box
-    28. Pagination /.pagination
-    29. Main Footer / .main-footer
-    30. Sub Footer / .sub-footer
-    31. have ad space
-    32. about adex home section
-    33. any-person-place-or-things
--------------------------------------------------------------------*/
-/** GLOBAL CLASSES **/
-
 :root {
     --bc-black: #000000;
     --fc-black: #000000;
@@ -10360,3 +10322,113 @@ blockquote {
     padding-bottom: 15px;
     border-bottom: 1px solid var(--bc-lightgray);
 }
+
+/* 19-oct-s */
+.listing-property-sec .category h6{
+  padding: 15px 0 7px;
+  margin-bottom: 0;
+}
+.listing-property-sec .category p{
+  margin-bottom: 0;
+}
+
+.listing-property-sec .category{
+  background-color: var(--bc-white);
+  box-shadow: 0 0 6px rgb(0 0 0 / 16%);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.property-hover .label-details{
+  font-size: 14px;
+  font-weight: bold;
+}
+.property-hover .market-details{
+  font-size: 14px;
+}
+.map-property-box.property-hover{
+  padding: 15px;
+}
+.user-profile-icon {
+  text-align: center;
+}
+.user-profile-icon img {
+  bottom: 2px;
+  border-radius: 50%;
+  max-height: 180px;
+  border: 6px solid var(--fc-yellow);
+}
+.user-profile-icon h3{
+  padding:15px 0;
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 42.36px;
+}
+.user-profile-icon .rating .fa.fa-star{
+  color: #FFB800;
+}
+.car-details{
+  padding: 50px 0;
+}
+.car-details .row{
+  align-items: center;
+}
+.car-data p{
+  margin-bottom: 0;
+  font-weight: 400;
+  color: #838383;
+  line-height: 24.2px;
+}
+.car-data p b{
+  color: var(--bc-black);
+  font-weight: 600;
+}
+.whole-vehicle{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.whole-vehicle a{
+  background-color: #494949;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18.15px;
+  color: var(--bc-white);
+  margin-right: 10px;
+}
+.car-padding{
+  padding-left: 100px;
+}
+.car-image {
+  text-align: center;
+}
+.contract-details b{
+  font-size: 24px;
+  line-height: 29.05px;
+  font-weight: 600;
+  color: var(--bc-black);
+}
+
+.contract-details h2, p{
+  font-size: 20px;
+  line-height: 24.2px;
+  font-weight: 400;
+  color: #838383;
+  margin-bottom: 0;
+}
+.contract-section {
+  max-width: 904px;
+  margin: 0 auto;
+}
+.btn-accept{
+  border-radius: 10px;
+  margin: 50px 0 0 20px;
+}
+/* 19-oct-e */

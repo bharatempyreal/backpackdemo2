@@ -28,23 +28,25 @@ Adex - List-Property
 </div>
 
 <!-- Submit Property start -->
-<div class="submit-property content-area">
+<div class="submit-property content-area listing-property-sec">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="submit-address">
-                        <div class="row">
-                            <div class="col-md-12 row">
-                                {{-- {{ dd($category_data) }} --}}
-                                @foreach ($category_data as $category)
-                                <div class="col-md-3 category" data-id={{ $category->id }}>
-                                    <img src="{{ (myisset($category->image) != '') ? $category->image :'' }}" alt="{{ myisset($category->name) }}" style="height: 60px; weight:60px;">
-                                    <h6>{{ myisset($category->name) }}</h6>
-                                    <p>{{ myisset($category->details) }}</p>
-                                </div>
-                                @endforeach
-                            </div>
+                    <div class="row">
+                      {{-- {{ dd($category_data) }} --}}
+                      @foreach ($category_data as $category)
+                      <div class="col-md-3">
+                        <div class="category" data-id="{{ $category->id }}">
+                          <a href="#">
+                            <img src="{{ (myisset($category->image) != '') ? $category->image :'' }}" alt="{{ myisset($category->name) }}" style="height: 60px; weight:60px;">
+                            <h6>{{ myisset($category->name) }}</h6>
+                            <p>{{ myisset($category->details) }}</p>
+                          </a>
                         </div>
+                      </div>
+                      @endforeach
+                    </div>
                 </div>
             </div>
         </div>

@@ -39,6 +39,8 @@ Route::get('/adex-market-place', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-profile', [App\Http\Controllers\Front\DashboardController::class, 'myprofile'])->name('my-profile');
+    Route::get('/profile', [App\Http\Controllers\Front\DashboardController::class, 'profile'])->name('profile');
+    Route::get('/business', [App\Http\Controllers\Front\DashboardController::class, 'business'])->name('business');
     Route::get('/security', [App\Http\Controllers\Front\DashboardController::class, 'security'])->name('security');
     Route::get('/notification', [App\Http\Controllers\Front\DashboardController::class, 'notification'])->name('notification');
     Route::get('/my-adex', [App\Http\Controllers\Front\DashboardController::class, 'myadex'])->name('my-adex');

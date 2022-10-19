@@ -261,13 +261,13 @@ $(document).ready(function() {
                     console.log(property);
                         html += '<div class="card property-box-2 map-property-box property-hover">';
                         html += '<div class="row">';
-                        html +='<div class="col-lg-5 col-md-5 col-pad">';
+                        html +='<div class="col-lg-6 col-md-6 col-pad">';
                         html += '</div>';
-                        html +='<div class="col-lg-7 col-md-7 col-pad row">';
+                        html +='<div class="col-lg-6 col-md-6 col-pad row">';
                         if((property.advertisedata).length>0){
                             $.each(property.advertisedata,function(i,v){
-                                html +='<div class="pr-2">'+v.name+' :-</div>';
-                                html +='<div class="">'+v.value+'</div>';
+                                html +='<div class="pr-2 label-details">'+v.name+' -</div>';
+                                html +='<div class="market-details">'+v.value+'</div>';
                                 html +='<div class="col-md-12"></div>'
                             })
                         }
