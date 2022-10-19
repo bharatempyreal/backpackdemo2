@@ -117,7 +117,8 @@ Adex - List-Property
                                                     case '3':
                                                         // 3 = multipleimages
                                                         html += adddropzone(value1.name,'','');
-                                                        html += inputhidden((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+                                                        html += inputhidden(value1.name,value1.category_type);
 
                                                     break;
                                                     case '4':
@@ -133,6 +134,8 @@ Adex - List-Property
                                                     case '6':
                                                         // 6 = Image
                                                         html += dropzone(value1.name);
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden');
+                                                        html += inputhidden(value1.name,value1.category_type);
                                                     break;
                                                     case '7':
                                                         // 7 = date
@@ -147,8 +150,8 @@ Adex - List-Property
                                     }
                                     html += closeDiv();
                                 });
-                                html += inputhidden('cancelImages','','cancelImages');
-                                html += inputhidden('removeImages','','removeImages');
+                                html += inputhiddenfordropzone('cancelImages','','cancelImages');
+                                html += inputhiddenfordropzone('removeImages','','removeImages');
                             }
                         $('.form_section').append(html);
                     }else{
@@ -178,21 +181,19 @@ Adex - List-Property
                                     var oldArr = [];
                                     var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
                                     hidden_value.forEach(function(item) {
-                                        if (item[0] != removefile){
-                                            oldArr.push(item[0]);
+                                        if (item != removefile){
+                                            oldArr.push(item);
                                         }
                                     });
-
-
                                     dropzone_hidden.val(JSON.stringify(oldArr));
 
                                     // Add IN Remove Hidden
                                     var oldremoved = [];
                                     var removehidden_value = JSON.parse($('.removeImages').val() || '[]');
                                     removehidden_value.forEach(function(item) {
-                                        oldremoved.push(item[0]);
+                                        oldremoved.push(item);
                                     });
-                                    oldremoved.push(removefile);
+                                    oldremoved.push(removefile[0]);
                                     $('.removeImages').val(JSON.stringify(oldremoved));
                                     $(file.previewElement).remove();
                                 },

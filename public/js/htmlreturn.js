@@ -104,6 +104,12 @@ function closeDiv(){
 
 function inputhidden(name='',value='', classname=''){
     var html="";
+        html += '<input type="hidden" class="'+classname+'" name="'+name+'_id" value="'+value+'">';
+    return html;
+}
+
+function inputhiddenfordropzone(name='',value='', classname=''){
+    var html="";
         html += '<input type="hidden" class="'+classname+'" name="'+name+'">';
     return html;
 }

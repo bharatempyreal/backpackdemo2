@@ -50,7 +50,6 @@ class AdvertisementController extends Controller
     }
 
     public function saveListProperty(Request $request){
-        // dd($request->all());
         $removeImages =[];
         $i = 0;
         // dd($request->all());
@@ -82,13 +81,13 @@ class AdvertisementController extends Controller
 
                     $advertisement_value->value = $filename;
                     $advertisement_value->advertisement_id = $items->id;
-                    $advertisement_value->name = $value;
+                    $advertisement_value->name = str_replace("_"," ",$value);
                     $advertisement_value->attributes_id = $request->$attributes_id;
                     $advertisement_value->save();
                 } else {
                     $advertisement_value->advertisement_id = $items->id;
                     $advertisement_value->value = $request->$value;
-                    $advertisement_value->name = $value;
+                    $advertisement_value->name = str_replace("_"," ",$value);
                     $advertisement_value->attributes_id = $request->$attributes_id;
                     $advertisement_value->save();
                 }
@@ -96,7 +95,7 @@ class AdvertisementController extends Controller
         }
         if(isset($removeImages) && !empty($removeImages)){
             foreach($removeImages as $key => $file){
-                $path = storage_path('/app/public/image/'). $file[0];
+                $path = storage_path('/app/public/image/'). $file;
                 if (file_exists($path)) {
                     unlink($path);
                 }
@@ -109,7 +108,7 @@ class AdvertisementController extends Controller
     {
         if(isset($request['files']) && !empty($request['files'])){
             foreach($request['files'] as $key => $file){
-                $path = storage_path('/app/public/image/'). $file[0];
+                $path = storage_path('/app/public/image/'). $file;
                 if (file_exists($path)) {
                     unlink($path);
                 }
