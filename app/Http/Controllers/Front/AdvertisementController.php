@@ -123,14 +123,26 @@ class AdvertisementController extends Controller
 
     public function ListingProperty(Request $request)
     {
-        $listing  = Advertisement::with(['advertisedata','category'])->get();
-        foreach($listing as $k =>$v){
-            // dd($v->category);
-        }
+        // $listing  = Advertisement::with(['advertisedata','category','advertisedata.attribute'])->whereHas('advertisedata',function($query){
+        //     $query->whereHas('attribute',function($que){
+        //          $que->where('is_default','1');
+        //     });
+        //  })->get();
+        $listing  = Advertisement::with(['advertisedata','category','advertisedata.attribute'])->get();
+        // $image = [];
+        // foreach($listing as $k =>$v){
+        //     foreach($v->advertisedata as $k1 => $v1){
+        //         if($v1->attributes_id == 3){
+        //             $image[]=$v1->value;
+        //         }
+        //     }
+        //     $image[]= $v->category->image;
+        // }
+        // $listing['images'] = $image;
         $response = [
             'status'=>true,
             'message'=>'Data Get Successfully',
-            'listing'=>$listing
+            'listing'=>$listing,
         ];
         return response($response);
     }

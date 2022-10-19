@@ -266,9 +266,11 @@ $(document).ready(function() {
                         html +='<div class="col-lg-6 col-md-6 col-pad row">';
                         if((property.advertisedata).length>0){
                             $.each(property.advertisedata,function(i,v){
-                                html +='<div class="pr-2 label-details">'+v.name+' -</div>';
-                                html +='<div class="market-details">'+v.value+'</div>';
-                                html +='<div class="col-md-12"></div>'
+                                if(v.attribute.is_default == 1){
+                                    html +='<div class="pr-2 label-details">'+v.name+' -</div>';
+                                    html +='<div class="market-details">'+v.value+'</div>';
+                                    html +='<div class="col-md-12"></div>'
+                                }
                             })
                         }
                         html +='</div>';
