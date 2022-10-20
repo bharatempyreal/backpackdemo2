@@ -129,16 +129,20 @@ class AdvertisementController extends Controller
         //     });
         //  })->get();
         $listing  = Advertisement::with(['advertisedata','category','advertisedata.attribute'])->get();
-        // $image = [];
-        // foreach($listing as $k =>$v){
-        //     foreach($v->advertisedata as $k1 => $v1){
-        //         if($v1->attributes_id == 3){
-        //             $image[]=$v1->value;
-        //         }
-        //     }
-        //     $image[]= $v->category->image;
-        // }
-        // $listing['images'] = $image;
+        $image = [];
+        foreach($listing as $k =>$v){
+            foreach($v->advertisedata as $k1 => $v1){
+                if($v1->attributes_id == 3){
+                    if(!isset($image[$v->id]) || $image[$v->id] == ''){
+                        $image[$v->id]=$v1->value;
+                    }
+                }
+            }
+            if(!isset($image[$v->id]) || $image[$v->id] == ''){
+                $image[$v->id]= $v->category->image;
+            }
+        }
+        $listing['images'] = $image;
         $response = [
             'status'=>true,
             'message'=>'Data Get Successfully',

@@ -74,7 +74,28 @@
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src={{ asset("assets/js/ie10-viewport-bug-workaround.js") }}></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+    })
+
+    @if(Session::has('message'))
+        Toast.fire({
+            icon: "{{ Session::get('status', 'info') }}",
+            title: "{{ Session::get('message') }}"
+        })
+    @endif
+});
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
