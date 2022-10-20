@@ -39,6 +39,14 @@ class DashboardController extends Controller
     {
         return view('front.auth.business');
     }
+    public function contract(Request $request)
+    {
+        return view('front.auth.contract');
+    }
+    public function user_dashboard(Request $request)
+    {
+        return view('front.auth.user-dashboard');
+    }
     public function userlogout(Request $request)
     {
         auth()->logout();

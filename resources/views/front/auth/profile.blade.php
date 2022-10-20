@@ -44,7 +44,7 @@ Adex - My Profile
       </section>
       <section class="car-details">
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-6 col-md-6">
             <div class="car-padding">
               <div class="car-data">
                 <p><b> Ad Space Type: Car</b></p>
@@ -57,7 +57,7 @@ Adex - My Profile
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-6 col-md-6">
             <div class="car-image">
               <img src={{asset("assets/img/asset/sam-pizza.png")}}>
             </div>
@@ -73,7 +73,9 @@ Adex - My Profile
           </p>
         </div>
       </section>
-      <button type="submit" class="btn btn-theme-black-second btn-accept">Accept Contract</button>
+      <div class="accept-btn">
+        <button type="submit" class="btn btn-theme-black-second btn-accept">Accept Contract</button>
+      </div>
     </div>
   </div>
 

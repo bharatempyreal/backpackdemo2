@@ -28,31 +28,28 @@ Adex - My Profile
       <section class="profile-section">
         <div class="row">
           <div class="col-md-12">
-            <div class="user-profile-icon">
-              <img src={{asset("assets/img/asset/sam-pizza.png")}} class="adex-list-image">
+            <div class="capital-logo">
+              <img src={{asset("assets/img/capital.png")}}>
             </div>
           </div>
         </div>
       </section>
       <section class="car-details">
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-6 col-md-7">
             <div class="car-padding">
               <div class="car-data">
-                <p><b> Ad Space Type: Car</b></p>
-                <p><b> ADEX Individual RATING:</b></p>
-                <p><b> General Information:</b> Honda Accord - 2019</p>
-              </div>
-              <div class="whole-vehicle">
-                <a href="#">Whole vehicle</a>
-                <a href="#">Door panel</a>
+                <p class="pb-3"><b>Captial Ale House:</b>  $125</p>
+                <p> <b>ADEX BUSINESS RATING:</b> </p>
+                <p> <b>Business Type:</b> Restaurant / Tavern</p>
+                <p> <b>Ad Space needed:</b> (1) posting signs/decals on local houses (lawn, front door, and windows) and (2) Wear advertising apparel (hats, t-shirts, etc.)</p>
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
-            <div class="adex-contract-time-day">
-              <p>Days left on contract</p>
-              <h2>23</h2>
+          <div class="col-lg-6 col-md-5">
+            <div class="contract-duration">
+              <p>Contract Duration</p>
+              <h2>60</h2>
             </div>
           </div>
         </div>
@@ -68,8 +65,8 @@ Adex - My Profile
           <p><b> Advertisement Requirements: </b> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. 
           </p>
         </div>
+        <button type="submit" class="btn btn-theme-black-second accept-contract">Accept Contract</button>
       </section>
-      <button type="submit" class="btn btn-theme-black-second btn-accept">Accept Contract</button>
     </div>
   </div>
 
