@@ -112,7 +112,7 @@ Adex - List-Property
                                                             attr = 'required';
                                                         }
                                                         html += chekboxes(value1.name, value1.name, options, attr);
-                                                        html += inputhidden(value1.name,value1.category_type,'',attr);
+                                                        html += inputhidden(value1.name,value1.id,'',attr);
                                                     break;
                                                     case '2':
                                                         // 2 = dropdown
@@ -121,7 +121,7 @@ Adex - List-Property
                                                         }
                                                         var options=value1.attributesvalue;
                                                         html += select(value1.name, value1.name, options, attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden(value1.name,value1.id);
                                                     break;
                                                     case '3':
                                                         // 3 = multipleimages
@@ -130,7 +130,7 @@ Adex - List-Property
                                                         }
                                                         html += adddropzone(value1.name,'','');
                                                         html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden((value1.name).replace(/ /g,"_"),value1.id);
 
                                                     break;
                                                     case '4':
@@ -139,7 +139,7 @@ Adex - List-Property
                                                             attr = 'required';
                                                         }
                                                         html += inputtext(value1.name,value1.name,'',attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden(value1.name,value1.id);
                                                     break;
                                                     case '5':
                                                         // 5 = textarea
@@ -147,7 +147,7 @@ Adex - List-Property
                                                             attr = 'required';
                                                         }
                                                         html += textarea(value1.name,value1.name,'',attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden(value1.name,value1.id);
                                                     break;
                                                     case '6':
                                                         // 6 = Image
@@ -156,7 +156,7 @@ Adex - List-Property
                                                         }
                                                         html += adddropzone(value1.name,'','');
                                                         html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden((value1.name).replace(/ /g,"_"),value1.id);
                                                     break;
                                                     case '7':
                                                         // 7 = date
@@ -164,7 +164,7 @@ Adex - List-Property
                                                             attr = 'required';
                                                         }
                                                         html += inputdate(value1.name,value1.name,'',attr);
-                                                        html += inputhidden(value1.name,value1.category_type);
+                                                        html += inputhidden(value1.name,value1.id);
                                                     break;
                                                     default:
                                                         alert('Somthing Went Wrong');

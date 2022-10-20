@@ -28,9 +28,27 @@ class UsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('firstname');
-            $table->dropColumn('lastname');
-            $table->dropColumn('address');
+            if (Schema::hasColumn('users', 'firstname'))
+            {
+                Schema::table('users', function (Blueprint $table)
+                {
+                    $table->dropColumn('firstname');
+                });
+            }
+            if (Schema::hasColumn('users', 'lastname'))
+            {
+                Schema::table('users', function (Blueprint $table)
+                {
+                    $table->dropColumn('lastname');
+                });
+            }
+            if (Schema::hasColumn('users', 'address'))
+            {
+                Schema::table('users', function (Blueprint $table)
+                {
+                    $table->dropColumn('address');
+                });
+            }
         });
     }
 }

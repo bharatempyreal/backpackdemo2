@@ -8,6 +8,7 @@ use App\Models\Attributes;
 use App\Models\Advertisement;
 use App\Models\AdvertisementValue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use File;
 
 class AdvertisementController extends Controller
@@ -51,6 +52,7 @@ class AdvertisementController extends Controller
     }
 
     public function saveListProperty(Request $request){
+    try{
         $removeImages =[];
         $i = 0;
         // dd($request->all());
@@ -102,7 +104,12 @@ class AdvertisementController extends Controller
                 }
             }
         }
-        return redirect()->back();
+        Session::flash('message', 'Advertisement Add Successfullay');
+        Session::flash('status', 'success');
+    } catch (Exception $e) {
+            return $e;
+    }
+        return redirect()->route('adex-market-place');
     }
 
     public function ajaxremoveImagesFront(Request $request)
@@ -132,7 +139,7 @@ class AdvertisementController extends Controller
         $image = [];
         foreach($listing as $k =>$v){
             foreach($v->advertisedata as $k1 => $v1){
-                if($v1->attributes_id == 3){
+                if($v1->attribute->category_type == 3 || $v1->attribute->category_type == 6){
                     if(!isset($image[$v->id]) || $image[$v->id] == ''){
                         $image[$v->id]=$v1->value;
                     }

@@ -287,7 +287,8 @@ $(document).ready(function() {
                         html +='<div class="col-lg-7 col-md-7 col-pad row">';
                         if((property.advertisedata).length>0){
                             $.each(property.advertisedata,function(i,v){
-                                if(v.attribute != null && v.attribute.is_default == 1 && v.attributes_id != 3 && v.attributes_id != 6){
+                                console.log(v)
+                                if(v.attribute != null && v.attribute.is_default == 1 && v.attribute.category_type != 3 && v.attribute.category_type != 6){
                                     html +='<div class="pr-2 label-details">'+v.name+' -</div>';
                                     html +='<div class="market-details">'+v.value+'</div>';
                                     html +='<div class="col-md-12"></div>'
