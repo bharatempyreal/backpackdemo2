@@ -1,4 +1,5 @@
 <div>
+ @isset($data)
 @foreach ($data as $key=>$value )
     <h4>Group:{{$key}}</h4>
     <table class="table">
@@ -9,28 +10,36 @@
           </tr>
         </thead>
         <tbody>
-            @foreach ($value as $val )
-                @foreach ($val->advertisement_data as $v)
-                    @if($v->advertisement_id == $adid)
-                        <tr>
-                            <td>{{ $v->name }}</td>
-                            @if ($val->category_type == 6)
-                            <td><img src="{{asset_storage() . $v->value}}" style="height: 50px"/></td>
-                            @elseif ($val->category_type == 3)
-                            <td>
-                                @foreach (json_decode($v->value) as $value)
-                                <img src="{{asset_storage() . $value}}" style="height: 50px"/>
-                                @endforeach
-                            </td>
-                            @else
-                            <td>{{ $v->value }}</td>
-                            @endif
-                        </tr>
-                    @endif
+            @isset($value)
+                @foreach ($value as $val )
+                    @isset($val->advertisement_data)
+                    @foreach ($val->advertisement_data as $v)
+                        @if($v->advertisement_id == $adid)
+                            <tr>
+                                <td>{{ myisset($v->name) }}</td>
+                                @if ($val->category_type == 6)
+                                <td><img src="{{asset_storage() . myisset($v->value)}}" style="height: 50px"/></td>
+                                @elseif ($val->category_type == 3)
+                                <td>
+                                    @isset($v->value)
+                                        @foreach (json_decode($v->value) as $value)
+                                        <img src="{{asset_storage() . myisset($value)}}" style="height: 50px"/>
+                                        @endforeach
+                                    @endisset
+                                </td>
+                                @else
+                                <td>{{ $v->value }}</td>
+                                @endif
+                            </tr>
+                        @endif
+                    @endforeach
+                    @endisset
                 @endforeach
-            @endforeach
+            @endisset
         </tbody>
     </table>
 @endforeach
+@endisset
+
 
 </div>

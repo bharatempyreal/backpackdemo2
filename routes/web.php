@@ -50,6 +50,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/contact-as/store', [App\Http\Controllers\Front\ContactasController::class, 'contactasstore'])->name('contact-as-store');
     Route::get('/user/logout', [App\Http\Controllers\Front\DashboardController::class, 'userlogout'])->name('user-logout');
 
+
+    Route::post('/profile/status', [App\Http\Controllers\Front\SecurityController::class, 'profile_status'])->name('profile-status');
+    Route::post('/show-email', [App\Http\Controllers\Front\SecurityController::class, 'show_email'])->name('show-email');
+    Route::post('/change/password', [App\Http\Controllers\Front\SecurityController::class, 'change_password'])->name('change_password');
+
+
+
     Route::post('/createbusiness', [App\Http\Controllers\Front\BusinessController::class, 'createbusiness'])->name('createbusiness');
     Route::post('/updatebusiness', [App\Http\Controllers\Front\BusinessController::class, 'updatebusiness'])->name('updatebusiness');
     Route::post('/get-businessdata', [App\Http\Controllers\Front\BusinessController::class, 'getbusinessdata'])->name('getbusinessdata');

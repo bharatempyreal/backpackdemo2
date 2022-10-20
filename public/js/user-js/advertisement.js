@@ -348,7 +348,7 @@ $(document).on('click', '.cancle_btn', function(e) {
     });
 });
 $(document).ready(function(){
-    $('form').validate();
+    $('form').validate({ignore: []});
 });
 $(document).on('submit', 'form', function() {
     $('.cancelImages').val('');

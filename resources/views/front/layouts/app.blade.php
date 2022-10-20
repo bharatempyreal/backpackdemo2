@@ -76,7 +76,6 @@
 <script src={{ asset("assets/js/ie10-viewport-bug-workaround.js") }}></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
-$(document).ready(function(){
     const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -88,6 +87,7 @@ $(document).ready(function(){
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
     })
+$(document).ready(function(){
 
     @if(Session::has('message'))
         Toast.fire({

@@ -111,8 +111,18 @@ Adex - Contact Us page
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function(data) {
-                        alert('success');
+                    success: function(response) {
+                        if(response.status){
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            })
+                        }else{
+                            Toast.fire({
+                                icon: error,
+                                title: response.message
+                            })
+                        }
                     },
                 });
             }

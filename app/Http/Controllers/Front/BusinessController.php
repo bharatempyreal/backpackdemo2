@@ -50,7 +50,10 @@ class BusinessController extends Controller
     }
     public function updatebusiness(Request $request)
     {
-        // dd($request->all());
+        $response = [
+            'status'=>false,
+            'message'=>'Somthig Went wrong',
+        ];
         $id = Auth::user()->id;
         $business = Business::where('user_id',$id)->first();
 
@@ -94,9 +97,12 @@ class BusinessController extends Controller
                     }
                 }
             }
-            return true ;
+            $response = [
+                'status'=>true,
+                'message'=>'Profile Save Successfully',
+            ];
+            return response($response);
          }else{
-            // dd($request->all());
              $business->businessname = $request->businessname;
              $business->email = $request->email;
              $business->phone = $request->phone;
@@ -116,8 +122,17 @@ class BusinessController extends Controller
              $business->asset_zipcode = $request->assetzipcode;
              $business->asset_advertisement_requirements = $request->assetmessage;
              $business->asset_property_gallery = (isset($request->asset_property_gallery) && $request->asset_property_gallery != '' && count(json_decode($request->asset_property_gallery))>0)?$request->asset_property_gallery : '';
-             $business->save();
-             $response['data']     = 'success';
+             if($business->save()){
+                 $response = [
+                     'status'=>true,
+                     'message'=>'Profile Update Successfully',
+                ];
+            }else{
+                $response = [
+                    'status'=>false,
+                    'message'=>'Somthig Went wrong',
+                ];
+            }
              if(isset($request->removeImages) && !empty($request->removeImages)){
                 $removeImages = $request->removeImages;
                 foreach(json_decode($removeImages) as $file){
@@ -136,7 +151,7 @@ class BusinessController extends Controller
                     }
                 }
             }
-             return response()->json($response);
+             return response($response);
             }
     }
     public function getbusinessdata(Request $request)

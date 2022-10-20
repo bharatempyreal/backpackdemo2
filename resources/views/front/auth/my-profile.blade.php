@@ -263,8 +263,8 @@ Adex - My Profile
                 canclehidden_value.forEach(function(item) {
                     cancled.push(item);
                 });
-                cancled.push(response_value[numberCreate]);
-                $('.cancelImages').val(JSON.stringify(cancled));
+                // cancled.push(response_value[numberCreate]);
+                // $('.cancelImages').val(JSON.stringify(cancled));
             },
         success: function(file, status , response) {
             var oldArr = [];
@@ -344,16 +344,18 @@ Adex - My Profile
                 canclehidden_value.forEach(function(item) {
                     cancled.push(item);
                 });
-                cancled.push(response_value[numberCreate]);
-                $('.galleryremoveImages').val(JSON.stringify(cancled));
+                // cancled.push(response_value[numberCreate]);
+                // $('.galleryremoveImages').val(JSON.stringify(cancled));
             },
         success: function(file, status , response) {
+            // console.log(JSON.parse(response.currentTarget.response));
             var oldArr = [];
             var hidden_value = JSON.parse($('.asset_property_gallery').val() || '[]');
             hidden_value.forEach(function(item) {
                 oldArr.push(item);
             });
             var response_value = JSON.parse(response.currentTarget.response || '[]');
+            // console.log(response_value);
             oldArr.push(response_value[numberCreate]);
             $('.asset_property_gallery').val(JSON.stringify(oldArr));
             element = $('.dz-preview').last(response_value.length);
@@ -413,17 +415,19 @@ $(document).ready(function () {
                 $('#assetimage').val(data.user.asset_image);
                 $('#assetimage_path').val(data.user.images);
                 $.each(data.images, function(key,value) {
-                    var filename = value;
-                    var image_name = filename.split('/');
-                    var mockFile = { name: image_name[1]};
+                    var slug = value.split('/');
+                    var filename = slug[(slug.length)-1];
+                    var image_name = filename;
+                    var mockFile = { name: filename};
                     mydropzone.options.addedfile.call(mydropzone, mockFile);
                     mydropzone.options.thumbnail.call(mydropzone, mockFile, value);
                     mydropzone.emit("complete", mockFile);
                 });
                 $.each(data.gallary_img, function(key,value) {
-                    var filename = value;
-                    var image_name = filename.split('/');
-                    var mockFile = { name: image_name[1]};
+                    var slug = value.split('/');
+                    var filename = slug[(slug.length)-1];
+                    var image_name = filename;
+                    var mockFile = { name: filename};
                     dropzone.options.addedfile.call(dropzone, mockFile);
                     dropzone.options.thumbnail.call(dropzone, mockFile, value);
                     dropzone.emit("complete", mockFile);
@@ -431,14 +435,14 @@ $(document).ready(function () {
                 // $.each(data.images, function(key, image_path) {
 
                     //     $('.dropzone').append('<div class="dz-preview" data-id="'+key+'" data-path="'+image_path+'"><img class="dropzone-thumbnail" src="'+image_path+'" /><a class="dz-remove" href="javascript:void(0);" data-remove="'+key+'" data-path="'+image_path+'">Remove file</a></div>');
-                    // });
-                    $('#assetaddress').val(data.user.asset_address);
-                    $('#assetlandmark').val(data.user.asset_landmark);
-                    $("#assetchoosecitys").selectpicker('val', data.user.asset_city);
-                    $("#assetchoosestate").selectpicker('val', data.user.asset_state);
-                    $('#assetzipcode').val(data.user.asset_zipcode);
-                    $('#assetmessage').val(data.user.asset_advertisement_requirements);
-                    $('#asset_property_gallery').val(data.user.asset_property_gallery);
+                // });
+                $('#assetaddress').val(data.user.asset_address);
+                $('#assetlandmark').val(data.user.asset_landmark);
+                $("#assetchoosecitys").selectpicker('val', data.user.asset_city);
+                $("#assetchoosestate").selectpicker('val', data.user.asset_state);
+                $('#assetzipcode').val(data.user.asset_zipcode);
+                $('#assetmessage').val(data.user.asset_advertisement_requirements);
+                $('#asset_property_gallery').val(data.user.asset_property_gallery);
 
                     $(document).on('click','.dz-remove',function() {
                         alert('remove');
@@ -497,7 +501,18 @@ $(document).ready(function () {
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function(data) {
+                success: function(response) {
+                    if(response.status){
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        })
+                    }else{
+                        Toast.fire({
+                            icon: error,
+                            title: response.message
+                        })
+                    }
                 },
             });
         // }
@@ -543,6 +558,7 @@ $(document).ready(function () {
                 _token:"{{ csrf_token() }}"
             },
             success: function(response) {
+
             }
         });
         var gallerycancelImages = JSON.parse($('.gallerycancelImages').val() || '[]');

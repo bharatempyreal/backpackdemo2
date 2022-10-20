@@ -268,9 +268,9 @@ $(document).ready(function() {
         type:'post',
         dataType:'json',
         success:function(response){
-            // console.log(response.listing[0].id);
             var html='';
             var listing = Object.keys(response.listing).map(function (key) { return response.listing[key]; });
+            console.log(listing)
             if(listing.length>0){
                 $.each(listing, function (index, property) {
                     if(index != ((listing.length)-1)){
@@ -278,13 +278,16 @@ $(document).ready(function() {
                         html += '<div class="row">';
                         html +='<div class="col-lg-5 col-md-5 text-center">';
                             var base_url = "{{ asset('/') }}";
+                            console.log(listing[(listing.length)-1][property.id]);
                             var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : base_url+listing[(listing.length)-1][property.id];
-                        html += '<img src="'+image+'" style="height:250px; weight:250px;">';
+                        html+='<div class="image_box">';
+                        html += '<img src="'+image+'">';
+                        html += '</div>';
                         html += '</div>';
                         html +='<div class="col-lg-7 col-md-7 col-pad row">';
                         if((property.advertisedata).length>0){
                             $.each(property.advertisedata,function(i,v){
-                                if(v.attribute.is_default == 1 && v.attributes_id != 3 && v.attributes_id != 6){
+                                if(v.attribute != null && v.attribute.is_default == 1 && v.attributes_id != 3 && v.attributes_id != 6){
                                     html +='<div class="pr-2 label-details">'+v.name+' -</div>';
                                     html +='<div class="market-details">'+v.value+'</div>';
                                     html +='<div class="col-md-12"></div>'

@@ -83,13 +83,11 @@
 @endpush
 
 @push('crud_fields_styles')
-    @loadOnce('bpFieldInitSwitchStyle')
     <style>
         .switch-input:checked+.switch-slider {
             background-color: var(--bg-color);
         }
     </style>
-    @endLoadOnce
 @endpush
 
 {{-- End of Extra CSS and JS --}}

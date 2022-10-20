@@ -10,7 +10,8 @@ class ContactasController extends Controller
 {
     public function contactasstore(Request $request)
     {
-        // dd($request->all());
+
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -19,5 +20,11 @@ class ContactasController extends Controller
             'message' => $request->message,
         ];
         Contactas::create($data);
+        $response = [
+            'status'=>true,
+            'message'=>'Data Store Successfully',
+        ];
+
+        return response($response);
     }
 }
