@@ -4241,24 +4241,26 @@ input[type="checkbox"]:checked + label::before {
 
 /** FOOTER  STARTED **/
 footer {
-    padding: 80px 0 50px;
-    background: var(--bc-black);
+    /* padding: 80px 0 50px; */
+    padding: 80px 0;
+    background-color: #252525;
 }
 
 .footer .footer-item {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 .footer .footer-item img{
-    height: 5rem;
+    height: 6rem;
     width: auto;
 }
 .footer .copy {
-    padding: 20px 0;
-    margin: 30px 0 0;
+    padding: 40px 0 0; 
+    /* margin: 30px 0 0; */
     text-align: center;
-    font-size: 15px;
-    color: var(--fc-white); !important;
-    border-top: solid 1px var(--bc-white);
+    font-size: 18px;
+    color: var(--fc-white);
+    font-weight: 600;
+    /* border-top: solid 1px var(--bc-white); */
 }
 
 .footer .copy a {
@@ -8819,10 +8821,6 @@ blockquote {
         margin-bottom: 40px;
     }
 
-    footer {
-        padding: 80px 0 40px;
-    }
-
     .sidebar-title {
         font-size: 20px;
     }
@@ -9288,10 +9286,6 @@ blockquote {
         height: 50px;
         line-height: 50px;
         font-size: 20px;
-    }
-
-    footer {
-        padding: 60px 0 20px;
     }
 
     .footer h4 {
@@ -10432,7 +10426,7 @@ blockquote {
 }
 .btn-accept{
   border-radius: 10px;
-  margin: 50px 0 0 20px;
+  margin: 50px 0 0;
 }
 .navbar-light .navbar-toggler-icon{
   background-image: url(../img/mobile-menu.svg);
@@ -10576,6 +10570,17 @@ blockquote {
   color: var(--bc-black);
   padding-top: 50px;
 }
+.footer-social-icons{
+  text-align: center;
+}
+.footer-social-icons a i{
+  font-size: 25px;
+  color: rgb(255 255 255 / 56%);
+  margin: 0 5px;
+}
+.footer-social-icons a i:hover{
+  color: var(--bc-white);
+}
 
 /* 19-oct-e */
 
@@ -10592,6 +10597,24 @@ blockquote {
   }
   .sams-pizza{
     padding-left: 0;
+  }
+}
+
+@media only screen and (max-width:991px) {
+  .main-header .navbar-expand-lg .navbar-nav .nav-link{
+    color: var(--bc-black);
+  }
+  .main-header .brand-logos img{
+    display: none;
+  }
+  .main-header .logos img {
+    height: 55px;
+  }
+  .navbar-toggler .navbar-toggler-icon{
+    background-image: url(../img/mobile-menu.svg);
+  }
+  .dashboard-nav{
+    background-color: var(--bc-yellow);
   }
 }
 
@@ -10633,6 +10656,14 @@ blockquote {
   }
   .contract-details h2 b {
     font-size: 21px;
+  }
+  /* .dashboard-nav nav{
+    padding-bottom: 13px;
+  } */
+  .dashboard-nav .navbar .navbar-collapse .navbar-nav .nav-link{
+    /* border-bottom: 1px solid #ededed; */
+    border-right: 0;
+    margin-bottom: 5px;
   }
 }
 
@@ -10688,6 +10719,9 @@ blockquote {
   .dashboard-details p{
     padding-top: 30px;
   }
+  .profile-banner .owner-details h2{
+    font-size: 28px;
+  }
 }
 
 @media only screen and (max-width:480px) {
@@ -10699,5 +10733,23 @@ blockquote {
   }
   .user-chat{
     width: 237px;
+  }
+  .profile-banner a img{
+    max-height: 95px;
+  }
+  .owner-details.my-auto{
+    margin: 0 !important;
+  }
+  .owner-details .ml-4.info-center{
+    margin-left: 0 !important;
+  }
+  .profile-banner .owner-details h2 {
+    font-size: 18px;
+  }
+  .profile-banner .owner-details .info-center .rating i{
+    font-size: 12px;
+  }
+  .info-center .btn-sm{
+    padding: 7px 13px;
   }
 }

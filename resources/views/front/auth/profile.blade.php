@@ -59,7 +59,7 @@ Adex - My Profile
           </div>
           <div class="col-lg-6 col-md-6">
             <div class="car-image">
-              <img src={{asset("assets/img/asset/sam-pizza.png")}}>
+              <img src={{asset("assets/img/car.png")}}>
             </div>
           </div>
         </div>
@@ -72,10 +72,10 @@ Adex - My Profile
           <p><b> Advertisement Requirements: </b> I have a 2019 Honda Accord in really great condition and I am willing to use it as ad space for a good amount of time.  I live and work in the Fredericksburg, VA area.  I do a lot of driving around for my job and use my vehicle all the time.  I take pride in my cars appearance and would be willing to send more photos if needed of my car.  
           </p>
         </div>
+        <div class="accept-btn">
+          <button type="submit" class="btn btn-theme-black-second btn-accept">Accept Contract</button>
+        </div>
       </section>
-      <div class="accept-btn">
-        <button type="submit" class="btn btn-theme-black-second btn-accept">Accept Contract</button>
-      </div>
     </div>
   </div>
 

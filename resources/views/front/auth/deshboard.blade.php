@@ -1,12 +1,12 @@
 <div class="profile-banner">
     <div class="container">
         <div class="row" style="min-height: 200px;">
-            <div class="col-md-2" style="min-height: 200px;">
+            <div class="col-lg-2 col-md-3 col-4" style="min-height: 200px;">
                 <a href="my-profile.php" class="ml-4">
                     <img src={{asset("assets/img/avatar/avatar-2.jpg")}} alt="comments-user">
                 </a>
             </div>
-            <div class="col-md-6 owner-details my-auto">
+            <div class="col-lg-6 col-md-9 col-8 owner-details my-auto">
                 <div class="ml-4 info-center">
                     <h2>Lucia Wagon - </h2>
                     <div class="rating">

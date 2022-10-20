@@ -35,14 +35,16 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " href={{route('register')}}>
+                                    <a class="nav-link" href={{route('register')}}>
                                         Sign Up
                                     </a>
                                 </li>
                             @else
                             <li class="nav-item">
-                                <a class="nav-link" href={{route('user-logout')}}>Logout
-                                </a>
+                              <a href="{{ route('profile') }}" class="nav-link">{{ auth()->user()->name }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href={{route('user-logout')}}>Logout</a>
                             </li>
                             @endif
                             <li class="nav-item">

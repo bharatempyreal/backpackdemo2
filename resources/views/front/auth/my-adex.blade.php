@@ -45,7 +45,7 @@ Adex - My Adex
                             <p>Days left on contract</p>
                             <h2>23</h2>
                         </div>
-                        <a href="#" class="btn btn-sm btn-theme-black mt-2">View Details</a>
+                        <a href="{{ route('contract') }}" class="btn btn-sm btn-theme-black mt-2">View Details</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@ Adex - My Adex
                             <p>Days left on contract</p>
                             <h2>23</h2>
                         </div>
-                        <a href="#" class="btn btn-sm btn-theme-black mt-2">View Details</a>
+                        <a href="{{ route('contract') }}" class="btn btn-sm btn-theme-black mt-2">View Details</a>
                     </div>
                 </div>
             </div>
