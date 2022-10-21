@@ -47,18 +47,18 @@ Adex - Market Place
                 <div class="pull-left form-group">
                     <a href={{route('list-property')}} class="btn btn-sm btn-theme-yellow"><i class="fa fa-plus-circle"></i> Create Listing</a>
                 </div>
-                <div class="pull-right btns-area mt-2">
+                <!-- <div class="pull-right btns-area mt-2">
                     <a href="properties-list-leftsidebar.html" class="active-view-btn"><i class="fa fa-th-list"></i></a>
                     <a href="properties-grid-leftside.html" class="change-view-btn"><i class="fa fa-th-large"></i></a>
-                </div>
+                </div> -->
                 <div class="clearfix"></div>
             </div>
             <div class="title-area">
                 <h2 class="text-center search">Market Display</h2>
-                <div class="text-center mt-3 mb-4">
+                <!-- <div class="text-center mt-3 mb-4">
                     <a href="#" class="btn btn-sm btn-theme-yellow">Business</a>
                     <a href="#" class="btn btn-sm btn-theme-black">Individual</a>
-                </div>
+                </div> -->
                 <div class="clearfix"></div>
             </div>
             <div class="properties-map-search">
@@ -289,7 +289,7 @@ $(document).ready(function() {
                             $.each(property.advertisedata,function(i,v){
                                 console.log(v)
                                 if(v.attribute != null && v.attribute.is_default == 1 && v.attribute.category_type != 3 && v.attribute.category_type != 6){
-                                    html+='<div class="listing-details">';
+                                    html+='<div class="listing-details row">';
                                     html +='<div class="pr-2 label-details">'+v.name+' -</div>';
                                     html +='<div class="market-details">'+v.value+'</div>';
                                     html +='<div class="col-md-12"></div>'

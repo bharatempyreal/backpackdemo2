@@ -10600,9 +10600,28 @@ blockquote {
   padding: 0 0 0 20px;
   width: 100%;
 }
+.property-input {
+  margin-bottom: 30px;
+}
+.property-input h3 {
+  font-weight: bold !important;
+}
+.property-input .margin-t-10{
+  font-weight: bold !important;
+  font-size: 18px;
+  color: var(--bc-black);
+  padding-bottom: 10px;
+}
+
 /* 19-oct-e */
 
 /* 20-oct-responsive */
+@media only screen and (max-width:1200px){
+  .properties-map-search-content .btn-lg{
+    padding: 10px 19px;
+  }
+}
+
 @media only screen and (max-width:1024px){ 
   .contract-section{max-width:100%;}
   .car-padding{padding-left:0;}
@@ -10667,6 +10686,7 @@ blockquote {
   .profile-banner .owner-details h2{font-size: 28px;}
   .listing-details{text-align: center;padding-top: 10px;}
   .login-section .form-group .form-control{font-size: 14px;}
+  .properties-map-search-content .form-group{text-align: center;}
 }
 
 @media only screen and (max-width:480px) {
