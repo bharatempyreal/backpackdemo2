@@ -274,7 +274,7 @@ $(document).ready(function() {
             if(listing.length>0){
                 $.each(listing, function (index, property) {
                     if(index != ((listing.length)-1)){
-                        html += '<div class="card property-box-2 map-property-box property-hover property-listing">';
+                        html += '<div class="card show_property property-box-2 map-property-box property-hover property-listing" data-advertisement_id="'+property.id+'">';
                         html += '<div class="row">';
                         html +='<div class="col-lg-5 col-md-5 text-center">';
                             var base_url = "{{ asset('/') }}";
@@ -306,6 +306,14 @@ $(document).ready(function() {
                 $('.fetching-properties').append(html);
             }
     });
+});
+
+$(document).on('click','.show_property',function(){
+    var advertisement_id = $(this).data('advertisement_id');
+    if(advertisement_id != ''){
+        var url="{{ url('property_detail') }}"+"/"+advertisement_id
+        window.location.href=url
+    }
 });
 </script>
 @endsection

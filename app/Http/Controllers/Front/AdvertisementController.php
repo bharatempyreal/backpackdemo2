@@ -126,6 +126,22 @@ class AdvertisementController extends Controller
         return response(true);
     }
 
+    public function propertyDetail($id,Request $request){
+        if(!isset($id) || $id != ''){
+            $advertisement_data = Advertisement::with('advertisedata')->find($id);
+            if(!isset($advertisement_data) || !empty($advertisement_data)){
+                // dd($advertisement_data->toArray());
+                return view('front.auth.property_detail');
+            }else{
+                Session::flash('message', 'Data Not Found');
+                Session::flash('status', 'error');
+            }
+        }else{
+            Session::flash('message', 'Something Went Wrong');
+            Session::flash('status', 'error');
+        }
+    }
+
     // advertisemet listing add bharat
 
     public function ListingProperty(Request $request)
