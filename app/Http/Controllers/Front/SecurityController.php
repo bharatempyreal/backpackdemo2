@@ -59,6 +59,54 @@ class SecurityController extends Controller
         return response($response);
 
     }
+    public function authenticator(Request $request)
+    {
+        $response = [
+            'status'=>false,
+            'message'=>'Somthig Went Wrong',
+        ];
+        $data = User::find(Auth::user()->id);
+        if(!empty($data)) {
+            $data->authenticator = $request->authenticator;
+            if($data->save()){
+                $response = [
+                    'status'=>true,
+                    'message'=>'Authenticator Changed Successfully',
+                ];
+            }
+        }else{
+            $response = [
+                'status'=>false,
+                'message'=>'Data Not Found',
+            ];
+        }
+        return response($response);
+
+    }
+    public function smsrecovery(Request $request)
+    {
+        $response = [
+            'status'=>false,
+            'message'=>'Somthig Went Wrong',
+        ];
+        $data = User::find(Auth::user()->id);
+        if(!empty($data)) {
+            $data->smsrecovery = $request->smsrecovery;
+            if($data->save()){
+                $response = [
+                    'status'=>true,
+                    'message'=>'SMS Recovery Changed Successfully',
+                ];
+            }
+        }else{
+            $response = [
+                'status'=>false,
+                'message'=>'Data Not Found',
+            ];
+        }
+        return response($response);
+
+    }
     public function change_password(Request $request)
     {
         // dd($request->all());

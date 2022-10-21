@@ -50,6 +50,7 @@ class BusinessController extends Controller
     }
     public function updatebusiness(Request $request)
     {
+        $hide=($request->hide_half_form == 1) ? true : false;
         $response = [
             'status'=>false,
             'message'=>'Somthig Went wrong',

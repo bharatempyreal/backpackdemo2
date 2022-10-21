@@ -50,16 +50,16 @@ Adex - My Security
                                     <h6 class="mb-1">Authenticator App</h6>
                                     <label>Google auth or 1Password</label>
                                     <div class="material-switch pull-right">
-                                        <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox"/>
-                                        <label for="someSwitchOptionDefault" class="label-default"></label>
+                                        <input id="authenticator" name="authenticator" {{ (auth()->check() && auth()->user() && auth()->user()->authenticator == '1') ? 'checked' : '' }} type="checkbox"/>
+                                        <label for="authenticator" class="label-default"></label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h6 class="mb-1">SMS Recovery</h6>
                                     <label>Standard messaging rates apply</label>
                                     <div class="material-switch pull-right">
-                                        <input id="someSwitchOptionDefault" name="someSwitchOption002" type="checkbox"/>
-                                        <label for="someSwitchOptionDefault" class="label-default"></label>
+                                        <input id="smsrecovery" name="smsrecovery" {{ (auth()->check() && auth()->user() && auth()->user()->smsrecovery == '1') ? 'checked' : '' }} type="checkbox"/>
+                                        <label for="smsrecovery" class="label-default"></label>
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +171,62 @@ Adex - My Security
             }
         });
     });
+    $('#authenticator').change(function() {
+        var authenticator = 0;
+        if($(this).is(":checked")) {
+            authenticator = 1;
+        }
+        $.ajax({
+            url:"{{ route('authenticator') }}",
+            type:'POST',
+            dataType:'json',
+            data :{
+                authenticator :authenticator,
+                _token:"{{ csrf_token() }}"
+            },
+            success:function(response){
+                if(response.status){
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message
+                    })
+                }else{
+                    Toast.fire({
+                        icon: error,
+                        title: response.message
+                    })
+                }
+            }
+        });
+    });
+    $('#smsrecovery').change(function() {
+        var smsrecovery = 0;
+        if($(this).is(":checked")) {
+            smsrecovery = 1;
+        }
+        $.ajax({
+            url:"{{ route('smsrecovery') }}",
+            type:'POST',
+            dataType:'json',
+            data :{
+                smsrecovery :smsrecovery,
+                _token:"{{ csrf_token() }}"
+            },
+            success:function(response){
+                if(response.status){
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message
+                    })
+                }else{
+                    Toast.fire({
+                        icon: error,
+                        title: response.message
+                    })
+                }
+            }
+        });
+    });
     $('#change_password').validate({
                 ignore: [],
                 rules: {
@@ -188,7 +244,6 @@ Adex - My Security
                 errorPlacement: (error, element) => {
                     error.appendTo(element.closest('div'));
                 }
-
         });
     $("#change_password").submit(function(e) {
 

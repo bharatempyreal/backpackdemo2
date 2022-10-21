@@ -3,7 +3,7 @@
 
 @section('content')
 
-<div class="login-section contact-section" style="background: url(assets/img/pages/login/property-123.png);">
+<div class="login-section contact-section" style="background: url({{ asset('assets/img/pages/login/property-123.png') }});">
     <div class="container  row justify-content-center">
         <div class="col-lg-6 align-self-center pad-0">
             <div class="main-title-2">

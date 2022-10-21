@@ -53,7 +53,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/profile/status', [App\Http\Controllers\Front\SecurityController::class, 'profile_status'])->name('profile-status');
     Route::post('/show-email', [App\Http\Controllers\Front\SecurityController::class, 'show_email'])->name('show-email');
+    Route::post('/authenticator', [App\Http\Controllers\Front\SecurityController::class, 'authenticator'])->name('authenticator');
+    Route::post('/smsrecovery', [App\Http\Controllers\Front\SecurityController::class, 'smsrecovery'])->name('smsrecovery');
     Route::post('/change/password', [App\Http\Controllers\Front\SecurityController::class, 'change_password'])->name('change_password');
+
+    Route::post('/notification-status-change', [App\Http\Controllers\Front\NotificationController::class, 'notification_status_change'])->name('notification_status');
 
 
 
@@ -71,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
     Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
     Route::post('/ajaxremoveImagesFront',[App\Http\Controllers\Front\AdvertisementController::class, 'ajaxremoveImagesFront'])->name('ajaxremoveImagesFront');
-
+    Route::get('property_detail/{id}',[App\Http\Controllers\Front\AdvertisementController::class,'propertyDetail'])->name('propertyDetail');
     Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {
         $path = storage_path('app/public/'.$name.'/'.$filename);
         $file = File::get($path);

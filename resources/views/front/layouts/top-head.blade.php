@@ -3,7 +3,7 @@
     <header class="main-header">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="navbar-brand logos" href="index.html">
+                <a class="navbar-brand logos" href="#">
                     <img src={{ asset("assets/img/logos/adex-logo-white-yellow.png") }} alt="logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@
                                 </a>
                             </li>
                             <li class="nav-item my-auto">
-                                <a class="brand-logos" href={{route('home')}}>
+                                <a class="brand-logos" href={{route('user-dashboard')}}>
                                     <img src={{ asset("assets/img/logos/adex-logo-white-yellow.png") }} alt="logo">
                                 </a>
                             </li>

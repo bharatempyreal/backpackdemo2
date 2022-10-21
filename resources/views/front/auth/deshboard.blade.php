@@ -2,13 +2,13 @@
     <div class="container">
         <div class="row" style="min-height: 200px;">
             <div class="col-lg-2 col-md-3 col-4" style="min-height: 200px;">
-                <a href="my-profile.php" class="ml-4">
+                <a href={{route('user-dashboard')}} class="ml-4">
                     <img src={{asset("assets/img/avatar/avatar-2.jpg")}} alt="comments-user">
                 </a>
             </div>
             <div class="col-lg-6 col-md-9 col-8 owner-details my-auto">
                 <div class="ml-4 info-center">
-                    <h2>Lucia Wagon - </h2>
+                    <h2>{{ (auth()->check() && auth()->user() && auth()->user()->name)?auth()->user()->name:'' }} - </h2>
                     <div class="rating">
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
@@ -17,8 +17,8 @@
                         <i class="fa fa-star-half-full"></i>
                     </div>
                     <div class="clearfix"></div>
-                    <h3 class="mt-1 mb-3">luciawagon@gmail.com</h3>
-                    <a href="#" class="btn btn-sm btn-theme-yellow-second">View Dashboard</a>
+                    <h3 class="mt-1 mb-3">{{ (auth()->check() && auth()->user() && auth()->user()->email)?auth()->user()->email:'' }}</h3>
+                    <a href={{route('user-dashboard')}} class="btn btn-sm btn-theme-yellow-second">View Dashboard</a>
                 </div>
             </div>
         </div>

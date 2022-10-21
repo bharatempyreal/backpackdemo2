@@ -46,8 +46,8 @@ function textarea(label = '',name='',classname="",attr=''){
 function adddropzone(label = '',name='',classname="",attr=''){
     var html="";
         // html='<h3 class="heading-2">'+label+'</h3>';
-        html+='<div class="col-md-12 dropzone_box" '+attr+'>';
-        html+='<div id="" class="dropzone dropzone-design mb-50" >';
+        html+='<div class="col-md-12 dropzone_box">';
+        html+='<div id="" class="dropzone dropzone-design mb-50" '+attr+'>';
         html+='<div class="dz-default dz-message"><span>Drop files here to upload</span></div>';
         html+='</div>';
         html+='</div>';

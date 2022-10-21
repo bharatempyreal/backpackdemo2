@@ -17,6 +17,9 @@ Adex - My Profile
     div#myDropZone {
         display: flex;
     }
+    .dropzone .dz-default.dz-message span {
+            display: block;
+    }
 </style>
 @endsection
 
@@ -25,6 +28,9 @@ Adex - My Profile
 
 
 @section('content')
+@php
+    $hide_half_form = true;
+@endphp
 @include('front.auth.deshboard')
 
 <!-- Submit Property start -->
@@ -35,6 +41,7 @@ Adex - My Profile
                 <div class="submit-address">
                     <form id="ContactDetailsform" method="POST" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="hide_half_form" value="{{ (isset($hide_half_form) && $hide_half_form) ? 1 : 0 }}">
                         <h3 class="heading-2">Contact Details</h3>
                         <div class="row  mb-30">
                             <div class="col-md-4">
@@ -110,6 +117,8 @@ Adex - My Profile
                                 </div>
                             </div>
                         </div>
+                        @if (!$hide_half_form)
+
                         <h3 class="heading-2">Ad Information</h3>
                         <div class="search-contents-sidebar mb-30">
                             <div class="row">
@@ -200,6 +209,8 @@ Adex - My Profile
                             <input type="hidden" class="input-text gallerycancelImages" id="gallerycancelImages" name="gallerycancelImages">
                             <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                         </div>
+                        @endif
+
                         <div class="row text-center">
                             <div class="col-md-12">
                                 <button id="ContactDetails" type="submit" class="btn btn-lg btn-theme-black-second">Save Changes</button>
