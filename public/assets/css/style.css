@@ -10581,7 +10581,16 @@ blockquote {
 .footer-social-icons a i:hover{
   color: var(--bc-white);
 }
-
+.image_box img{
+  width: 100%;
+  height: 100%;
+  max-width: 270px;
+  margin: 0 15px;
+}
+.listing-details{
+  padding: 0 0 0 20px;
+  width: 100%;
+}
 /* 19-oct-e */
 
 /* 20-oct-responsive */
@@ -10615,6 +10624,9 @@ blockquote {
   }
   .dashboard-nav{
     background-color: var(--bc-yellow);
+  }
+  .properties-left{
+    padding: 20px 25px !important;
   }
 }
 
@@ -10722,6 +10734,10 @@ blockquote {
   .profile-banner .owner-details h2{
     font-size: 28px;
   }
+  .listing-details{
+    text-align: center;
+    padding-top: 10px;
+  }
 }
 
 @media only screen and (max-width:480px) {
@@ -10751,5 +10767,11 @@ blockquote {
   }
   .info-center .btn-sm{
     padding: 7px 13px;
+  }
+  .property-listing .row{
+    justify-content: center;
+  }
+  .listing-details{
+    padding-left: 0;
   }
 }
