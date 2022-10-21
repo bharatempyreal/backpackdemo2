@@ -21,7 +21,7 @@ Adex - My Wallet
             </div>
         </div>
         <div class="row justify-content-center current-balance-section">
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2 pl-0">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2">
                 <div class="balance-section">
                     <h5>Balance</h5>
                     <p>$147.98</p>
@@ -29,7 +29,7 @@ Adex - My Wallet
                     <a href="#" class="btn btn-sm btn-theme-black">Add Bank Account</a>
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2 pr-0">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2">
                 <div class="card-section" style="">
                     <h6>Virtual Card</h6>
                     <div class="last-line-show">

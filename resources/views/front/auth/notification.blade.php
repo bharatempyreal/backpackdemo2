@@ -10,7 +10,7 @@ Adex - Notification
 <div class="submit-property content-area">
     <div class="container">
         <div class="row justify-content-md-center">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-12">
                 <div class="submit-address">
                     <form method="POST">
                         <h3 class="heading-2 mb-4">ADEX Notifications</h3>
@@ -48,7 +48,7 @@ Adex - Notification
         </div>
         <hr class="mt-4 mb-5">
         <div class="row justify-content-md-center">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-12">
                 <div class="submit-address">
                     <form method="POST">
                         <h3 class="heading-2 mb-4">Marketing Communications</h3>
