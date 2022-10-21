@@ -97,6 +97,7 @@ Adex - List-Property
                             // inputhidden(name='',value='', classname='')
                             if(Object.keys(response.data).length>0){
                                 $.each(response.data, function( index, value ) {
+                                    html += startDiv('property-input','');
                                     html +='<h3 class="heading-2">'+index+'</h3>';
                                     html += startDiv('row','');
                                     if(value.length>0){
@@ -126,10 +127,11 @@ Adex - List-Property
                                                     case '3':
                                                         // 3 = multipleimages
                                                         if(value1.compulsory == 1){
-                                                            attr = 'required';
+                                                            attr1 = 'required';
                                                         }
-                                                        html += adddropzone(value1.name,'','');
-                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
+                                                        attr = 'data-category_type='+value1.category_type;
+                                                        html += adddropzone(value1.name,'','',attr);
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr1);
                                                         html += inputhidden((value1.name).replace(/ /g,"_"),value1.id);
 
                                                     break;
@@ -152,10 +154,11 @@ Adex - List-Property
                                                     case '6':
                                                         // 6 = Image
                                                         if(value1.compulsory == 1){
-                                                            attr = 'required';
+                                                            attr1 = 'required';
                                                         }
-                                                        html += adddropzone(value1.name,'','');
-                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr);
+                                                        attr = 'data-category_type='+value1.category_type;
+                                                        html += adddropzone(value1.name,'','',attr);
+                                                        html += inputhiddenfordropzone((value1.name).replace(/ /g,"_"),'','dropzone_hidden',attr1);
                                                         html += inputhidden((value1.name).replace(/ /g,"_"),value1.id);
                                                     break;
                                                     case '7':
@@ -173,6 +176,7 @@ Adex - List-Property
                                         });
                                     }
                                     html += closeDiv();
+                                    html += closeDiv();
                                 });
                                 html += inputhiddenfordropzone('cancelImages','','cancelImages');
                                 html += inputhiddenfordropzone('removeImages','','removeImages');
@@ -184,13 +188,14 @@ Adex - List-Property
 
                         $(".dropzone").each(function(i_d,v_d) {
                                 Dropzone.autoDiscover = false;
-
+                                var cat_type=$(this).data('category_type');
                                 var url = "{{ route('ajaxUploadImages') }}";
                                 new Dropzone(v_d, {
                                 url: url,
                                 uploadMultiple: true,
                                 parallelUploads: 1,
                                 addRemoveLinks: true,
+                                maxFiles: (cat_type == 3) ? 1 : 50 ,
                                 sending: function(file, xhr, formData) {
                                     formData.append("_token", $('[name=_token').val());
                                 },
