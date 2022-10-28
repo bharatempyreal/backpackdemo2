@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Business;
+use App\Models\User;
 use File;
 
 class BusinessController extends Controller
@@ -50,6 +51,7 @@ class BusinessController extends Controller
     }
     public function updatebusiness(Request $request)
     {
+        // dd($request->all());
         $hide=($request->hide_half_form == 1) ? true : false;
         $response = [
             'status'=>false,
@@ -155,6 +157,77 @@ class BusinessController extends Controller
              return response($response);
             }
     }
+    public function businessprofile(Request $request)
+    {
+        // dd($request->all());
+        $hide=($request->hide_half_form == 1) ? true : false;
+        $response = [
+            'status'=>false,
+            'message'=>'Somthig Went wrong',
+        ];
+        $id = Auth::user()->id;
+        $business = User::where('id',$id)->first();
+        $business->business_name = $request->businessname;
+        $business->email = $request->email;
+        $business->phone = $request->phone;
+        $business->address = $request->address;
+        $business->landmark = $request->landmark;
+        $business->city = $request->choosecitys;
+        $business->state = $request->choosestate;
+        $business->zipcode = $request->zipcode;
+        $business->bio_information = $request->message;
+        $business->profile_pic = (isset($request->assetimage) && $request->assetimage != '' && count(json_decode($request->assetimage))>0)?$request->assetimage : '';
+        if(isset($request->removeImages) && !empty($request->removeImages)){
+            $removeImages = $request->removeImages;
+            foreach(json_decode($removeImages) as $file){
+                $path = storage_path('/app/public/image/'). $file;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
+        if($business->save()){
+            $response = [
+                'status'=>true,
+                'message'=>'Profile Update Successfully',
+        ];
+        }else{
+            $response = [
+                'status'=>false,
+                'message'=>'Somthig Went wrong',
+            ];
+        }
+        return response($response);
+    }
+    public function getbusinessprofile(Request $request)
+    {
+        $user = User::where('id',$request->id)->first();
+        if (is_null($user)) {
+            return false;
+        }else{
+            $images = [];
+            $images_val = [];
+            if($user->profile_pic != null){
+                $all_images = $user->profile_pic;
+                $all_images =  ltrim($all_images, $all_images[0]);
+                $all_images = rtrim($all_images, ']');
+                $all_images = explode(',',$all_images);
+                if($all_images != null){
+                    // dd($all_images);
+                    foreach($all_images as $items){
+                        $items = ltrim($items, $items[0]);
+                        $items = rtrim($items, '"');
+                        $images[] = route('getStoragePath', ['image', $items]);
+                        $images_val[] = $items;
+                    }
+                }
+            }
+            return compact('user','images');
+        }
+    }
+
+
+    // old getbusinessdata
     public function getbusinessdata(Request $request)
     {
         $user = Business::where('user_id',$request->id)->first();
@@ -165,7 +238,7 @@ class BusinessController extends Controller
             $images_val = [];
             if($user->asset_image != null){
                 $all_images = $user->asset_image;
-                $all_images =  ltrim($all_images, $all_images[0]) ;
+                $all_images =  ltrim($all_images, $all_images[0]);
                 $all_images = rtrim($all_images, ']');
                 $all_images = explode(',',$all_images);
                 if($all_images != null){
@@ -200,12 +273,13 @@ class BusinessController extends Controller
         $imageNameArr = [];
         $i = 0;
         if($request->file){
-            foreach($request->file as $key => $file){
+            $file = $request->file;
+            // foreach($request->file as $key => $file){
                 $path = storage_path('/app/public/image/');
                 $imageName = uniqid(). $i++ . '.' .File::extension($file->getClientOriginalName());
                 $file->move($path,$imageName);
                 $imageNameArr[]=$imageName;
-            }
+            // }
         }
         return  response($imageNameArr);
     }

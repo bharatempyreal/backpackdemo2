@@ -65,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/createbusiness', [App\Http\Controllers\Front\BusinessController::class, 'createbusiness'])->name('createbusiness');
     Route::post('/updatebusiness', [App\Http\Controllers\Front\BusinessController::class, 'updatebusiness'])->name('updatebusiness');
+    Route::post('/businessprofile', [App\Http\Controllers\Front\BusinessController::class, 'businessprofile'])->name('business-profile');
+    Route::post('/get-business-profile', [App\Http\Controllers\Front\BusinessController::class, 'getbusinessprofile'])->name('get-business-profile');
     Route::post('/get-businessdata', [App\Http\Controllers\Front\BusinessController::class, 'getbusinessdata'])->name('getbusinessdata');
     Route::post('/dropzone-image', [App\Http\Controllers\Front\BusinessController::class, 'dropimages'])->name('dropzone-image');
     Route::post('/drop-remove-images', [App\Http\Controllers\Front\BusinessController::class, 'dropremoveimages'])->name('dropremoveImages');
