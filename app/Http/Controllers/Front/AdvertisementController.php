@@ -128,10 +128,53 @@ class AdvertisementController extends Controller
 
     public function propertyDetail($id,Request $request){
         if(!isset($id) || $id != ''){
-            $advertisement_data = Advertisement::with('advertisedata')->find($id);
+            $advertisement_data = Advertisement::with('advertisedata','advertisedata.attribute')->find($id);
             if(!isset($advertisement_data) || !empty($advertisement_data)){
-                // dd($advertisement_data->toArray());
-                return view('front.auth.property_detail');
+                $advertisedata = $advertisement_data->advertisedata->toArray();
+                $attributegroup_id =  array_map(function($d1){
+                    return $d1['attribute']['attributegroup_id'];
+                },$advertisedata);
+                $attributegroup_id=array_unique($attributegroup_id);
+                $group_by_data = [];
+                $ids = [3,4,5,6,1,2];
+                $use = [
+                    'ids'=>$ids,
+                    'make_grop'=>''
+                ];
+                foreach($attributegroup_id as $make_grop){
+                    $use['make_grop'] = $make_grop;
+                    // $ad_val_data = AdvertisementValue::with('attribute','attribute.attributegroup')->where('advertisement_id',$id)->whereHas('attribute',function($q)use($use){ $q->where('attributegroup_id',$use['make_grop']);})->where(function($q1)use($use){
+                    //     $q1->whereHas('attribute',function($q2)use($use){ $q2->orderByRaw('FIELD (category_type, ' . implode(', ', $use['ids']) . ') ASC');});
+                    // })->get()->toArray();
+                    $ad_val_data = AdvertisementValue::with('attribute','attribute.attributegroup')->where('advertisement_id',$id)->whereHas('attribute',function($q)use($use){ $q->where('attributegroup_id',$use['make_grop']);})->get()->toArray();
+                    $group_by_data[$ad_val_data[0]['name']]=$ad_val_data;
+                }
+                // $n=[];
+                // for($i=0;$i<count($group_by_data);$i++){
+                //     $key=array_keys($group_by_data);
+                //     $value = array_values($group_by_data);
+                //     $n[$key[$i]] = usort($group_by_data[$key[$i]],function($a){
+                //         return ($a['attribute']['category_type'] == 3) ? -1 : 1;
+                //     });
+                // }
+
+                // foreach($group_by_data as $k=>$s_grop_data){
+                //     $n[$k]= usort($s_grop_data, function ($a, $b) use ($ids) {
+                //         $pos_a = array_search($a['attribute']['category_type'], $ids);
+                //         $pos_b = array_search($b['attribute']['category_type'], $ids);
+                //         return $pos_a - $pos_b;
+                //     });
+                // }
+                // $group=array_column($advertisedata,'attribute');
+                // dd($advertisement_data->advertisedata->attribute->toArray(),$group);
+                // $data = $advertisement_data->advertisedata->toArray();
+                // usort($data, function($a){
+                //     $custom_short = [3];
+                //     $key = 0;
+                //     return ($a['attribute']['category_type'] == $custom_short[$key]) ? -1 : 1;
+                // });
+                // dd($advertisement_data->advertisedata->toArray(),$data);
+                return view('front.auth.property_detail',compact('group_by_data'));
             }else{
                 Session::flash('message', 'Data Not Found');
                 Session::flash('status', 'error');

@@ -21,10 +21,47 @@ Adex - My Profile
 
 @section('content')
 @include('front.auth.deshboard')
-
+@php
+$ids=[3,4,5,6,7,2,1];
+$group=[];
+foreach ($group_by_data as $k=>$data){
+    $group[$k]=[];
+    $new=$data;
+    foreach ($data as $key => $value) {
+        $group[$k]=$value['attribute'];
+    }
+    usort($new, function($a){
+        return ($a['attribute']['category_type'] == 3 || $a['attribute']['category_type'] == 6) ? -1 : 1;
+    });
+    $group[$k]=$new;
+}
+@endphp
 <!-- Submit Property start -->
   <div class="submit-property content-area">
     <div class="container">
+        @foreach ($group as $key=>$val)
+            <h3>{{ $key }}</h3>
+                <div>
+                    @foreach ($val as $v)
+                        @if($v['attribute']['category_type'] == 3 || $v['attribute']['category_type'] == 6)
+                        <section class="profile-section">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="capital-logo">
+                                    <img src="{{ asset_storage().(json_decode($v['value'])[0]) }}" style="height: 40vh;">
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        @else
+                        <p><b>{{ $v['name'] }}</b>{{ $v['value'] }}</p>
+                        @endif
+                    @endforeach
+                </div>
+        @endforeach
+
+    @if(1==2)
+        {{-- Img Section --}}
       <section class="profile-section">
         <div class="row">
           <div class="col-md-12">
@@ -67,6 +104,7 @@ Adex - My Profile
           </p>
         </div>
       </section>
+      @endif
 
       @auth
       <section class="sams-pizza-sub-online">
