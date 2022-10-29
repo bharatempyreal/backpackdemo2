@@ -3,7 +3,12 @@
         <div class="row" style="min-height: 200px;">
             <div class="col-lg-2 col-md-3 col-4" style="min-height: 200px;">
                 <a href={{route('user-dashboard')}} class="ml-4">
-                    <img src={{asset("assets/img/avatar/avatar-2.jpg")}} alt="comments-user">
+                    {{-- {{dd(asset_storage(). "0635bdff189b120.jpg")}} --}}
+                    @php
+                        $image = json_decode((auth()->check() && auth()->user() && auth()->user()->profile_pic)?auth()->user()->profile_pic:'');
+                    @endphp
+
+                    <img src={{asset_storage().$image[0] }} alt="comments-user" style="height: 200px; width:200px">
                 </a>
             </div>
             <div class="col-lg-6 col-md-9 col-8 owner-details my-auto">
