@@ -270,29 +270,35 @@ $(document).ready(function() {
         success:function(response){
             var html='';
             var listing = Object.keys(response.listing).map(function (key) { return response.listing[key]; });
-            console.log(listing)
             if(listing.length>0){
                 $.each(listing, function (index, property) {
                     if(index != ((listing.length)-1)){
                         html += '<div class="card show_property property-box-2 map-property-box property-hover property-listing" data-advertisement_id="'+property.id+'">';
                         html += '<div class="row">';
-                        html +='<div class="col-lg-5 col-md-5 text-center">';
+                        html +='<div class="col-lg-4 col-md-4 text-center">';
                             var base_url = "{{ asset('/') }}";
-                            console.log(listing[(listing.length)-1][property.id]);
                             var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : base_url+listing[(listing.length)-1][property.id];
                         html+='<div class="image_box">';
                         html += '<img src="'+image+'">';
                         html += '</div>';
                         html += '</div>';
-                        html +='<div class="col-lg-7 col-md-7 row">';
+                        html +='<div class="col-lg-8 col-md-8 row">';
                         if((property.advertisedata).length>0){
+                            var tt = 0;
                             $.each(property.advertisedata,function(i,v){
-                                console.log(v)
                                 if(v.attribute != null && v.attribute.is_default == 1 && v.attribute.category_type != 3 && v.attribute.category_type != 6){
-                                    html+='<div class="listing-details row">';
-                                    html +='<div class="pr-2 label-details">'+v.name+' -</div>';
+                                    tt++;
+                                    var style = '';
+                                    if (tt % 2 === 0) {
+                                        /* we are even */
+                                        style='border:none;';
+                                    }else {
+                                        /* we are odd */
+                                    }
+                                   // As a side note, this === el.
+                                    html+='<div class="listing-details col-md-6 pb-2" style="'+style+'">';
+                                    html +='<div class="pr-2 label-details">'+v.name+'     '+tt+' -</div>';
                                     html +='<div class="market-details">'+v.value+'</div>';
-                                    html +='<div class="col-md-12"></div>'
                                     html += '</div>';
                                 }
                             })
@@ -306,6 +312,8 @@ $(document).ready(function() {
                 $('.fetching-properties').append(html);
             }
     });
+
+
 });
 
 $(document).on('click','.show_property',function(){
@@ -315,5 +323,6 @@ $(document).on('click','.show_property',function(){
         window.location.href=url
     }
 });
+
 </script>
 @endsection

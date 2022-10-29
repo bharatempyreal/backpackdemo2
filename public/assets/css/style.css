@@ -2405,7 +2405,7 @@ input[type="checkbox"]:checked + label::before {
     font-weight: 300;
 }
 
-.property-box-2 .detail .location a, 
+.property-box-2 .detail .location a,
 .property-box-2 .facilities-list a{
     color: #666;
 }
@@ -4254,7 +4254,7 @@ footer {
     width: auto;
 }
 .footer .copy {
-    padding: 40px 0 0; 
+    padding: 40px 0 0;
     /* margin: 30px 0 0; */
     text-align: center;
     font-size: 18px;
@@ -10183,14 +10183,14 @@ blockquote {
 
 /*switch option*/
 .material-switch > input[type="checkbox"] {
-    display: none;   
+    display: none;
 }
 
 .material-switch > label {
     cursor: pointer;
     height: 0px;
-    position: relative; 
-    width: 40px;  
+    position: relative;
+    width: 40px;
 }
 
 .material-switch > label::before {
@@ -10350,9 +10350,12 @@ blockquote {
 .property-hover .label-details{
   font-size: 14px;
   font-weight: bold;
+  color: #9a9a9a;
 }
 .property-hover .market-details{
   font-size: 14px;
+  font-weight: bold;
+
 }
 .map-property-box.property-hover{
   padding: 15px;
@@ -10446,7 +10449,59 @@ blockquote {
 }
 .capital-logo img{
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
+  max-width: 400px;
+}
+/* .property-content-details.text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+} */
+.property-content-details.text {
+    border-bottom: 1px solid #ddd;
+    padding: 12px;
+}
+.property-content-details.text h3{
+    font-size: 20px;
+    margin: 10px 0;
+    font-weight: bold;
+    /* border-bottom: 1px solid #000; */
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+.property-content-details.text p{
+    font-size: 14px;
+    color: #000;
+    font-weight: 600;
+}
+.property-content-details.text p b{
+    font-weight: bold;
+    padding-right: 10px;
+    color: #9a9a9a;
+    font-size: 15px;
+}
+.property-gallery-title{
+    margin-top: 50px;
+}
+.property_logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.property_logo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    max-width: 190px;
+}
+.property-content-details.image{
+    text-align: center;
+}
+.property-content-details.text .apply-padding{
+    padding-bottom: 13px;
 }
 .contract-duration{
   text-align: center;
@@ -10599,7 +10654,9 @@ blockquote {
 .listing-details{
   padding: 0 0 0 20px;
   width: 100%;
+  border-right: 1px solid #ddd;
 }
+
 .property-input {
   margin-bottom: 30px;
 }
@@ -10622,7 +10679,7 @@ blockquote {
   }
 }
 
-@media only screen and (max-width:1024px){ 
+@media only screen and (max-width:1024px){
   .contract-section{max-width:100%;}
   .car-padding{padding-left:0;}
   .btn-accept{margin:50px 0 0 0;}
@@ -10684,7 +10741,7 @@ blockquote {
   .dashboard-details {padding: 20px 0;}
   .dashboard-details p{padding-top: 30px;}
   .profile-banner .owner-details h2{font-size: 28px;}
-  .listing-details{text-align: center;padding-top: 10px;}
+  .listing-details{text-align: center;padding-top: 10px; border-right:none;}
   .login-section .form-group .form-control{font-size: 14px;}
   .properties-map-search-content .form-group{text-align: center;}
 }
@@ -10700,7 +10757,7 @@ blockquote {
   .profile-banner .owner-details .info-center .rating i{font-size: 12px;}
   .info-center .btn-sm{padding: 7px 13px;}
   .property-listing .row{justify-content: center;}
-  .listing-details{padding-left: 0;}
+  .listing-details{padding-left: 0; }
   .my-adex-asset-list .adex-asset-details-image{border: none;}
   .my-adex-asset-list .adex-contract-time .adex-contract-time-day{max-width: 140px;margin: 0 auto;}
 }

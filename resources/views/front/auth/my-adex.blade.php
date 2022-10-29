@@ -5,6 +5,15 @@
 Adex - My Adex
 @endsection
 
+@section('style')
+<style>
+.main_list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+@endsection
 
 @section('content')
 @include('front.auth.deshboard')
@@ -26,6 +35,10 @@ Adex - My Adex
 <!-- Asset list  -->
 <div class="my-adex-asset-list">
     <div class="container">
+        <div class="main_list">
+            <div class="fetching-properties col-md-9">
+            </div>
+        </div>
         <div class="row justify-content-center current-ad-section adex-current">
             <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12 current-ad-row">
                 <div class="row">
@@ -75,4 +88,67 @@ Adex - My Adex
     </div>
 </div>
 
+@endsection
+@section('script')
+<script>
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+$(document).ready(function(){
+    $.ajax({
+        url:"{{ route('ListingProperty') }}",
+        type:'post',
+        dataType:'json',
+        success:function(response){
+            var html='';
+            var listing = Object.keys(response.listing).map(function (key) { return response.listing[key]; });
+            if(listing.length>0){
+                $.each(listing, function (index, property) {
+                    if(index != ((listing.length)-1)){
+                        html += '<div class="show_property map-property-box property-hover property-listing p-0" data-advertisement_id="'+property.id+'">';
+                        html += '<div class="row">';
+                        html +='<div class="col-lg-4 col-md-4 text-center">';
+                            var base_url = "{{ asset('/') }}";
+                            var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : base_url+listing[(listing.length)-1][property.id];
+                        html+='<div class="image_box">';
+                        html += '<img src="'+image+'">';
+                        html += '</div>';
+                        html += '</div>';
+                        html +='<div class="col-lg-8 col-md-8 row">';
+                        if((property.advertisedata).length>0){
+                            var tt = 0;
+                            $.each(property.advertisedata,function(i,v){
+                                if(v.attribute != null && v.attribute.is_default == 1 && v.attribute.category_type != 3 && v.attribute.category_type != 6){
+                                    tt++;
+                                    var style = '';
+                                    if (tt % 2 === 0) {
+                                        /* we are even */
+                                        style='border:none;';
+                                    }else {
+                                        /* we are odd */
+                                    }
+                                   // As a side note, this === el.
+                                    html+='<div class="listing-details col-md-6 pb-2" style="'+style+'">';
+                                    html +='<div class="pr-2 label-details">'+v.name+'-</div>';
+                                    html +='<div class="market-details">'+v.value+'</div>';
+                                    html += '</div>';
+                                }
+                            })
+                        }
+                        html +='</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                });
+                }
+                $('.fetching-properties').append(html);
+            }
+    });
+});
+</script>
 @endsection

@@ -40,24 +40,47 @@ foreach ($group_by_data as $k=>$data){
   <div class="submit-property content-area">
     <div class="container">
         @foreach ($group as $key=>$val)
-            <h3>{{ $key }}</h3>
-                <div>
-                    @foreach ($val as $v)
-                        @if($v['attribute']['category_type'] == 3 || $v['attribute']['category_type'] == 6)
-                        <section class="profile-section">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="capital-logo">
-                                    <img src="{{ asset_storage().(json_decode($v['value'])[0]) }}" style="height: 40vh;">
+            @php
+                $attrs = array_column($val, 'attribute');
+                $test1 = array_search('3', array_column($attrs, 'category_type'));
+                $test2 = array_search('6', array_column($attrs, 'category_type'));
+            @endphp
+            <div class="property-content-details {{ ($test1 !==false || $test2 !==false)?'image':'text' }}">
+                <h3 class="{{ ($test1 !== false) ? 'property-gallery-title' : (($test2 !== false)?'pb-3':'')}}">{{ $key }}</h3>
+                <div class="{{ ($test1 !==false || $test2 !==false)?'':'row' }}">
+                @foreach ($val as $v)
+                    @if($v['attribute']['category_type'] == 3 || $v['attribute']['category_type'] == 6)
+                    <section class="profile-section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="capital-logo {{ ($v['attribute']['category_type'] == 3) ? 'property_logo' : '' }}">
+                                    @if($v['attribute']['category_type'] == 3)
+                                        @php
+                                            $img=json_decode($v['value']);
+                                        @endphp
+                                            @if(isset($img) && !empty($img) && count($img)>0)
+                                                @foreach ($img as $i)
+                                                <div class="col-md-4">
+                                                    <img src="{{ asset_storage().$i }}">
+                                                </div>
+                                                @endforeach
+                                            @endif
+                                    @else
+                                        <img src="{{ asset_storage().(json_decode($v['value'])[0]) }}" >
+                                    @endif
                                 </div>
-                              </div>
                             </div>
-                          </section>
-                        @else
-                        <p><b>{{ $v['name'] }}</b>{{ $v['value'] }}</p>
-                        @endif
-                    @endforeach
-                </div>
+                        </div>
+                    </section>
+                    @else
+                    <div class="col-lg-4 col-md-6 apply-padding">
+                        <p><b> {{ $v['name'] }} : </b> </p>
+                        <p>{{ $v['value'] }}</p>
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
         @endforeach
 
     @if(1==2)

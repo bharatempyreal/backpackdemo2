@@ -15,8 +15,7 @@ if(!function_exists('getStorageUrl')){
 if(!function_exists('asset_storage')){
     function asset_storage(){
         $p = asset('');
-        $p=str_replace("public/", "",$p);
-        $p.="storage/image/";
+        $p.="/storage/image/";
         return $p;
     }
 }

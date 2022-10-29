@@ -26,6 +26,10 @@ Route::get('/adex-market-place', function () {
 })->name('adex-market-place');
 
 
+// Advertisement
+Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
+Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
+
 // Route::get('/login', function () {
 //     return view('front.layouts.login');
 // })->name('login');
@@ -73,11 +77,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/editdropajax-remove-images', [App\Http\Controllers\Front\BusinessController::class,'editdropajaxRemoveImages'])->name('editajaxremoveImages');
 
     // Advertisement
-    Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
+    // Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
     Route::get('/add-list-property/{id}', [App\Http\Controllers\Front\AdvertisementController::class, 'addListProperty'])->name('addListProperty');
     Route::post('/getAttributeAsPerCategory',[App\Http\Controllers\Front\AdvertisementController::class, 'getAttributeAsPerCategory'])->name('getAttributeAsPerCategory');
     Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
-    Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
     Route::post('/ajaxremoveImagesFront',[App\Http\Controllers\Front\AdvertisementController::class, 'ajaxremoveImagesFront'])->name('ajaxremoveImagesFront');
     Route::get('property_detail/{id}',[App\Http\Controllers\Front\AdvertisementController::class,'propertyDetail'])->name('propertyDetail');
     Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {

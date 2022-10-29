@@ -20,6 +20,22 @@ Adex - My Profile
     .dropzone .dz-default.dz-message span {
             display: block;
     }
+    .dz-size{
+        display: none;
+    }
+    .dropzone-design .dz-preview{
+        min-height: 0;
+        height: 206px !important;
+    }
+    .dropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details{
+        height: 0;
+    }
+    .dropzone-design{
+        width: 43%;
+    }
+    .dropzone{
+        min-height:200px;
+    }
 </style>
 @endsection
 
