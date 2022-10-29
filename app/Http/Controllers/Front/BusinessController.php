@@ -176,7 +176,7 @@ class BusinessController extends Controller
         $business->state = $request->choosestate;
         $business->zipcode = $request->zipcode;
         $business->bio_information = $request->message;
-        $business->profile_pic = (isset($request->assetimage) && $request->assetimage != '' && count(json_decode($request->assetimage))>0)?$request->assetimage : '';
+        $business->profile_pic = $request->assetimage;
         if(isset($request->removeImages) && !empty($request->removeImages)){
             $removeImages = $request->removeImages;
             foreach(json_decode($removeImages) as $file){
@@ -202,26 +202,27 @@ class BusinessController extends Controller
     public function getbusinessprofile(Request $request)
     {
         $user = User::where('id',$request->id)->first();
+        $images = $user->profile_pic;
         if (is_null($user)) {
             return false;
         }else{
-            $images = [];
-            $images_val = [];
-            if($user->profile_pic != null){
-                $all_images = $user->profile_pic;
-                $all_images =  ltrim($all_images, $all_images[0]);
-                $all_images = rtrim($all_images, ']');
-                $all_images = explode(',',$all_images);
-                if($all_images != null){
-                    // dd($all_images);
-                    foreach($all_images as $items){
-                        $items = ltrim($items, $items[0]);
-                        $items = rtrim($items, '"');
-                        $images[] = route('getStoragePath', ['image', $items]);
-                        $images_val[] = $items;
-                    }
-                }
-            }
+            // $images = [];
+            // $images_val = [];
+            // if($user->profile_pic != null){
+            //     $all_images = $user->profile_pic;
+            //     $all_images =  ltrim($all_images, $all_images[0]);
+            //     $all_images = rtrim($all_images, ']');
+            //     $all_images = explode(',',$all_images);
+            //     if($all_images != null){
+            //         // dd($all_images);
+            //         foreach($all_images as $items){
+            //             $items = ltrim($items, $items[0]);
+            //             $items = rtrim($items, '"');
+            //             $images[] = route('getStoragePath', ['image', $items]);
+            //             $images_val[] = $items;
+            //         }
+            //     }
+            // }
             return compact('user','images');
         }
     }
