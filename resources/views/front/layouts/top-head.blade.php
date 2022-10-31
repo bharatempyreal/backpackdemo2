@@ -14,7 +14,7 @@
                     <ul class="navbar-nav header-ml">
                         {{-- @guest --}}
                             <li class="nav-item">
-                                <a class="nav-link " href="#">
+                                <a class="nav-link " href={{route('howItWork')}}>
                                     How it Works
                                 </a>
                             </li>
@@ -31,6 +31,7 @@
                             @if(Auth::guest())
                                 <li class="nav-item">
                                     <a class="nav-link " href={{route('login')}}>
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                         Login
                                     </a>
                                 </li>
