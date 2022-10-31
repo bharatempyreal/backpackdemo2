@@ -277,7 +277,7 @@ $(document).ready(function() {
                         html += '<div class="row">';
                         html +='<div class="col-lg-4 col-md-4 text-center">';
                             var base_url = "{{ asset('/') }}";
-                            var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : base_url+listing[(listing.length)-1][property.id];
+                            var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : (((listing[(listing.length)-1][property.id]).includes('storage/image/'))?base_url+listing[(listing.length)-1][property.id]:base_url+'storage/image/'+listing[(listing.length)-1][property.id]);
                         html+='<div class="image_box">';
                         html += '<img src="'+image+'">';
                         html += '</div>';
@@ -312,8 +312,6 @@ $(document).ready(function() {
                 $('.fetching-properties').append(html);
             }
     });
-
-
 });
 
 $(document).on('click','.show_property',function(){

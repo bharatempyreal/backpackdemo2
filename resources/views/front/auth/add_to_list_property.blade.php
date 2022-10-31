@@ -45,6 +45,7 @@ Adex - List-Property
                 <div class="submit-address">
                     <form action="{{ route('saveListProperty') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" id="category_id" name="category_id" value="{{ myisset($category_id) }}">
+                        <input type="hidden" id="advertisement_id" name="advertisement_id" value="{{ myisset($advertisement_id) }}">
                         @csrf
                         <div class="form_section">
 
@@ -195,7 +196,7 @@ Adex - List-Property
                                 uploadMultiple: true,
                                 parallelUploads: 1,
                                 addRemoveLinks: true,
-                                maxFiles: (cat_type == 3) ? 1 : 50 ,
+                                maxFiles: (cat_type == 3) ? 50 : 1 ,
                                 sending: function(file, xhr, formData) {
                                     formData.append("_token", $('[name=_token').val());
                                 },
@@ -207,14 +208,19 @@ Adex - List-Property
                                 removedfile: function(file) {
                                     removefile = $(file.previewElement).find('.dz-filename span').data('dz-name');
                                     var dropzone_hidden = $(file.previewTemplate).closest('.dropzone_box').parent().find('.dropzone_hidden');
-                                    var oldArr = [];
-                                    var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
-                                    hidden_value.forEach(function(item) {
-                                        if (item != removefile){
-                                            oldArr.push(item);
-                                        }
-                                    });
-                                    dropzone_hidden.val(JSON.stringify(oldArr));
+                                    if(cat_type == 3){
+                                        var oldArr = [];
+                                        var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
+                                        hidden_value.forEach(function(item) {
+                                            if (item != removefile){
+                                                oldArr.push(item);
+                                            }
+                                        });
+                                        dropzone_hidden.val(JSON.stringify(oldArr));
+                                    }
+                                    if(cat_type == 6){
+                                        dropzone_hidden.val('');
+                                    }
 
                                     // Add IN Remove Hidden
                                     var oldremoved = [];
@@ -222,21 +228,36 @@ Adex - List-Property
                                     removehidden_value.forEach(function(item) {
                                         oldremoved.push(item);
                                     });
-                                    oldremoved.push(removefile[0]);
+                                    if(removefile[0] != ''){
+                                        oldremoved.push(removefile[0]);
+                                    }
                                     $('.removeImages').val(JSON.stringify(oldremoved));
                                     $(file.previewElement).remove();
                                 },
                                 success: function(file, status, response) {
                                     var dropzone_hidden = $(file.previewTemplate).closest('.dropzone_box').parent().find('.dropzone_hidden');
-                                    var oldArr = [];
-                                    var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
-                                    hidden_value.forEach(function(item) {
-                                        oldArr.push(item);
-                                    });
                                     var response_value = JSON.parse(response.currentTarget.response || '[]');
-                                    oldArr.push(response_value[0]);
-                                    dropzone_hidden.val(JSON.stringify(oldArr));
-
+                                    if(cat_type == 3){
+                                        var oldArr = [];
+                                        var hidden_value = JSON.parse(dropzone_hidden.val() || '[]');
+                                        hidden_value.forEach(function(item) {
+                                            oldArr.push(item);
+                                        });
+                                        oldArr.push(response_value[0]);
+                                        dropzone_hidden.val(JSON.stringify(oldArr));
+                                    }
+                                    if(cat_type == 6){
+                                        var old_img=dropzone_hidden.val()
+                                        // Add IN Remove Hidden
+                                        var oldremoved = [];
+                                        var removehidden_value = JSON.parse($('.removeImages').val() || '[]');
+                                        removehidden_value.forEach(function(item) {
+                                            oldremoved.push(item);
+                                        });
+                                        oldremoved.push(old_img);
+                                        $('.removeImages').val(JSON.stringify(oldremoved));
+                                        dropzone_hidden.val(response_value[0]);
+                                    }
 
                                     $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value);
                                     $(file.previewTemplate).find('.dz-filename span').html(response_value);
@@ -256,6 +277,21 @@ Adex - List-Property
                     $('.selectpicker').selectpicker();
                 }
             });
+            //Get Data If Edit
+            if(){
+                    $.ajax({
+                        url:{{ route('getAdvertisementData') }},
+                        type:'post',
+                        dataType:'json',
+                        data : {
+                            advertisement_id:advertisement_id
+                        },
+                        success:function(response){
+                            console.log(response);
+                        }
+                    });
+            }
+
         }else{
             alert('Somthing Went Wrong');
         }

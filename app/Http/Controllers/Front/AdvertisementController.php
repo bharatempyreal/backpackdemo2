@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\User;
 use App\Models\Attributes;
 use App\Models\Advertisement;
 use App\Models\AdvertisementValue;
@@ -19,8 +20,19 @@ class AdvertisementController extends Controller
         return view('front.auth.list-property',compact('category_data'));
     }
 
-    public function addListProperty($id){
+    public function addListProperty($id,$advertisement_ID=''){
         $category_id = $id;
+        $advertisement_id  = '';
+        if(isset($advertisement_ID) && $advertisement_ID != ''){
+            $check = Advertisement::where('id',$advertisement_ID)->first();
+            if(isset($check) && !empty($check)){
+                $user_id = $check->created_by;
+                $super_admins = User::whereHas("roles", function($q){ $q->where("name", "Admin"); })->pluck('id');
+                if($user_id == auth()->user()->id || in_array( $user_id ,$super_admins)){
+                    $advertisement_id = $advertisement_ID;
+                }
+            }
+        }
         return view('front.auth.add_to_list_property',compact('category_id'));
     }
 
@@ -98,9 +110,11 @@ class AdvertisementController extends Controller
         }
         if(isset($removeImages) && !empty($removeImages)){
             foreach($removeImages as $key => $file){
-                $path = storage_path('/app/public/image/'). $file;
-                if (file_exists($path)) {
-                    unlink($path);
+                if($file != ''){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
                 }
             }
         }
@@ -116,9 +130,11 @@ class AdvertisementController extends Controller
     {
         if(isset($request['files']) && !empty($request['files'])){
             foreach($request['files'] as $key => $file){
-                $path = storage_path('/app/public/image/'). $file;
-                if (file_exists($path)) {
-                    unlink($path);
+                if($file != ''){
+                    $path = storage_path('/app/public/image/'). $file;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
                 }
             }
             return true;
@@ -183,6 +199,10 @@ class AdvertisementController extends Controller
             Session::flash('message', 'Something Went Wrong');
             Session::flash('status', 'error');
         }
+    }
+
+    public function getAdvertisementData(Request $request){
+        dd($request->all());
     }
 
     // advertisemet listing add bharat

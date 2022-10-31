@@ -30,7 +30,10 @@ Route::get('/adex-market-place', function () {
 Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
 Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
 Route::get('/how-it-work', [App\Http\Controllers\Front\DashboardController::class, 'howItWork'])->name('howItWork');
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 // Route::get('/login', function () {
 //     return view('front.layouts.login');
@@ -85,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
     Route::post('/ajaxremoveImagesFront',[App\Http\Controllers\Front\AdvertisementController::class, 'ajaxremoveImagesFront'])->name('ajaxremoveImagesFront');
     Route::get('property_detail/{id}',[App\Http\Controllers\Front\AdvertisementController::class,'propertyDetail'])->name('propertyDetail');
+    Route::post('getAdvertisementData',[App\Http\Controllers\Front\AdvertisementController::class,'getAdvertisementData'])->name('getAdvertisementData');
     Route::get('get-storage-path/{name}/{filename}', function($name, $filename) {
         $path = storage_path('app/public/'.$name.'/'.$filename);
         $file = File::get($path);
