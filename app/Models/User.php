@@ -62,6 +62,7 @@ class User extends Authenticatable
 
         // if the image was erased
         if ($value==null) {
+            dd('1');
             // delete the image from disk
             Storage::delete($this->{$attribute_name});
 
@@ -72,6 +73,7 @@ class User extends Authenticatable
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
         {
+            // dd('2');
             // 0. Make the image
             $image = Image::make($value)->encode('jpg', 90);
 
@@ -82,14 +84,23 @@ class User extends Authenticatable
             Storage::put($destination_path.'/'.$filename, $image->stream());
 
             // 3. Delete the previous image, if there was one.
-            Storage::delete(Str::replaceFirst('storage/','public/', $this->{$attribute_name}));
-
+            // if ($value !=null) {
+            $path = storage_path('/app/public/image/'). $this->{$attribute_name};
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            // }
             // 4. Save the public path to the database
             // but first, remove "public/" from the path, since we're pointing to it
             // from the root folder; that way, what gets saved in the db
             // is the public URL (everything that comes after the domain name)
             $public_destination_path = Str::replaceFirst('public/', 'storage/', $destination_path);
             $this->attributes[$attribute_name] = $filename;
+        }else{
+            // dd($value);
+            $val =  explode('/', $value);
+            // dd($val[array_key_last($val)]);
+            $this->attributes[$attribute_name] = $val[array_key_last($val)];
         }
     }
 }

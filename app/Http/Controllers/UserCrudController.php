@@ -185,10 +185,10 @@ class UserCrudController extends CrudController
             'type'      => 'select_from_array',
             'label'     => 'City',
             'options'   => [
-                1 => "New York",
-                2 => "Los Angeles",
-                3 => "Chicago",
-                4 => "Brooklyn"
+                "New York" => "New York",
+                "Los Angeles" => "Los Angeles",
+                "Chicago" => "Chicago",
+                "Brooklyn" => "Brooklyn"
             ]
         ]);
         CRUD::addField([
@@ -196,10 +196,10 @@ class UserCrudController extends CrudController
             'type'      => 'select_from_array',
             'label'     => 'State',
             'options'   => [
-                1 => "Alabama",
-                2 => "Alaska",
-                3 => "California",
-                4 => "Colorado"
+                "Alabama" => "Alabama",
+                "Alaska" => "Alaska",
+                "California" => "California",
+                "Colorado" => "Colorado"
             ]
         ]);
         // CRUD::addfield('state');

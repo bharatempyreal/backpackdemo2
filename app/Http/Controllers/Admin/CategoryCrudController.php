@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use App\Models\Attribute;
+use App\Models\Attributes;
+use App\Models\Advertisement;
+use App\Models\AdvertisementValue;
 use App\Models\Category;
-use App\Models\Attribute_value;
+use App\Models\AttributesValue;
 use Illuminate\Http\Request;
 use Alert;
 use Backpack\CRUD\app\Library\Widget;
@@ -29,6 +31,8 @@ class CategoryCrudController extends CrudController
     use \Gaspertrix\LaravelBackpackDropzoneField\App\Http\Controllers\Operations\MediaOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+
 
 
 
@@ -172,6 +176,42 @@ class CategoryCrudController extends CrudController
             'height' => '30px',
             'width'  => '30px',
         ]);
+    }
+
+    public function destroy($id)
+    {
+        // Category::where('id',$id)->delete();
+        $attributes = Attributes::where('category_id',$id)->where('is_default','!=', 1);
+        $attributes_ids = $attributes->pluck('id');
+
+        $advertisement = Advertisement::where('category_id',$id);
+        $advertisement_ids = $advertisement->pluck('id');
+
+        $AdvertisementValue = AdvertisementValue::whereIn('advertisement_id',$advertisement_ids);
+        $AdvertisementValue_IMG = AdvertisementValue::whereIn('advertisement_id',$advertisement_ids);
+        $images = $AdvertisementValue_IMG->whereHas('attribute',function($q){
+            $q->where('category_type',3)->orWhere('category_type',6);
+        })->get();
+        foreach($images as $img){
+            if(is_string($img->value) && is_array(json_decode($img->value, true))){
+                foreach(json_decode($img->value) as $i){
+                    $path = storage_path('/app/public/image/'). $i;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }else{
+                $path = storage_path('/app/public/image/'). $img->value;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+            }
+        }
+        $AdvertisementValue = $AdvertisementValue->delete();
+        $advertisement = $advertisement->delete();
+        AttributesValue::whereIn('attributes_id',$attributes_ids)->delete();
+        $attributes=$attributes->delete();
+        return $this->crud->delete($id);
     }
 
 }

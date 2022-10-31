@@ -5,10 +5,10 @@
                 <a href={{route('user-dashboard')}} class="ml-4">
                     {{-- {{dd(asset_storage(). "0635bdff189b120.jpg")}} --}}
                     @php
-                        $image = json_decode((auth()->check() && auth()->user() && auth()->user()->profile_pic)?auth()->user()->profile_pic:'');
+                        $image = (auth()->check() && auth()->user() && auth()->user()->profile_pic)?auth()->user()->profile_pic:'';
                     @endphp
 
-                    <img src={{asset_storage().((isset($image[0]) && !empty($image[0])) ? $image[0] : '') }} alt="comments-user" >
+                    <img src={{asset_storage().((isset($image) && !empty($image)) ? $image : '') }} alt="comments-user">
                 </a>
             </div>
             <div class="col-lg-6 col-md-9 col-8 owner-details my-auto">

@@ -673,8 +673,37 @@ class AdvertisementCrudController extends CrudController
     }
     public function destroy($id)
     {
-        Advertisement::where('id', $id)->delete();
-        AdvertisementValue::where('advertisement_id', $id)->delete();
+        // Advertisement::where('id', $id)->delete();
+        // AdvertisementValue::where('advertisement_id', $id)->delete();
+
+
+        $AdvertisementValue = AdvertisementValue::where('advertisement_id',$id);
+        $AdvertisementValue_IMG = AdvertisementValue::where('advertisement_id',$id);
+        $Advertisement_ids = $AdvertisementValue->pluck('id');
+
+        $images = $AdvertisementValue_IMG->whereHas('attribute',function($q){
+            $q->where('category_type',3)->orWhere('category_type',6);
+        })->get();
+        // dd($images);
+        foreach($images as $img){
+            if(is_string($img->value) && is_array(json_decode($img->value, true))){
+                foreach(json_decode($img->value) as $i){
+                    $path = storage_path('/app/public/image/'). $i;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }else{
+                $path = storage_path('/app/public/image/'). $img->value;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+            }
+        }
+        // dd($images);
+        $AdvertisementValue=$AdvertisementValue->delete();
+
+
         return $this->crud->delete($id);
     }
 

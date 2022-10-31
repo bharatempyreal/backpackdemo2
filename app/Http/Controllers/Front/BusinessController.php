@@ -159,8 +159,8 @@ class BusinessController extends Controller
     }
     public function businessprofile(Request $request)
     {
-        // dd($request->all());
-        $hide=($request->hide_half_form == 1) ? true : false;
+        // dd($request->assetimage);
+        // $hide=($request->hide_half_form == 1) ? true : false;
         $response = [
             'status'=>false,
             'message'=>'Somthig Went wrong',
@@ -202,27 +202,28 @@ class BusinessController extends Controller
     public function getbusinessprofile(Request $request)
     {
         $user = User::where('id',$request->id)->first();
-        $images = $user->profile_pic;
         if (is_null($user)) {
             return false;
         }else{
-            // $images = [];
-            // $images_val = [];
-            // if($user->profile_pic != null){
-            //     $all_images = $user->profile_pic;
-            //     $all_images =  ltrim($all_images, $all_images[0]);
-            //     $all_images = rtrim($all_images, ']');
-            //     $all_images = explode(',',$all_images);
-            //     if($all_images != null){
-            //         // dd($all_images);
-            //         foreach($all_images as $items){
-            //             $items = ltrim($items, $items[0]);
-            //             $items = rtrim($items, '"');
-            //             $images[] = route('getStoragePath', ['image', $items]);
-            //             $images_val[] = $items;
-            //         }
-            //     }
-            // }
+            $images = [];
+            $images_val = [];
+            if($user->profile_pic != null){
+                $image = $user->profile_pic;
+                $array = explode(' ', $image);
+                // dd($array);
+                // $all_images =  ltrim($all_images, $all_images[0]);
+                // $all_images = rtrim($all_images, ']');
+                // $all_images = explode(',',$all_images);
+                // if($all_images != null){
+                    // dd($all_images);
+                    foreach($array as $items){
+                        // $items = ltrim($items, $items[0]);
+                        // $items = rtrim($items, '"');
+                        $images[] = route('getStoragePath', ['image', $items]);
+                        $images_val[] = $items;
+                    }
+                // }
+            }
             return compact('user','images');
         }
     }

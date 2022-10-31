@@ -6,6 +6,7 @@ use App\Http\Requests\AttributesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use App\Models\Attributes;
+use App\Models\AdvertisementValue;
 use App\Models\Attributegroup;
 use App\Models\AttributesValue;
 use Backpack\CRUD\app\Library\Widget;
@@ -357,8 +358,30 @@ class AttributesCrudController extends CrudController
     }
     public function destroy($id)
     {
-        AttributesValue::where('attributes_id',$id)->delete();
-        // AdvertisementValue::where('attributes_id',$id)->delete();
+        $attr_val = AttributesValue::where('attributes_id',$id);
+        $AdvertisementValue = AdvertisementValue::where('attributes_id',$id);
+
+        $images = $AdvertisementValue->whereHas('attribute',function($q){
+            $q->where('category_type',3)->orWhere('category_type',6);
+        })->get();
+        // dd($images);
+        foreach($images as $img){
+            if(is_string($img->value) && is_array(json_decode($img->value, true))){
+                foreach(json_decode($img->value) as $i){
+                    $path = storage_path('/app/public/image/'). $i;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }else{
+                $path = storage_path('/app/public/image/'). $img->value;
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+            }
+        }
+        $AdvertisementValue->delete();
+        $attr_val->delete();
         return $this->crud->delete($id);
     }
 

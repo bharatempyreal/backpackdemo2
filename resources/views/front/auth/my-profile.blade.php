@@ -192,7 +192,10 @@ $(document).ready(function () {
                 $('#assetimage').val(data.user.profile_pic);
                 $.each(data.images, function(key,value) {
                     var slug = value.split('/');
+                    // console.log(slug);
+                    // return false;
                     var filename = slug[(slug.length)-1];
+                    // var filename = data.images
                     var image_name = filename;
                     var mockFile = { name: filename};
                     mydropzone.options.addedfile.call(mydropzone, mockFile);
@@ -200,7 +203,7 @@ $(document).ready(function () {
                     mydropzone.emit("complete", mockFile);
                 });
                 $(document).on('click','.dz-remove',function() {
-                    alert('remove');
+                    // alert('remove');
                     removefile = $(this).closest('.dz-preview').find('.dz-filename span').data('dz-name');
                     var oldArr = [];
                     var oldremoved = [];
@@ -297,12 +300,12 @@ $(document).ready(function () {
             removedfile: function(file) {
                 removefile = $(file.previewElement).find('.dz-filename span').html();
                 var oldArr = [];
-                var hidden_value = JSON.parse($('.assetimage').val() || '[]');
-                hidden_value.forEach(function(item) {
-                    if(removefile !== item)
-                        oldArr.push(item);
-                });
-                $('.assetimage').val(JSON.stringify(oldArr));
+                var hidden_value = $('.assetimage').val();
+                // hidden_value.forEach(function(item) {
+                    if(removefile !== hidden_value)
+                        oldArr.push(hidden_value);
+                // });
+                $('.assetimage').val(oldArr);
                 oldArr = [];
 
                 var oldremoved = [];
@@ -332,12 +335,12 @@ $(document).ready(function () {
                 }
             });
             var response_value = JSON.parse(response.currentTarget.response || '[]');
-            alert(response_value);
+            // alert(response_value);
             var oldArr = [];
-            var hidden_value = JSON.parse($('.assetimage').val() || '[]');
-            hidden_value.forEach(function(item) {
-                oldArr.push(item);
-            });
+            var hidden_value = $('.assetimage').val();
+            // hidden_value.forEach(function(item) {
+            //     oldArr.push(item);
+            // });
             // console.log(oldArr);
             var removefile = $(file.previewElement).find('.dz-filename span').html();
             var removehidden_value =  JSON.parse($('.removeImages').val() || '[]');
@@ -349,7 +352,7 @@ $(document).ready(function () {
 
             var newImg = [];
             newImg.push(response_value[0]);
-            $('.assetimage').val(JSON.stringify(newImg));
+            $('.assetimage').val(newImg);
             $(file.previewTemplate).find('.dz-filename span').data('dz-name', response_value);
             $(file.previewTemplate).find('.dz-filename span').html(response_value);
 
