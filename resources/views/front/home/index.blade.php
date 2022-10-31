@@ -115,7 +115,7 @@ Adex - Home page
             <div class="container">
                 <!-- Text -->
                 <p class="text-black mb-4 mt-5">Are you a person that would like to offer yourself as Ad space or; do you have a place or thing you’d like to offer up as Ad space, create a Listing in a few easy steps:</p>
-                <a href="#" class="btn btn-lg btn-theme-yellow-second">Sign Up</a>
+                <a href="#" class="btn btn-lg btn-theme-yellow-second text-black">Create a listing</a>
               </div>
           </div>
         </div> <!-- / .row -->

@@ -49,6 +49,10 @@ class DashboardController extends Controller
     {
         return view('front.auth.user-dashboard');
     }
+    public function howItWork(Request $request)
+    {
+        return view('front.home.how-it-work');
+    }
     public function userlogout(Request $request)
     {
         auth()->logout();
