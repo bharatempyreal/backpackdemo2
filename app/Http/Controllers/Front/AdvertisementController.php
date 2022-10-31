@@ -30,6 +30,8 @@ class AdvertisementController extends Controller
                 $super_admins = User::whereHas("roles", function($q){ $q->where("name", "Admin"); })->pluck('id');
                 if($user_id == auth()->user()->id || in_array( $user_id ,$super_admins)){
                     $advertisement_id = $advertisement_ID;
+                }else{
+                    // error
                 }
             }
         }

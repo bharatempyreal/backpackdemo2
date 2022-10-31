@@ -30,10 +30,7 @@ Route::get('/adex-market-place', function () {
 Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
 Route::post('/ListingProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'ListingProperty'])->name('ListingProperty');
 Route::get('/how-it-work', [App\Http\Controllers\Front\DashboardController::class, 'howItWork'])->name('howItWork');
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
 // Route::get('/login', function () {
 //     return view('front.layouts.login');
