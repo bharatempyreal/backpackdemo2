@@ -108,7 +108,11 @@ $(document).ready(function(){
         $('.page_loader').fadeOut(250);
     });
     $("img").on("error", function () {
-        $(this).attr("src", "{{ asset('assets/img/logos/adex-logo-white-yellow.png') }}");
+        if(($(this).hasClass('profile_pic'))){
+            $(this).attr("src", "{{ asset('image/image_2022_11_01T10_13_38_038Z.png') }}");
+        }else{
+            $(this).attr("src", "{{ asset('assets/img/logos/adex-logo-white-yellow.png') }}");
+        }
     });
     </script>
 @yield('script')

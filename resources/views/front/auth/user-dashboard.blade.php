@@ -29,14 +29,14 @@ Adex - My Profile
         <div class="col-lg-6 col-md-6">
           <a href="#">
             <div class="dashboard-details">
-              <img src="{{asset("assets/img/personal.png")}}" alt="">
+              <img src="{{asset("assets/img/personal12.png")}}" alt="">
               <p>Personal Dashboard</p>
             </div>
           </a>
         </div>
         <div class="col-lg-6 col-md-6">
           <a href="#">
-            <div class="dashboard-details">
+            <div class="dashboard-details dashboard-business-img">
               <img src="{{asset("assets/img/business.png")}}" alt="">
               <p>Business Dashboard</p>
             </div>

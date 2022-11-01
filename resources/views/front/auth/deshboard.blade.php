@@ -1,19 +1,17 @@
 <div class="profile-banner">
     <div class="container">
         <div class="row" style="min-height: 200px;">
-            <div class="col-lg-2 col-md-3 col-4" style="min-height: 200px;">
-                <a href={{route('user-dashboard')}} class="ml-4">
-                    {{-- {{dd(asset_storage(). "0635bdff189b120.jpg")}} --}}
+            <div class="col-lg-3 col-md-4 col-5 text-center">
+                <a href={{route('my-profile')}}>
                     @php
                         $image = (auth()->check() && auth()->user() && auth()->user()->profile_pic)?auth()->user()->profile_pic:'';
                     @endphp
-
-                    <img src={{asset_storage().((isset($image) && !empty($image)) ? $image : '') }} alt="comments-user">
+                    <img src="{{ asset_storage().((isset($image) && !empty($image)) ? $image : 'e') }}" class="profile_pic">
                 </a>
             </div>
-            <div class="col-lg-6 col-md-9 col-8 owner-details my-auto">
-                <div class="ml-4 info-center">
-                    <h2>{{ (auth()->check() && auth()->user() && auth()->user()->name)?auth()->user()->name:'' }} - </h2>
+            <div class="col-lg-6 col-md-8 col-7 owner-details my-auto">
+                <div class="info-center">
+                    <h2><a href={{route('my-profile')}}>{{ (auth()->check() && auth()->user() && auth()->user()->name)?auth()->user()->name:'' }} </a>- </h2>
                     <div class="rating">
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
@@ -38,6 +36,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav w-100">
+                    <a href="{{route('user-dashboard')}}" class="nav-item nav-link {{ request()->is('user-dashboard') ? 'active' : ''}}">Dashboard</a>
                     <a href="{{route('my-profile')}}" class="nav-item nav-link {{ request()->is('my-profile') ? 'active' : ''}}">General Information</a>
                     <a href="{{route('security')}}" class="nav-item nav-link {{ request()->is('security') ? 'active' : ''}}">Security</a>
                     <a href="{{route('notification')}}" class="nav-item nav-link {{ request()->is('notification') ? 'active' : ''}}">Notification</a>

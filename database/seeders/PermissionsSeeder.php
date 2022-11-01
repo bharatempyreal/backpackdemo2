@@ -18,7 +18,6 @@ class PermissionsSeeder extends Seeder
         $guard = "web";
         $permission = [
             'users',
-            
         ];
         foreach($permission as $key => $item) {
             Permission::updateOrCreate(['name' => "$item-create"], [

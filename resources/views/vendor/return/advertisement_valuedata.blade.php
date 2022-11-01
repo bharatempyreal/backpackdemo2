@@ -27,6 +27,8 @@
                                         @endforeach
                                     @endisset
                                 </td>
+                                @elseif ($val->category_type == 1)
+                                <td>{{implode(', ',json_decode($v->value))}}</td>
                                 @else
                                 <td>{{ $v->value }}</td>
                                 @endif

@@ -242,7 +242,7 @@ class AttributesCrudController extends CrudController
             'label' => 'Attributes Value',
             'type'  => 'repeatable',
             'entity'    => 'attributesdata',
-            'wrapper' => ['class' => 'form-group col-md-4 attributes'],
+            'wrapper' => ['class' => 'form-group col-md-4 attributes d-none'],
             'fields' => [
                 [
                     'name'    => 'id',

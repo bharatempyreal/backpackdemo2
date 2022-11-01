@@ -68,7 +68,6 @@ class UserCrudController extends CrudController
                 'model'     => config('permission.models.permission'), // foreign key model
             ],
         ]);
-
         // Role Filter
         $this->crud->addFilter(
             [
@@ -146,7 +145,7 @@ class UserCrudController extends CrudController
     }
     protected function setupShowOperation()
     {
-        CRUD::column('name');
+        // CRUD::column('name');
         CRUD::column('email');
         CRUD::column('firstname');
         CRUD::column('lastname');

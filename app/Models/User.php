@@ -53,6 +53,14 @@ class User extends Authenticatable
     public function getProfileAttribute() {
         return (isset($this->profile_pic)) ? 'storage/image/'.$this->profile_pic : '';
     }
+    public function setLastnameAttribute($val) {
+        $this->attributes['name'] = (isset($this->attributes['firstname']) ? $this->attributes['firstname'] : ''). ' ' . (isset($val) ? $val : '');
+        $this->attributes['lastname'] = $val;
+    }
+    public function setFirstnameAttribute($val) {
+        $this->attributes['name'] =  (isset($val) ? $val : '') . ' ' . (isset($this->attributes['lastname']) ? $this->attributes['lastname'] : '');
+        $this->attributes['firstname'] = $val;
+    }
 
     public function setProfilePicAttribute($value)
     {
@@ -62,7 +70,6 @@ class User extends Authenticatable
 
         // if the image was erased
         if ($value==null) {
-            dd('1');
             // delete the image from disk
             Storage::delete($this->{$attribute_name});
 

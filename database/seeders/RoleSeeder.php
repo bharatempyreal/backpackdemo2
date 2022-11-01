@@ -19,13 +19,8 @@ class RoleSeeder extends Seeder
             'guard_name' => 'web',
         ]);
 
-        Role::updateOrCreate(['name' => 'Buyer'], [
-            'name'        => 'Buyer',
-            'guard_name' => 'web',
-        ]);
-        
-        Role::updateOrCreate(['name' => 'Seller'], [
-            'name'        => 'Seller',
+        Role::updateOrCreate(['name' => 'User'], [
+            'name'        => 'User',
             'guard_name' => 'web',
         ]);
     }
