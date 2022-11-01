@@ -81,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
     // Advertisement
     // Route::get('/list-property', [App\Http\Controllers\Front\AdvertisementController::class, 'listproperty'])->name('list-property');
     Route::get('/add-list-property/{id}', [App\Http\Controllers\Front\AdvertisementController::class, 'addListProperty'])->name('addListProperty');
+    Route::get('/add-list-property/{category_id}/{advertisement_ID}', [App\Http\Controllers\Front\AdvertisementController::class, 'addListProperty'])->name('editListProperty');
     Route::post('/getAttributeAsPerCategory',[App\Http\Controllers\Front\AdvertisementController::class, 'getAttributeAsPerCategory'])->name('getAttributeAsPerCategory');
     Route::post('/saveListProperty',[App\Http\Controllers\Front\AdvertisementController::class, 'saveListProperty'])->name('saveListProperty');
     Route::post('/ajaxremoveImagesFront',[App\Http\Controllers\Front\AdvertisementController::class, 'ajaxremoveImagesFront'])->name('ajaxremoveImagesFront');

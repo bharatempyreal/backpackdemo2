@@ -107,6 +107,9 @@ $(document).ready(function(){
     $(document).ajaxComplete(function(){
         $('.page_loader').fadeOut(250);
     });
+    $("img").on("error", function () {
+        $(this).attr("src", "{{ asset('assets/img/logos/adex-logo-white-yellow.png') }}");
+    });
     </script>
 @yield('script')
 

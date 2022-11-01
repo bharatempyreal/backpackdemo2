@@ -31,11 +31,11 @@ class AdvertisementController extends Controller
                 if($user_id == auth()->user()->id || in_array( $user_id ,$super_admins)){
                     $advertisement_id = $advertisement_ID;
                 }else{
-                    // error
+                    $advertisement_id = '';
                 }
             }
         }
-        return view('front.auth.add_to_list_property',compact('category_id'));
+        return view('front.auth.add_to_list_property',compact('category_id','advertisement_id'));
     }
 
     public function getAttributeAsPerCategory(Request $request){
@@ -204,7 +204,14 @@ class AdvertisementController extends Controller
     }
 
     public function getAdvertisementData(Request $request){
-        dd($request->all());
+        $response=[
+            'status'=>false,
+            'message'=>'Somthing Went Wrong'
+        ];
+        if(isset($request->advertisement_id) && $request->advertisement_id != ''){
+            $advertisement_data = Advertisement::find($request->advertisement_id);
+        }
+        return response($response);
     }
 
     // advertisemet listing add bharat

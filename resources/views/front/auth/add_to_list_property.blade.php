@@ -45,7 +45,7 @@ Adex - List-Property
                 <div class="submit-address">
                     <form action="{{ route('saveListProperty') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" id="category_id" name="category_id" value="{{ myisset($category_id) }}">
-                        <input type="hidden" id="advertisement_id" name="advertisement_id" value="{{ (isset($advertisement_id) && $advertisement_id != '') ?? $advertisement_id }}">
+                        <input type="hidden" id="advertisement_id" name="advertisement_id" value="{{ (isset($advertisement_id) && $advertisement_id != '') ? $advertisement_id : ''}}">
                         @csrf
                         <div class="form_section">
 
@@ -278,9 +278,10 @@ Adex - List-Property
                 }
             });
             //Get Data If Edit
-            if(){
+            if($('#advertisement_id').val() != ''){
+                var  advertisement_id = $('#advertisement_id').val();
                     $.ajax({
-                        url:{{ route('getAdvertisementData') }},
+                        url:"{{ route('getAdvertisementData') }}",
                         type:'post',
                         dataType:'json',
                         data : {
