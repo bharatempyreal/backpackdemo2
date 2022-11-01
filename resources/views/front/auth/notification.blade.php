@@ -84,6 +84,12 @@ Adex - Notification
                 </div>
             </div>
         </div>
+        <hr class="mt-4 mb-5">
+        <div class="row justify-content-md-center text-left upload-passwd-btn">
+            <div class="col-lg-8 col-md-12">
+                <button type="submit" class="btn btn-lg btn-theme-black-second">Save Changes</button>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

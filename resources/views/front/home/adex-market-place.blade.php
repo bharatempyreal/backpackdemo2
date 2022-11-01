@@ -305,6 +305,10 @@ $(document).ready(function() {
                         }
                         html +='</div>';
                         html += '</div>';
+                        html +='<div class="view-details-btn">';
+                        html += '<a href="#">View Details</a>';
+                        html += '<a href="#">Edit</a>';
+                        html +='</div>';
                         html += '</div>';
                     }
                 });

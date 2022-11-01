@@ -43,7 +43,7 @@ Adex - My Security
             <div class="col-lg-8 col-md-12">
                 <div class="submit-address">
                     <form method="POST">
-                        <h3 class="heading-2 mb-4">Two Fact Authentication - Required?</h3>
+                        <h3 class="heading-2 mb-4">Two Fact Authentication - <span> Required? </span></h3>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -69,7 +69,7 @@ Adex - My Security
             </div>
         </div>
         <hr class="mt-4 mb-5">
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-md-center password-sec">
             <div class="col-lg-8 col-md-12">
                 <div class="submit-address">
                     <form id="change_password" action="{{ route('change_password') }}" method="POST" >
@@ -82,25 +82,25 @@ Adex - My Security
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Current Password</label>
-                                    <input type="password" class="input-text" name="curentpassword" placeholder="Current Password">
+                                    <input type="password" class="input-text" name="curentpassword">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>New Password</label>
-                                    <input type="password" id="password" class="input-text" name="password" placeholder="New Password">
+                                    <input type="password" id="password" class="input-text" name="password">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Confirm Password</label>
-                                    <input type="password" id="password_confirmation" class="input-text" name="password_confirmation" placeholder="Confirm Password">
+                                    <input type="password" id="password_confirmation" class="input-text" name="password_confirmation">
                                 </div>
                             </div>
                         </div>
-                        <div class="row text-center">
+                        <div class="row text-left upload-passwd-btn">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-lg btn-theme-yellow-second">Submit</button>
+                                <button type="submit" class="btn btn-lg btn-theme-black-second">Update Password</button>
                             </div>
                         </div>
                     </form>

@@ -28,15 +28,17 @@ Adex - Home page
                   <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is, making it look like readable English. </p>
                   <p> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
                 </div>
-                <a href="#" class="btn btn-lg btn-theme-black-second mb-4">Sign Up</a>
+                <div class="signup-btn">
+                  <a href="#" class="btn btn-lg btn-theme-black-second mb-4">Sign Up</a>
+                </div>
             </div>
-            <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 pr-0">
+            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-xs-12 pr-0">
                 <div class="paid-you-user paid-user-right">
                     <img src={{ asset("assets/img/get-paid4.png") }} alt="Second" class="img-fluid pb-3">
                     <img src={{ asset("assets/img/get-paid1.png") }} alt="Second" class="img-fluid">
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
                 <div class="paid-you-user">
                     <img src={{ asset("assets/img/get-paid3.png") }} alt="Second" class="img-fluid pb-3">
                     <img src={{ asset("assets/img/get-paid2.png") }} alt="Second" class="img-fluid">
