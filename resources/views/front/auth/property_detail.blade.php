@@ -66,7 +66,7 @@ foreach ($group_by_data as $k=>$data){
                                                 @endforeach
                                             @endif
                                     @else
-                                        <img src="{{ asset_storage().(json_decode($v['value'])[0]) }}" >
+                                        <img src="{{ asset_storage().($v['value'])}}" >
                                     @endif
                                 </div>
                             </div>

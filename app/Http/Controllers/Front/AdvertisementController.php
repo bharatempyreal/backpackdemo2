@@ -209,7 +209,8 @@ class AdvertisementController extends Controller
             'message'=>'Somthing Went Wrong'
         ];
         if(isset($request->advertisement_id) && $request->advertisement_id != ''){
-            $advertisement_data = Advertisement::find($request->advertisement_id);
+            $advertisement_data = Advertisement::with('advertisedata','category','advertisedata.attribute')->find($request->advertisement_id);
+            dd($advertisement_data);
         }
         return response($response);
     }
