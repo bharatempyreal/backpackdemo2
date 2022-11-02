@@ -63,6 +63,11 @@ class CheckIfAdmin
             return $this->respondToUnauthorizedRequest($request);
         }
 
+        if(auth()->user()->hasRole('Admin')){
+            return $next($request);
+        }else{
+            return redirect('/');
+        }
         return $next($request);
     }
 }

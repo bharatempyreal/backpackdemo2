@@ -197,6 +197,7 @@ class AttributesCrudController extends CrudController
             'name'    => 'category_type',
             'type'    => 'select2_from_array',
             'label'   => 'Category Type',
+            'attributes'=>['disabled'=>''],
             'wrapper' => ['class' => 'form-group col-md-4 select-test','id' => 'select'],
             'options' => Attributes::typeData(),
         ]);
@@ -215,6 +216,7 @@ class AttributesCrudController extends CrudController
                     1 => 'Active',
                 ],
                 'inline' => true,
+                'default' => '1'
             ],
         );
         CRUD::addField(
@@ -262,6 +264,7 @@ class AttributesCrudController extends CrudController
                         1 => 'Active',
                     ],
                     'inline' => true,
+                    'default' => '1'
                 ],
             ],
             'new_item_label'  => 'Add Attribute',
@@ -284,7 +287,9 @@ class AttributesCrudController extends CrudController
         CRUD::addColumn([
             'name'      => 'attribute_value',
             'label'     => 'Attribute Value',
+            // 'wrapper' => ['class' => 'd-none'],
             'type'     => 'closure',
+            // 'visibleInTable'   => false,
             'function' => function($entry) {
                 $data = $entry->attributesdata;
                 $arr=[];
@@ -325,7 +330,7 @@ class AttributesCrudController extends CrudController
         // dd($request->all());
         $data = Attributes::find($request->id);
         $data->category_id   = $request->category_id;
-        $data->category_type    = $request->category_type;
+        // $data->category_type    = $request->category_type;
         $data->attributegroup_id    = $request->attributegroup_id;
         $data->is_default = $request->is_default;
         $data->compulsory = $request->compulsory;
@@ -335,15 +340,17 @@ class AttributesCrudController extends CrudController
         $attributes_id = $data->id;
         $attrIds = [];
         $json = json_decode($request['attributesvalue']);
-        if(count($json) && $json[0]->attribute_name != null ){
+        if(($request->category_type == 1 || $request->category_type == 2) && count($json) && $json[0]->attribute_name != null ){
             foreach(json_decode($request['attributesvalue']) as $value) {
                 if ($value->id != null) {
+                    // dd($value->status);
                     $item =  AttributesValue::find($value->id);
                     $item->attributes_id = $attributes_id;
                     $item->attribute_name = $value->attribute_name;
                     $item->status = $value->status;
                     $item->save();
                 } else {
+                    // dd($value->status);
                     $item = new AttributesValue;
                     $item->attributes_id = $attributes_id;
                     $item->attribute_name = $value->attribute_name;
@@ -352,6 +359,8 @@ class AttributesCrudController extends CrudController
                 }
                 $attrIds[] = $item->id;
             }
+        }else{
+            AttributesValue::where('attributes_id',$attributes_id)->delete();
         }
         $delete = AttributesValue::whereNotIn('id',$attrIds)->where('attributes_id',$attributes_id)->delete();
         return redirect('/admin/attributes');

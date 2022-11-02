@@ -297,7 +297,7 @@ $(document).ready(function() {
                                     }
                                    // As a side note, this === el.
                                     html+='<div class="listing-details col-md-6 pb-2" style="'+style+'">';
-                                    html +='<div class="pr-2 label-details">'+v.name+'     '+tt+' -</div>';
+                                    html +='<div class="pr-2 label-details">'+v.name+' -</div>';
                                     html +='<div class="market-details">'+v.value+'</div>';
                                     html += '</div>';
                                 }
@@ -307,7 +307,7 @@ $(document).ready(function() {
                         html += '</div>';
                         html +='<div class="view-details-btn">';
                         html += '<a href="#">View Details</a>';
-                        html += '<a href="#">Edit</a>';
+                        // html += '<a href="#">Edit</a>';
                         html +='</div>';
                         html += '</div>';
                     }

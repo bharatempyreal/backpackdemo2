@@ -91,12 +91,14 @@ class User extends Authenticatable
             Storage::put($destination_path.'/'.$filename, $image->stream());
 
             // 3. Delete the previous image, if there was one.
-            // if ($value !=null) {
-            $path = storage_path('/app/public/image/'). $this->{$attribute_name};
-                if (file_exists($path)) {
-                    unlink($path);
+            if ($value !=null && $value != '' ) {
+                if(isset($this->{$attribute_name}) && $this->{$attribute_name} != ''){
+                    $path = storage_path('/app/public/image/'). $this->{$attribute_name};
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
                 }
-            // }
+            }
             // 4. Save the public path to the database
             // but first, remove "public/" from the path, since we're pointing to it
             // from the root folder; that way, what gets saved in the db
