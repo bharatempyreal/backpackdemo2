@@ -42,7 +42,8 @@ class Attributes extends Model
             4 => "Textbox",
             5 => "Textarea",
             6 => "Image",
-            7 => "Date"
+            7 => "Date",
+            8 => "Google AutoComplete"
         ];
         return ($id) ? $data[$id] : $data;
     }

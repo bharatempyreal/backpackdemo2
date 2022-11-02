@@ -210,7 +210,13 @@ class AdvertisementController extends Controller
         ];
         if(isset($request->advertisement_id) && $request->advertisement_id != ''){
             $advertisement_data = Advertisement::with('advertisedata','category','advertisedata.attribute')->find($request->advertisement_id);
-            dd($advertisement_data);
+            if(isset($advertisement_data) && !empty($advertisement_data)){
+                $response=[
+                    'status'=>true,
+                    'message'=>'Data Got Successfullay',
+                    'advertisement_data'=>$advertisement_data
+                ];
+            }
         }
         return response($response);
     }

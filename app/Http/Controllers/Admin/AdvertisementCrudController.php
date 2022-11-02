@@ -349,6 +349,21 @@ class AdvertisementCrudController extends CrudController
                             'value'     => $value->id,
                         ];
                         break;
+                        case 8:
+                            $attr = ['class'=>'google_autocomplete form-control'];
+                            ($value->compulsory ==1)?$attr['required']='required':'';
+                            $crudFields[] = [
+                                'name'      => $value->name,
+                                'label'     => ucFirst($value->name),
+                                'type'      => 'text',
+                                'attributes'=> $attr,
+                            ];
+                            $crudFields[]  = [
+                                'name'      => $value->name.'_id',
+                                'type'      => 'hidden',
+                                'value'     => $value->id,
+                            ];
+                            break;
                     default:
                 }
             }
@@ -515,6 +530,17 @@ class AdvertisementCrudController extends CrudController
                             'name'      => $value->name,
                             'label'     => ucFirst($value->name),
                             'type'      => 'date',
+                            'attributes'=> $attr,
+                            'value'     => (isset($addsData)) ? $addsData->value : ''
+                        ];
+                        break;
+                    case 8:
+                        $attr = [];
+                        ($value->compulsory ==1)?$attr['required']='required':'';
+                        $crudFields[] = [
+                            'name'      => $value->name,
+                            'label'     => ucFirst($value->name),
+                            'type'      => 'text',
                             'attributes'=> $attr,
                             'value'     => (isset($addsData)) ? $addsData->value : ''
                         ];

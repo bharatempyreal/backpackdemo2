@@ -7,7 +7,7 @@ function inputtext(label = '', name='',classname="",attr=''){
     var html='<div class="col-md-4">';
         html+='<div class="form-group">';
         html+='<label>'+label+'</label>';
-        html+='<input type="text" class="input-text" name="'+name+'" placeholder="Enter '+label+'" '+attr+'>';
+        html+='<input type="text" class="input-text '+classname+'" name="'+name+'" placeholder="Enter '+label+'" '+attr+'>';
         html+='</div>';
         html+='</div>';
     return html;

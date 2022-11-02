@@ -12,6 +12,16 @@ Adex - My Adex
     align-items: center;
     justify-content: center;
 }
+.property-listing-btn {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 95%;
+    margin: 20px 0;
+}
+.property-listing-btn a {
+    margin: 0 10px;
+}
 </style>
 @endsection
 
@@ -115,6 +125,7 @@ $(document).ready(function(){
                         html +='<div class="col-lg-4 col-md-4 text-center">';
                             var base_url = "{{ asset('/') }}";
                             var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : base_url+listing[(listing.length)-1][property.id];
+                            var image = isJsonString(listing[(listing.length)-1][property.id]) ? base_url+'storage/image/'+(JSON.parse(listing[(listing.length)-1][property.id])[0]) : (((listing[(listing.length)-1][property.id]).includes('storage/image/'))?base_url+listing[(listing.length)-1][property.id]:base_url+'storage/image/'+listing[(listing.length)-1][property.id]);
                         html+='<div class="image_box">';
                         html += '<img src="'+image+'">';
                         html += '</div>';
