@@ -234,7 +234,7 @@ class AdvertisementController extends Controller
         $image = [];
         foreach($listing as $k =>$v){
             foreach($v->advertisedata as $k1 => $v1){
-                if($v1->attribute->category_type == 3 || $v1->attribute->category_type == 6){
+                if(isset($v1->attribute) && $v1->attribute->category_type != '' && ($v1->attribute->category_type == 3 || $v1->attribute->category_type == 6)){
                     if(!isset($image[$v->id]) || $image[$v->id] == ''){
                         $image[$v->id]=$v1->value;
                     }
